@@ -50,6 +50,7 @@ infrastructure data to generate the inputs to agent-based transport simulations.
 These steps are described in the following documents:
 
 - [How to create a synthetic population of Île-de-France](docs/population.md)
+- [How to create a synthetic population of Munich](docs/population_munich.md)
 - [How to run a MATSim simulation of Île-de-France](docs/simulation.md)
 
 Furthermore, we provide documentation on how to make use of the code to create
