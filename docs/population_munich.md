@@ -53,9 +53,9 @@ Fitting)
 ### Strobel and Pruckner
 
 list of dataset :
-- Germany census at different geographical scale agregation
-- MiD (2017) Germany mobility survey (300 000 persons, over 1 million trips)
-- Optional : Germany census
+- Open Street Maps - OSM network and other attributes
+- Optional : Germany census at different geographical scale agregation
+- Optional : MiD (2017) Germany mobility survey (300 000 persons, over 1 million trips)
 
 
 interesting points :
