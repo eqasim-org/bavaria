@@ -39,7 +39,7 @@ Then fiter to geo match : grids vs communes (France) brings flexibility in spati
 For general purpose (no mobility focus), interesting methods about sampling and attributes selection.
 
 list of dataset :
-- Germany census at different geographical scale agregation
+- Open Street Maps - OSM network and other attributes
 
 
 interesting points :
@@ -50,7 +50,38 @@ Fitting)
 - different geographical scales data match
 - computation ressources (time)
 
-### Moreno and Moeckel
+### Strobel and Pruckner
+
+list of dataset :
+- Germany census at different geographical scale agregation
+- MiD (2017) Germany mobility survey (300 000 persons, over 1 million trips)
+- Optional : Germany census
+
+
+interesting points :
+- OSM based (world wide capable)
+- temporal and spatial micro dissagregated (every minutes, every buildings) like Synpp
+- 200 0000 to 2.5 million inhabitants perimeters validated model (Germany)
+- no mode and route choice (affectation) steps
+- calibrated with comparison to MiD
+- not really self sufficiant with OMS (uses proxy for MiD)
+- key words for activities in OSM
+
+
+### TUM project tasks schedule
+1. read articles => done
+2. Check open sources data availability (and dates)
+3. Propose data replacement and method replacement if required
+4. develop (need to priorize) step by step (and set uniform random draw for dataset not yet processed)
+5. check for caliration data and assesses results
+
+### TUM project adaptations 1st draft 
+1. Census Data : choose aggregation level (100m x 100m grid or higher)
+2. MiD : hope there is an english verson (or some translate tool)
+3. OSM : probably the best option to replace BDE and SIRENE (no article mentions this kind of open source data)
+4. Mobpro - Mobsco : MiD?  
+5. Filosofi : no need?
+6/ Building and adresses database : OSM
 
 
 ## <a name="section-data"></a>Gathering the data
