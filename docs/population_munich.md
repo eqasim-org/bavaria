@@ -1,17 +1,88 @@
-# Generating the Île-de-France population
+# Generating the Munich population
 
 The following sections describe how to generate a synthetic population for
-Île-de-France using the pipeline. First all necessary data must be gathered.
+Munich using the pipeline. First all necessary data must be gathered.
 Afterwards, the pipeline can be run to create a synthetic population in *CSV*
 and *GPKG* format. These outputs can be used for analysis, or serve as input
-to [run a transport simulation in MATSim](simulation.md). Also, this guide
-is the basis for creating populations and simulations of other regions and
-cities such as [Toulouse](cases/toulouse.md) or [Lyon](cases/lyon.md).
+to [run a transport simulation in MATSim](simulation.md).
 
 This guide will cover the following steps:
 
 - [Gathering the data](#section-data)
 - [Running the pipeline](#section-population)
+
+
+## <a name="section-data"></a> Notes about the papers on that matter
+
+### Lelke et al.
+Really matches our goal
+
+list of dataset :
+- Census (2011) and its cells grid system of 100m x 100m (33 millions + 3.6 million empty)
+- MiD (2017) Germany mobility survey (300 000 persons, over 1 million trips)
+- Regional Statistical Spatial Typology for Mobility and Transport
+Research (RegioStaR) => kind of unités urbaines or more likely aires urbaines
+- CORINE Land Cover - CLC - 2018 for land use classification
+- Open Street Maps - OSM network
+- geometry defining the planning area 
+
+interesting points :
+- model based on the 100m x 100m grid system
+- RegioStaR match for each cells
+- CLC attributes match for each cells
+- OSM enchancement of CLC (university, schools) for each cells
+
+Then fiter to geo match : grids vs communes (France) brings flexibility in spatial perimeter definition.
+
+
+### Moreno and Moeckel
+For general purpose (no mobility focus), interesting methods about sampling and attributes selection.
+
+list of dataset :
+- Open Street Maps - OSM network and other attributes
+
+
+interesting points :
+- synthesis population 
+- sampling and weigts methods (Montercarlo, Markov, combinatorial,Iterative Proportional 
+Fitting) 
+- attributes : 47 identified, subset selection
+- different geographical scales data match
+- computation ressources (time)
+
+### Strobel and Pruckner
+
+list of dataset :
+- Open Street Maps - OSM network and other attributes
+- Optional : Germany census at different geographical scale agregation
+- Optional : MiD (2017) Germany mobility survey (300 000 persons, over 1 million trips)
+
+
+interesting points :
+- OSM based (world wide capable)
+- temporal and spatial micro dissagregated (every minutes, every buildings) like Synpp
+- 200 0000 to 2.5 million inhabitants perimeters validated model (Germany)
+- no mode and route choice (affectation) steps
+- calibrated with comparison to MiD
+- not really self sufficiant with OMS (uses proxy for MiD)
+- key words for activities in OSM
+
+
+### TUM project tasks schedule
+1. read articles => done
+2. Check open sources data availability (and dates)
+3. Propose data replacement and method replacement if required
+4. develop (need to priorize) step by step (and set uniform random draw for dataset not yet processed)
+5. check for caliration data and assesses results
+
+### TUM project adaptations 1st draft 
+1. Census Data : choose aggregation level (100m x 100m grid or higher)
+2. MiD : hope there is an english verson (or some translate tool)
+3. OSM : probably the best option to replace BDE and SIRENE (no article mentions this kind of open source data)
+4. Mobpro - Mobsco : MiD?  
+5. Filosofi : no need?
+6/ Building and adresses database : OSM
+
 
 ## <a name="section-data"></a>Gathering the data
 
