@@ -255,7 +255,6 @@ if __name__ == "__main__":
         ("q90", lambda x: x.quantile(0.9))
     ]).reset_index()
 
-    print(df)
 
 
 
@@ -264,20 +263,11 @@ if __name__ == "__main__":
 
     random = np.random.RandomState(0)
 
-    #for df_subset in sample_subsets(df, 3, random):
-    #    print(df_subset)
 
-    print(average_subsets(df, 3, random))
 
     print(apply_bootstrap(average_subsets(df, 3, random), 100, random, lambda df: analyze_sample(df)))
 
-    exit()
 
-    #print(analyze(df))
-
-    #for df_sample in bootstrap(df, 100, random):
-    #    df_sample = analyze(df_sample)
-    #    print(df_sample)
 
     statistics = [
         ("precision", lambda x: np.mean(x < 55.0))
@@ -292,12 +282,8 @@ if __name__ == "__main__":
 
 
 
-    print(df)
-    exit()
-    print()
 
 
-    exit()
 
     sample = [create_sample(R) for R in range(2)]
     random = np.random.RandomState(5)
@@ -307,4 +293,3 @@ if __name__ == "__main__":
     marginals = collect_marginalized_sample(marginals)
 
     metrics = bootstrap_sampled_marginals(marginals, 100, subset_size = 2, random = random)
-    print(metrics[("gender",)])

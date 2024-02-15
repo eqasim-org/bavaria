@@ -79,6 +79,8 @@ def process(context, purpose, random, df_persons, df_od, df_locations):
             for df_partial in parallel.imap_unordered(sample_destination_municipalities, df_demand.itertuples(index = False, name = None)):
                 df_flow.append(df_partial)
 
+    print(df_flow)
+
     df_flow = pd.concat(df_flow).sort_values(["origin_id", "destination_id"])
 
     # Sample destinations based on the obtained flows
@@ -104,7 +106,7 @@ def execute(context):
     df_persons["has_work_trip"] = df_persons["person_id"].isin(df_trips[
         (df_trips["following_purpose"] == "work") | (df_trips["preceding_purpose"] == "work")
     ]["person_id"])
-    
+
     df_persons["has_education_trip"] = df_persons["person_id"].isin(df_trips[
         (df_trips["following_purpose"] == "education") | (df_trips["preceding_purpose"] == "education")
     ]["person_id"])
@@ -125,6 +127,12 @@ def execute(context):
     )
 
     df_locations = context.stage("synthesis.locations.education")
+
+    df_persons["commune_id"] =     df_persons["commune_id"].astype(str)
+    df_persons["iris_id"] =     df_persons["iris_id"].astype(str)
+    df_persons["departement_id"] =     df_persons["departement_id"].astype(str)
+
+
     df_education = process(context, "education", random, df_persons,
         df_education_od, df_locations
     )

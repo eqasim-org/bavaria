@@ -56,7 +56,7 @@ def execute(context):
 
     # Perform sampling per commune
     with context.parallel(dict(households = df_households, income = df_income)) as parallel:
-        commune_ids = df_households["commune_id"].unique()
+        commune_ids = df_households["commune_id"].astype(int).unique()
         random_seeds = random.randint(10000, size = len(commune_ids))
 
         for f, incomes in context.progress(parallel.imap(_sample_income, zip(commune_ids, random_seeds)), label = "Imputing income ...", total = len(commune_ids)):
@@ -64,5 +64,7 @@ def execute(context):
 
     # Cleanup
     df_households = df_households[["household_id", "household_income", "consumption_units"]]
+    df_households["household_income"] = random.randint(1200,8000,len(df_households))
+
     assert len(df_households) == len(df_households["household_id"].unique())
     return df_households

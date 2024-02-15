@@ -17,6 +17,11 @@ def execute(context):
 
 
     # merging geographical SIREN file (containing only SIRET and location) with full SIREN file (all variables and processed)
+
+    df_siret_geoloc =  df_siret_geoloc.drop_duplicates(subset=['siret'])
+    df_sirene =  df_sirene.drop_duplicates(subset=['siret'])
+
+
     df_siret_geoloc.set_index(("siret"),inplace=True,verify_integrity=True)
     df_sirene.set_index(("siret"),inplace=True,verify_integrity=True)
     df_siret_geoloc.sort_index(inplace=True)

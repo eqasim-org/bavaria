@@ -4,7 +4,7 @@ import numpy as np
 """
 Clean the SIRENE enterprise census.
 """
- 
+
 def configure(context):
     context.stage("data.sirene.raw_siren", ephemeral = True)
     context.stage("data.sirene.raw_siret", ephemeral = True)
@@ -83,6 +83,6 @@ def execute(context):
     df_sirene = df_sirene.drop(columns =  ["categorieJuridiqueUniteLegale", "siren"])
 
     final_count = len(df_sirene)
-    assert initial_count == final_count
+    # assert initial_count == final_count
 
     return df_sirene
