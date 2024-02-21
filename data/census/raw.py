@@ -14,22 +14,22 @@ def configure(context):
     context.config("census_csv", "FD_INDCVI_2019.csv")
 
 COLUMNS_DTYPES = {
-    "CANTVILLE":"str", 
-    "NUMMI":"str", 
+    "CANTVILLE":"str",
+    "NUMMI":"str",
     "AGED":"str",
-    "COUPLE":"str", 
+    "COUPLE":"str",
     "CS1":"str",
-    "DEPT":"str", 
-    "ETUD":"str", 
+    "DEPT":"str",
+    "ETUD":"str",
     "ILETUD":"str",
-    "ILT":"str", 
-    "IPONDI":"str", 
+    "ILT":"str",
+    "IPONDI":"str",
     "IRIS":"str",
-    "REGION":"str", 
+    "REGION":"str",
     "SEXE":"str",
-    "TACT":"str", 
+    "TACT":"str",
     "TRANS":"str",
-    "VOIT":"str", 
+    "VOIT":"str",
     "DEROU":"str"
 }
 
@@ -37,17 +37,19 @@ def execute(context):
     df_records = []
     df_codes = context.stage("data.spatial.codes")
 
-    requested_departements = df_codes["departement_id"].unique()
+    requested_departements = df_codes["departement_id"].astype(str).unique()
+    print(requested_departements)
+
 
     with context.progress(label = "Reading census ...") as progress:
         with zipfile.ZipFile(
             "{}/{}".format(context.config("data_path"), context.config("census_path"))) as archive:
             with archive.open(context.config("census_csv")) as f:
-                csv = pd.read_csv(f, 
+                csv = pd.read_csv(f,
                         usecols = COLUMNS_DTYPES.keys(), sep = ";",
                         dtype = COLUMNS_DTYPES,
-                        chunksize = 10240)
-    
+                        chunksize = 10)
+
                 for df_chunk in csv:
                     progress.update(len(df_chunk))
 

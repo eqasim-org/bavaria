@@ -14,7 +14,7 @@ def execute(context):
 
     pt2matsim.run(context, "org.matsim.pt2matsim.run.Gtfs2TransitSchedule", [
         gtfs_path,
-        context.config("gtfs_date"), "EPSG:2154",
+        context.config("gtfs_date"), "EPSG:25832",
         "%s/transit_schedule.xml.gz" % context.path(),
         "%s/transit_vehicles.xml.gz" % context.path()
     ])

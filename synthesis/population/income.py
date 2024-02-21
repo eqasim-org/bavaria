@@ -54,17 +54,25 @@ def execute(context):
 
     df_households = pd.merge(df_households, df_homes)
 
-    # Perform sampling per commune
-    with context.parallel(dict(households = df_households, income = df_income)) as parallel:
-        commune_ids = df_households["commune_id"].astype(int).unique()
-        random_seeds = random.randint(10000, size = len(commune_ids))
+    # df_income["commune_id"] = df_income["commune_id"].astype(str).str[:4]
+    # df_income["commune_id"] = "0"+ df_income["commune_id"]
+    # df_income = df_income.drop_duplicates(subset=["commune_id"])
+    # df_income = df_income.reset_index()
 
-        for f, incomes in context.progress(parallel.imap(_sample_income, zip(commune_ids, random_seeds)), label = "Imputing income ...", total = len(commune_ids)):
-            df_households.loc[f, "household_income"] = incomes * df_households.loc[f, "consumption_units"]
+
+    # Perform sampling per commune
+    # with context.parallel(dict(households = df_households, income = df_income)) as parallel:
+    #     commune_ids = df_households["commune_id"].astype("int64").unique()
+    #     random_seeds = random.randint(10000, size = len(commune_ids))
+
+    #     print(commune_ids)
+    #     print(random_seeds)
+    #     for f, incomes in context.progress(parallel.imap(_sample_income, zip(commune_ids, random_seeds)), label = "Imputing income ...", total = len(commune_ids)):
+    #         df_households.loc[f, "household_income"] = incomes * df_households.loc[f, "consumption_units"]
 
     # Cleanup
-    df_households = df_households[["household_id", "household_income", "consumption_units"]]
     df_households["household_income"] = random.randint(1200,8000,len(df_households))
+    df_households = df_households[["household_id", "household_income", "consumption_units"]]
 
     assert len(df_households) == len(df_households["household_id"].unique())
     return df_households

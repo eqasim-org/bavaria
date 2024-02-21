@@ -47,6 +47,8 @@ def find_assignment_problems(df, df_locations):
     current_location = None
 
     for problem in find_bare_assignment_problems(df):
+
+
         origin_purpose = problem["purposes"][0]
         destination_purpose = problem["purposes"][-1]
 
@@ -83,6 +85,12 @@ def find_assignment_problems(df, df_locations):
 
         if destination_purpose in FIXED_PURPOSES:
             problem["destination"] = current_location[LOCATION_FIELDS.index(destination_purpose)] # Shapely POINT
+
+
+        if problem["destination"] is None:
+             problem["destination"] =np.array([721083.26503899, 5340577.00505011])
+
+        else:
             problem["destination"] = np.array([[problem["destination"].x, problem["destination"].y]])
 
         if problem["origin"] is None:

@@ -34,9 +34,10 @@ def sample_locations(context, arguments):
     destination_id, random_seed = arguments
     df_locations, df_flow = context.data("df_locations"), context.data("df_flow")
 
+
     # Prepare state
     random = np.random.RandomState(random_seed)
-    df_locations = df_locations[df_locations["commune_id"] == destination_id]
+    df_locations = df_locations[df_locations["commune_id"].astype(str) == destination_id]
 
     # Determine demand
     df_flow = df_flow[df_flow["destination_id"] == destination_id]
@@ -64,11 +65,13 @@ def sample_locations(context, arguments):
     return df_result
 
 def process(context, purpose, random, df_persons, df_od, df_locations):
+
     df_persons = df_persons[df_persons["has_%s_trip" % purpose]]
 
     # Sample commute flows based on population
     df_demand = df_persons.groupby("commune_id").size().reset_index(name = "count")
     df_demand["random_seed"] = random.randint(0, int(1e6), len(df_demand))
+    df_demand['commune_id'] = df_demand['commune_id'].astype(str)
     df_demand = df_demand[["commune_id", "count", "random_seed"]]
     df_demand = df_demand[df_demand["count"] > 0]
 
@@ -79,7 +82,6 @@ def process(context, purpose, random, df_persons, df_od, df_locations):
             for df_partial in parallel.imap_unordered(sample_destination_municipalities, df_demand.itertuples(index = False, name = None)):
                 df_flow.append(df_partial)
 
-    print(df_flow)
 
     df_flow = pd.concat(df_flow).sort_values(["origin_id", "destination_id"])
 
@@ -89,18 +91,33 @@ def process(context, purpose, random, df_persons, df_od, df_locations):
 
     df_result = []
 
-    with context.progress(label = "Sampling %s destinations" % purpose, total = len(df_demand)) as progress:
-        with context.parallel(dict(df_locations = df_locations, df_flow = df_flow)) as parallel:
-            for df_partial in parallel.imap_unordered(sample_locations, zip(unique_ids, random_seeds)):
-                df_result.append(df_partial)
+    print("________________________")
+    print(purpose)
+    print(random)
+    print(df_persons)
+    print(df_od)
+    print(df_locations)
 
-    df_result = pd.concat(df_result).sort_values(["origin_id", "destination_id"])
+    # with context.progress(label = "Sampling %s destinations" % purpose, total = len(df_demand)) as progress:
+    #     with context.parallel(dict(df_locations = df_locations, df_flow = df_flow)) as parallel:
+    #         for df_partial in parallel.imap_unordered(sample_locations, zip(unique_ids, random_seeds)):
+    #             df_result.append(df_partial)
+
+
+    df_result = df_od[["origin_id", "destination_id"]].copy()
+    df_locations["commune_id"] = df_locations["commune_id"].astype(str)
+    df_result["destination_id"] = df_result["destination_id"].astype(str)
+
+    df_result = pd.merge(df_result,df_locations,left_on="destination_id",right_on="commune_id")
+
+    # df_result = pd.concat(df_result).sort_values(["origin_id", "destination_id"])
 
     return df_result[["origin_id", "destination_id", "location_id"]]
 
 def execute(context):
     # Prepare population data
     df_persons = context.stage("synthesis.population.enriched")[["person_id", "household_id"]].copy()
+
     df_trips = context.stage("synthesis.population.trips")
 
     df_persons["has_work_trip"] = df_persons["person_id"].isin(df_trips[
@@ -113,6 +130,7 @@ def execute(context):
 
     df_homes = context.stage("synthesis.population.spatial.home.zones")
     df_persons = pd.merge(df_persons, df_homes, on = "household_id")
+    df_persons["commune_id"] =     df_persons["commune_id"].astype(str)
 
     # Prepare spatial data
     df_work_od, df_education_od = context.stage("data.od.weighted")
@@ -121,6 +139,9 @@ def execute(context):
     random = np.random.RandomState(context.config("random_seed"))
 
     df_locations = context.stage("synthesis.locations.work")
+    # print(df_locations)
+    # print(df_work_od)
+    # print(df_persons)
     df_locations["weight"] = df_locations["employees"]
     df_work = process(context, "work", random, df_persons,
         df_work_od, df_locations

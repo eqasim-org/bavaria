@@ -21,6 +21,7 @@ def get_commuting_distance(df_persons, df_trips, activity_type, random):
 
     df_persons = pd.merge(df_persons, df_commute_distance, on = "person_id", how = "left")
 
+    print(df_persons)
     # For the ones without commuting distance, sample from the distribution
     f_missing = df_persons["commute_distance"].isna()
 
@@ -30,11 +31,13 @@ def get_commuting_distance(df_persons, df_trips, activity_type, random):
     values = df_persons["commute_distance"][~f_missing].values
     weights = df_persons["person_weight"][~f_missing].values
 
+    print(values)
     sorter = np.argsort(values)
     values = values[sorter]
     weights = weights[sorter]
 
     cdf = np.cumsum(weights)
+    print(cdf)
     cdf /= cdf[-1]
 
     indices = [
@@ -58,6 +61,9 @@ def get_commuting_distance(df_persons, df_trips, activity_type, random):
 
 def execute(context):
     df_households, df_persons, df_trips = context.stage("data.hts.selected")
+    print(df_households)
+    print(df_persons)
+    print(df_trips)
     random = np.random.RandomState(context.config("random_seed"))
 
     return dict(

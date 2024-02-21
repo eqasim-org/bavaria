@@ -31,8 +31,8 @@ def execute(context):
     df_sirene.dropna(subset=['x', 'y'],inplace=True)
 
 
-    # convert to geopandas dataframe with Lambert 93, EPSG:2154 french official projection
-    df_sirene = gpd.GeoDataFrame(df_sirene, geometry=gpd.points_from_xy(df_sirene.x, df_sirene.y),crs="EPSG:2154")
+    # convert to geopandas dataframe with Lambert 93, EPSG:25832 french official projection
+    df_sirene = gpd.GeoDataFrame(df_sirene, geometry=gpd.points_from_xy(df_sirene.x, df_sirene.y),crs="EPSG:25832")
 
 
     return df_sirene

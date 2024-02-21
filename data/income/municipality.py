@@ -33,10 +33,10 @@ def execute(context):
 
     # Verify spatial data for education
     df_municipalities = context.stage("data.spatial.municipalities")
-    requested_communes = df_municipalities["commune_id"].unique().tolist()
+    requested_communes = df_municipalities["commune_id"].astype(str).unique().tolist()
 
-    df = df[df["commune_id"].astype(str).isin(requested_communes)]
 
+    # df = df[df["commune_id"].astype(str).isin(requested_communes)]
 
     # # Find communes without data
     # df["commune_id"] = df["commune_id"].astype("category")
@@ -98,6 +98,8 @@ def execute(context):
     df["reference_median"] = False
     df["is_imputed"] = False
 
+
+    print("___________________")
     print(df)
 
     return df[["commune_id", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "is_imputed", "is_missing", "reference_median"]]

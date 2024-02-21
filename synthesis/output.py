@@ -21,7 +21,7 @@ def configure(context):
 
     context.config("output_path")
     context.config("output_prefix", "ile_de_france_")
-    
+
     if context.config("mode_choice", False):
         context.stage("matsim.simulation.prepare")
 
@@ -133,14 +133,14 @@ def execute(context):
         df_mode_choice = pd.read_csv(
             "{}/{}tripModes.csv".format(context.path("matsim.simulation.prepare"), output_prefix),
             delimiter = ";")
-        
+
         df_mode_choice = df_mode_choice.rename(columns = {
             "personId": "person_id", "tripId": "trip_index", "mode" : "mode"})
-        
+
         df_trips = pd.merge(df_trips, df_mode_choice, on = [
             "person_id", "trip_index"], how="left", validate = "one_to_one")
 
-        assert not np.any(df_trips["mode"].isna())                                 
+        assert not np.any(df_trips["mode"].isna())
 
     df_trips.to_csv("%s/%strips.csv" % (output_path, output_prefix), sep = ";", index = None, lineterminator = "\n")
 
@@ -161,7 +161,7 @@ def execute(context):
     ]], how = "left", on = ["person_id", "activity_index"])
 
     # Write spatial activities
-    df_spatial = gpd.GeoDataFrame(df_activities, crs = "EPSG:2154")
+    df_spatial = gpd.GeoDataFrame(df_activities, crs = "EPSG:25832")
     df_spatial["purpose"] = df_spatial["purpose"].astype(str)
     path = "%s/%sactivities.gpkg" % (output_path, output_prefix)
     df_spatial.to_file(path, driver = "GPKG")
@@ -181,6 +181,11 @@ def execute(context):
         df_spatial[df_spatial["purpose"] == "home"].drop_duplicates("person_id")[["person_id", "geometry"]].rename(columns = { "geometry": "home_geometry" }),
         df_spatial[df_spatial["purpose"] == "work"].drop_duplicates("person_id")[["person_id", "geometry"]].rename(columns = { "geometry": "work_geometry" })
     )
+
+
+
+    tmp = df_spatial.iloc[::-1]
+    df_spatial["work_geometry"] =  tmp["home_geometry"]
 
     df_spatial["geometry"] = [
         geo.LineString(od)
@@ -207,6 +212,15 @@ def execute(context):
         "geometry": "following_geometry"
     }), how = "left", on = ["person_id", "following_activity_index"])
 
+
+
+    tmp = df_spatial.iloc[::-1]
+    df_spatial.loc[df_spatial["following_geometry"] == None,"following_geometry"] =df_spatial.at[1,"following_geometry"]
+    df_spatial.loc[df_spatial["preceding_geometry"] == None,"preceding_geometry"] =df_spatial.at[0,"preceding_geometry"]
+
+
+    print(df_spatial)
+
     df_spatial["geometry"] = [
         geo.LineString(od)
         for od in zip(df_spatial["preceding_geometry"], df_spatial["following_geometry"])
@@ -214,13 +228,13 @@ def execute(context):
 
     df_spatial = df_spatial.drop(columns = ["preceding_geometry", "following_geometry"])
 
-    df_spatial = gpd.GeoDataFrame(df_spatial, crs = "EPSG:2154")
+    df_spatial = gpd.GeoDataFrame(df_spatial, crs = "EPSG:25832")
     df_spatial["following_purpose"] = df_spatial["following_purpose"].astype(str)
     df_spatial["preceding_purpose"] = df_spatial["preceding_purpose"].astype(str)
 
     if "mode" in df_spatial:
         df_spatial["mode"] = df_spatial["mode"].astype(str)
-    
+
     path = "%s/%strips.gpkg" % (output_path, output_prefix)
     df_spatial.to_file(path, driver = "GPKG")
     clean_gpkg(path)
