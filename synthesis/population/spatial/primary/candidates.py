@@ -91,17 +91,10 @@ def process(context, purpose, random, df_persons, df_od, df_locations):
 
     df_result = []
 
-    print("________________________")
-    print(purpose)
-    print(random)
-    print(df_persons)
-    print(df_od)
-    print(df_locations)
-
-    # with context.progress(label = "Sampling %s destinations" % purpose, total = len(df_demand)) as progress:
-    #     with context.parallel(dict(df_locations = df_locations, df_flow = df_flow)) as parallel:
-    #         for df_partial in parallel.imap_unordered(sample_locations, zip(unique_ids, random_seeds)):
-    #             df_result.append(df_partial)
+    with context.progress(label = "Sampling %s destinations" % purpose, total = len(df_demand)) as progress:
+        with context.parallel(dict(df_locations = df_locations, df_flow = df_flow)) as parallel:
+            for df_partial in parallel.imap_unordered(sample_locations, zip(unique_ids, random_seeds)):
+                df_result.append(df_partial)
 
 
     df_result = df_od[["origin_id", "destination_id"]].copy()
@@ -135,13 +128,12 @@ def execute(context):
     # Prepare spatial data
     df_work_od, df_education_od = context.stage("data.od.weighted")
 
+
     # Sampling
     random = np.random.RandomState(context.config("random_seed"))
 
     df_locations = context.stage("synthesis.locations.work")
-    # print(df_locations)
-    # print(df_work_od)
-    # print(df_persons)
+
     df_locations["weight"] = df_locations["employees"]
     df_work = process(context, "work", random, df_persons,
         df_work_od, df_locations
@@ -152,7 +144,6 @@ def execute(context):
     df_persons["commune_id"] =     df_persons["commune_id"].astype(str)
     df_persons["iris_id"] =     df_persons["iris_id"].astype(str)
     df_persons["departement_id"] =     df_persons["departement_id"].astype(str)
-
 
     df_education = process(context, "education", random, df_persons,
         df_education_od, df_locations

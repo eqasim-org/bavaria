@@ -23,7 +23,8 @@ def execute(context):
     # Perform stochastic rounding for the population (and scale weights)
     df_rounding = df_census[["household_id", "weight", "household_size"]].drop_duplicates("household_id")
 
-    df_rounding["multiplicator"] = np.floor(df_rounding["weight"])
+    print(df_rounding)
+    df_rounding["multiplicator"] = df_rounding["weight"]
     df_rounding["multiplicator"] += random.random_sample(len(df_rounding)) <= (df_rounding["weight"] - df_rounding["multiplicator"])
     df_rounding["multiplicator"] = df_rounding["multiplicator"].astype(int)
 

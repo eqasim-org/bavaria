@@ -14,48 +14,69 @@ def configure(context):
 def execute(context):
     # Find required IRIS
     df_iris = context.stage("data.spatial.iris")
-    required_iris = set(df_iris["iris_id"].unique())
-    
-    # Load all addresses and add IRIS information
-    df_addresses = context.stage("synthesis.locations.home.addresses")
+    # required_iris = set(df_iris["iris_id"].unique())
 
-    print("Imputing IRIS into addresses ...")
-   
-    df_addresses = gpd.sjoin(df_addresses,
-        df_iris[["iris_id", "commune_id", "geometry"]], predicate = "within")
-    del df_addresses["index_right"]
-    
-    df_addresses.loc[df_addresses["iris_id"].isna(), "iris_id"] = "unknown"
-    df_addresses["iris_id"] = df_addresses["iris_id"].astype("category")
+    df_addresses = df_iris[["iris_id", "commune_id", "geometry"]].copy()
 
+    z = df_addresses.area
+    z = z/(z.max()/10000)
+    z  = z.astype(int)
+    df_addresses["geometry"] = df_addresses.geometry.sample_points(size=z,rng=0)
+    df_addresses = df_addresses.explode(ignore_index=True)
     df_addresses["fake"] = False
+    df_addresses["weight"] = 1.0
+    df_addresses["building_id"] = df_addresses.index
 
-    # Add fake homes for IRIS without addresses
-    missing_iris = required_iris - set(df_addresses["iris_id"].unique())
 
-    if len(missing_iris) > 0:
-        print("Adding homes at the centroid of %d/%d IRIS without BDTOPO observations" % (
-            len(missing_iris), len(required_iris)))
+    # print(df_iris)
+    # ee
+    # # Load all addresses and add IRIS information
+    # df_addresses = context.stage("synthesis.locations.home.addresses")
 
-        df_added = []
+    # print("Imputing IRIS into addresses ...")
 
-        for iris_id in sorted(missing_iris):
-            centroid = df_iris[df_iris["iris_id"] == iris_id]["geometry"].centroid.iloc[0]
+    # df_addresses = gpd.sjoin(df_addresses,
+    #     df_iris[["iris_id", "commune_id", "geometry"]], predicate = "within")
+    # del df_addresses["index_right"]
 
-            df_added.append({
-                "iris_id": iris_id, "geometry": centroid,
-                "commune_id": iris_id[:5],
-                "weight" : 1,
-                "building_id": -1
-            })
+    # df_addresses.loc[df_addresses["iris_id"].isna(), "iris_id"] = "unknown"
+    # df_addresses["iris_id"] = df_addresses["iris_id"].astype("category")
 
-        df_added = gpd.GeoDataFrame(pd.DataFrame.from_records(df_added), crs = df_addresses.crs)
-        df_added["fake"] = True
+    # df_addresses["fake"] = False
 
-        df_addresses = pd.concat([df_addresses, df_added])
+    # # Add fake homes for IRIS without addresses
+    # missing_iris = required_iris - set(df_addresses["iris_id"].unique())
+
+    # if len(missing_iris) > 0:
+    #     print("Adding homes at the centroid of %d/%d IRIS without BDTOPO observations" % (
+    #         len(missing_iris), len(required_iris)))
+
+    #     df_added = []
+
+    #     for iris_id in sorted(missing_iris):
+    #         centroid = df_iris[df_iris["iris_id"] == iris_id]["geometry"].centroid.iloc[0]
+
+    #         df_added.append({
+    #             "iris_id": iris_id, "geometry": centroid,
+    #             "commune_id": iris_id[:5],
+    #             "weight" : 1,
+    #             "building_id": -1
+    #         })
+
+    #     df_added = gpd.GeoDataFrame(pd.DataFrame.from_records(df_added), crs = df_addresses.crs)
+    #     df_added["fake"] = True
+
+    #     df_addresses = pd.concat([df_addresses, df_added])
+
+
+    # generate fake adresses
+
 
     # Add home identifier
     df_addresses["location_id"] = np.arange(len(df_addresses))
     df_addresses["location_id"] = "home_" + df_addresses["location_id"].astype(str)
 
+
+    # print(df_addresses)
+    # ee
     return df_addresses

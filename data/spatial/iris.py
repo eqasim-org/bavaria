@@ -18,9 +18,9 @@ def execute(context):
     df_codes = context.stage("data.spatial.codes")
 
     df_iris = gpd.read_file("{}/{}/{}".format(context.config("data_path"), context.config("iris_path"),"DE_VG250.gpkg"),layer='VG250_GEM')[[
-        "ARS", "geometry"
+        "AGS", "geometry"
     ]].rename(columns = {
-        "ARS": "commune_id"
+        "AGS": "commune_id"
     })
 
     df_iris.crs = "EPSG:25832"

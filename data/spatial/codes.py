@@ -35,8 +35,8 @@ def execute(context):
         with archive.open(context.config("codes_xlsx")) as f:
             df_codes = pd.read_excel(f,dtype=object,
                 skiprows = 0, sheet_name = "VGTB_VZ_GEM"
-            )[["ARS_G", "ARS_R", "ARS_L", "GEN_G"]].rename(columns = {
-                "ARS_G": "commune_id",
+            )[["AGS_G", "ARS_R", "ARS_L", "GEN_G"]].rename(columns = {
+                "AGS_G": "commune_id",
                 "ARS_R": "departement_id",
                 "ARS_L": "region_id"
             })
@@ -47,7 +47,8 @@ def execute(context):
 
     df_codes["commune_id"] = df_codes["commune_id"].astype("category")
     df_codes["departement_id"] = df_codes["departement_id"].astype("category")
-    df_codes["region_id"] = df_codes["region_id"].astype(int)
+    df_codes["region_id"] = df_codes["region_id"].astype("category")
+
 
     # Filter zones
     requested_regions = list(map(int, context.config("regions")))
@@ -66,7 +67,7 @@ def execute(context):
     df_codes["iris_id"] = df_codes["commune_id"].astype(str) + "0000"
     df_codes["iris_id"] = df_codes["iris_id"].astype("category")
 
-    return df_codes
+    return df_codes[["region_id","departement_id","commune_id","iris_id"]]
 
 def validate(context):
     if not os.path.exists("%s/%s" % (context.config("data_path"), context.config("codes_path"))):

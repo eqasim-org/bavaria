@@ -66,9 +66,8 @@ output_path = (
 # reset fake data folders (9)
 shutil.rmtree("%s/bpe_2021" % output_path, ignore_errors=True)
 shutil.rmtree("%s/rp_2019" % output_path, ignore_errors=True)
-shutil.rmtree("%s/bpe_2021" % output_path, ignore_errors=True)
 shutil.rmtree("%s/filosofi_2019" % output_path, ignore_errors=True)
-shutil.rmtree("{}/bdtopo_idf".format(output_path), ignore_errors=True)
+# shutil.rmtree("{}/bdtopo_idf".format(output_path), ignore_errors=True)
 shutil.rmtree("%s/ban_idf" % output_path, ignore_errors=True)
 shutil.rmtree("%s/sirene" % output_path, ignore_errors=True)
 
@@ -94,8 +93,7 @@ df_codes = pd.read_pickle(local_name + "data.spatial.codes.p")
 
 df_iris = pd.read_pickle(local_name + "data.spatial.iris.p")
 
-
-df_candidates = pd.read_pickle(local_name + "synthesis.population.spatial.primary.candidates.p")
+# df_candidates = pd.read_pickle(local_name + "synthesis.population.spatial.primary.candidates.p")
 
 df = df_iris.copy()
 df = df.rename(

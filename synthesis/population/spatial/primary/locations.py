@@ -79,6 +79,7 @@ def execute(context):
     data = context.stage("synthesis.population.spatial.primary.candidates")
     df_persons = data["persons"]
 
+
     # Separate data set
     df_work = df_persons[df_persons["has_work_trip"]]
     df_education = df_persons[df_persons["has_education_trip"]]

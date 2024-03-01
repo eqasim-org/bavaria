@@ -19,7 +19,6 @@ def _sample_locations(context, args):
 
     # Select home candidates and locations for the selected IRIS
     df_homes = df_homes[df_homes["iris_id"] == iris_id].copy()
-    df_locations = df_locations[df_locations["iris_id"] == iris_id].copy()
 
     # Verify counts
     home_count = len(df_homes)
@@ -34,13 +33,13 @@ def _sample_locations(context, args):
     cdf = np.cumsum(df_locations["weight"].values)
     cdf /= cdf[-1]
 
-    indices = np.array([np.count_nonzero(cdf < u) 
+    indices = np.array([np.count_nonzero(cdf < u)
         for u in random.random_sample(size = home_count)])
-    
+
     # Apply selection
     df_homes["geometry"] = df_locations.iloc[indices]["geometry"].values
     df_homes["building_id"] = df_locations.iloc[indices]["building_id"].values
-    
+
     # Update progress
     context.progress.update()
 
@@ -51,7 +50,7 @@ def execute(context):
 
     df_homes = context.stage("synthesis.population.spatial.home.zones")
     df_locations = context.stage("synthesis.locations.home.locations")
-                   
+
     # Sample locations for home
     unique_iris_ids = sorted(set(df_homes["iris_id"].unique()))
 

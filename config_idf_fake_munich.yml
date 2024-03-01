@@ -6,11 +6,12 @@ working_directory: C:/Users/arthur.burianne/Documents/tum/simulations/fake_munic
 
 # This section defines which parts of the pipeline should be run
 run:
+  #- synthesis.locations.home.output
   #- data.spatial.iris # implies codes, usefulll to generate fake data
   #- data.spatial.iris # implies codes, usefulll to generate fake data
   #- data.income.municipality # implies codes, usefulll to generate fake data
-
-  - synthesis.output # To create the output population in the output_path (see below)
+  - data.census.raw_employee
+  #- synthesis.output # To create the output population in the output_path (see below)
   #- matsim.output # Uncomment, if you want to run the full simulation (you'll need Java for that)
 
 # Here the configuraiton of the pipeline starts
