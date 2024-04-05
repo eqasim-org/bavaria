@@ -1,6 +1,5 @@
 import pandas as pd
 import os
-import zipfile
 
 """
 This stage loads the raw data from the French population census.
@@ -34,7 +33,6 @@ COLUMNS_DTYPES = {
 }
 
 def execute(context):
-    df_records = []
     df_codes = context.stage("data.spatial.codes")
 
     requested_departements = df_codes["departement_id"].astype(str).unique()
@@ -43,7 +41,8 @@ def execute(context):
     print(f)
 
     # read excel raw file
-    col_names = ["CANTVILLE","optional_admin_id","name","gender","total","3","6","10","15","18","20","25","30","40","50","65","75","75+","gemeinde_id_2","strangers"]
+    col_names = ["CANTVILLE","optional_admin_id","name","gender","total","0","3","6","10","15","18","20","25","30","40","50","65","75","gemeinde_id_2","strangers"]
+
     df_census = pd.read_excel(f, sheet_name="Gemeinden",skiprows=5,names=col_names)
     df_census = df_census.drop(columns=["gemeinde_id_2","strangers"])
 

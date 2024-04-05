@@ -1,43 +1,17 @@
 import pandas as pd
 import os
-import zipfile
-
 """
 This stage loads the raw data from the French population census.
 """
 
 def configure(context):
-    context.stage("data.spatial.codes")
-
+    context.stage("data.census.raw")
     context.config("data_path")
     context.config("census_path", "rp_2019")
     context.config("census_xla", "13111-004r.xlsx")
 
-COLUMNS_DTYPES = {
-    "CANTVILLE":"str",
-    "NUMMI":"str",
-    "AGED":"str",
-    "COUPLE":"str",
-    "CS1":"str",
-    "DEPT":"str",
-    "ETUD":"str",
-    "ILETUD":"str",
-    "ILT":"str",
-    "IPONDI":"str",
-    "IRIS":"str",
-    "REGION":"str",
-    "SEXE":"str",
-    "TACT":"str",
-    "TRANS":"str",
-    "VOIT":"str",
-    "DEROU":"str"
-}
 
 def execute(context):
-    df_records = []
-    df_codes = context.stage("data.spatial.codes")
-
-    requested_departements = df_codes["departement_id"].astype(str).unique()
 
     f = "{}/{}/{}".format(context.config("data_path"), context.config("census_path"),context.config("census_xla"))
 
@@ -65,12 +39,11 @@ def execute(context):
         df_census[col] = df_census[col].replace(".",0)
         df_census[col] = df_census[col].astype("int32")
 
-
     return df_census.reset_index(drop=True)
 
 
-def validate(context):
-    if not os.path.exists("{}/{}".format(context.config("data_path"), context.config("census_path"))):
-        raise RuntimeError("RP 2019 data is not available")
+# def validate(context):
+#     if not os.path.exists("{}/{}".format(context.config("data_path"), context.config("census_path"))):
+#         raise RuntimeError("RP 2019 data is not available")
 
-    return os.path.getsize("{}/{}".format(context.config("data_path"), context.config("census_path")))
+#     return os.path.getsize("{}/{}".format(context.config("data_path"), context.config("census_path")))

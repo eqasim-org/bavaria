@@ -6,11 +6,7 @@ working_directory: C:/Users/arthur.burianne/Documents/tum/simulations/fake_munic
 
 # This section defines which parts of the pipeline should be run
 run:
-  #- synthesis.locations.home.output
-  #- data.spatial.iris # implies codes, usefulll to generate fake data
-  #- data.spatial.iris # implies codes, usefulll to generate fake data
-  #- data.income.municipality # implies codes, usefulll to generate fake data
-  - data.census.raw_employee
+  - data.census.raw_employment
   #- synthesis.output # To create the output population in the output_path (see below)
   #- matsim.output # Uncomment, if you want to run the full simulation (you'll need Java for that)
 
@@ -32,8 +28,8 @@ config:
   mode_choice: false
   output_prefix: mun_
  
-  scenario_name : fake_Munich
-  short_description : a test of Munich with all fake but real gtfs, osm, codes, communes
+  # scenario_name : fake_Munich
+  # short_description : a test of Munich with all fake but real gtfs, osm, codes, communes
   
   # Paths to the input data and where the output should be stored
   data_path: C:/Users/arthur.burianne/Documents/sources_data/fake_data_munich
