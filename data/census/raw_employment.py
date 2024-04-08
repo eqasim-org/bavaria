@@ -8,12 +8,12 @@ def configure(context):
     context.stage("data.census.raw")
     context.config("data_path")
     context.config("census_path", "rp_2019")
-    context.config("census_xla", "13111-004r.xlsx")
+    context.config("census_xlb", "13111-004r.xlsx")
 
 
 def execute(context):
 
-    f = "{}/{}/{}".format(context.config("data_path"), context.config("census_path"),context.config("census_xla"))
+    f = "{}/{}/{}".format(context.config("data_path"), context.config("census_path"),context.config("census_xlb"))
 
     col_names = ["department_id","department_name","age_class","all_total","all_male",
                  "all_female","national_all","national_male","national_female","foreign_all","foreign_male,","foreign_female"]

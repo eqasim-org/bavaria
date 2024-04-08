@@ -18,7 +18,7 @@ def execute(context):
     df = context.stage("data.census.raw")
 
     df_census = pd.DataFrame()
-    cols_ages = ["3","6","10","15","18","20","25","30","40","50","65","75","75+"]
+    cols_ages = ["0","3","6","10","15","18","20","25","30","40","50","65","75"]
     classes_ages = [2,5,9,14,17,19,24,29,39,49,64,74,76]
 
     cols_mains = ["CANTVILLE","optional_admin_id","name","gender"]

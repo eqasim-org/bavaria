@@ -37,11 +37,11 @@ def validate(context):
     if shutil.which(context.config("osmosis_binary")) in ["", None]:
         raise RuntimeError("Cannot find Osmosis binary at: %s" % context.config("osmosis_binary"))
 
-    if not b"0.48." in sp.check_output([
-        shutil.which(context.config("osmosis_binary")),
-        "-v"
-    ], stderr = sp.STDOUT):
-        print("WARNING! Osmosis of at least version 0.48.x is recommended!")
+    #if not b"0.48." in sp.check_output([
+     #   shutil.which(context.config("osmosis_binary")),
+     #   "-v"
+    #], stderr = sp.STDOUT):
+     #   print("WARNING! Osmosis of at least version 0.48.x is recommended!")
 
 def execute(context):
     pass
