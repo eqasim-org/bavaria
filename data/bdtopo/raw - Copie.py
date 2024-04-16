@@ -22,7 +22,6 @@ def configure(context):
 
 
     context.stage("data.spatial.departments")
-    context.stage("data.spatial.municipalities")
 
 def execute(context):
     df_departments = context.stage("data.spatial.departments")
@@ -33,18 +32,15 @@ def execute(context):
                 use_arrow=True,
             )
 
+    # with zipfile.ZipFile("{}/{}/{}".format(context.config("data_path"), context.config("bdtopo_path"), context.config("bdtopo_zip"))) as archive:
+    #     with archive.open(context.config("bdtopo_shp")) as f:
+    #         df_buildings = gpd.read_file(f,
+    #             engine="pyogrio",
+    #             use_arrow=True,
+    #         )
+
     df_buildings["building_id"] = df_buildings.index
-    df_buildings["weight"] = df_buildings.area.round()
-    df_buildings.loc[(df_buildings["weight"] >=40) & (df_buildings["weight"] <400)]
-    df_buildings["housing"] = True
-    df_buildings["geometry"] = df_buildings.centroid
+    df_buildings["housing"] = df_buildings.area.div(50).round()
+    df_buildings.loc[(df_buildings["housing"] >0) & (df_buildings["housing"] <40)]
 
-    df_zones = context.stage("data.spatial.municipalities")
-    
-    df_buildings = gpd.sjoin(df_buildings,df_zones[["geometry","commune_id"]],how="left",predicate="intersects")
-    
-    df_buildings = df_buildings.reset_index(drop=True).copy()
-    
-    
-
-    return df_buildings[["building_id", "weight","housing","commune_id","geometry"]]
+    return df_buildings[["building_id", "housing", "geometry"]]

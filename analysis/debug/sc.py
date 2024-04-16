@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 def configure(context):
-    context.stage("data.census.filtered", alias = "census")
+    context.stage("data.census.ipf_cleaned", alias = "census")
     context.stage("data.hts.selected", alias = "hts")
     context.config("output_path")
 

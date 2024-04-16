@@ -164,6 +164,17 @@ def execute(context):
     df_source = pd.merge(df_source_persons, df_source_households)
 
     df_target = context.stage("synthesis.population.sampled")
+    
+    # df_source["sex"] = df_source["sex"].astype("string")
+    df_source["sex2"] = 0
+    df_source.loc[df_source["sex"]=="female","sex2"] = 2
+    df_source.loc[df_source["sex"]=="male","sex2"] = 1
+    df_source["sex"] = df_source["sex2"]
+    
+    print(df_target["sex"].unique())
+    print(df_source["sex"].unique())
+
+    # df_source.loc[df_source["sex"],"sex"] = 1
 
     # Define matching attributes
     AGE_BOUNDARIES = [14, 29, 44, 59, 74, 1000]
@@ -178,6 +189,8 @@ def execute(context):
 
     df_target["any_cars"] = df_target["number_of_vehicles"] > 0
     df_source["any_cars"] = df_source["number_of_vehicles"] > 0
+    
+    
 
     columns = ["sex", "any_cars", "age_class", "socioprofessional_class"]
     if "income_class" in df_source: columns += ["income_class"]

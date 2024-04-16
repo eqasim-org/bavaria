@@ -10,7 +10,7 @@ Comparison of various attributes between EGT, ENTD and census.
 def configure(context):
     context.stage("data.hts.egt.filtered")
     context.stage("data.hts.entd.filtered")
-    context.stage("data.census.filtered")
+    context.stage("data.census.ipf_cleaned")
 
 def combine(htss):
     households, persons, trips = [], [], []
@@ -81,7 +81,7 @@ def execute(context):
     df_persons["age_class"] = np.digitize(df_persons["age"], AGE_BOUNDS, right = True)
     df_age = df_persons.groupby(["hts", "age_class"])["person_weight"].sum().reset_index(name = "person_weight")
 
-    df_census = pd.DataFrame(context.stage("data.census.filtered")[["age", "studies", "weight", "employed"]], copy = True)
+    df_census = pd.DataFrame(context.stage("data.census.ipf_cleaned")[["age", "studies", "weight", "employed"]], copy = True)
     df_census["hts"] = "census"
     df_census["age_class"] = np.digitize(df_census["age"], AGE_BOUNDS, right = True)
     df_age_census = df_census.groupby(["hts", "age_class"])["weight"].sum().reset_index(name = "person_weight")

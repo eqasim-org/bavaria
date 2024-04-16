@@ -9,7 +9,7 @@ def configure(context):
     context.stage("data.spatial.codes")
     context.stage("data.income.municipality")
     context.stage("data.income.region")
-    context.stage("data.census.filtered")
+    context.stage("data.census.ipf_cleaned")
     context.stage("data.sirene.localized")
 
 def execute(context):
@@ -30,8 +30,8 @@ def execute(context):
         "weighted_number_of_persons": df_census["weight"].sum(),
         "share_of_households_without_iris": np.sum(df_households[~(df_households["iris_id"] != "undefined") & (df_households["commune_id"] != "undefined")]["weight"]) / np.sum(df_households["weight"]),
         "share_of_households_without_commune": np.sum(df_households[~(df_households["iris_id"] != "undefined") & ~(df_households["commune_id"] != "undefined")]["weight"]) / np.sum(df_households["weight"]),
-        "filtered_households_share": context.get_info("data.census.filtered", "filtered_households_share"),
-        "filtered_persons_share": context.get_info("data.census.filtered", "filtered_persons_share"),
+        "filtered_households_share": context.get_info("data.census.ipf_cleaned", "filtered_households_share"),
+        "filtered_persons_share": context.get_info("data.census.ipf_cleaned", "filtered_persons_share"),
     }
 
     # OD data

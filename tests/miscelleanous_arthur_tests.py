@@ -15,11 +15,11 @@ import pandas as pd
 
 tmp_path = ("C:/Users/arthur.burianne/Documents/tum/simulations/fake_munich_10_tmp/")
 
-# df_filtered = pd.read_pickle(tmp_path + "data.census.filtered__bae49205a1e9b09da2324345552c5d19.p")
+df_filtered = pd.read_pickle(tmp_path + "data.census.filtered__bae49205a1e9b09da2324345552c5d19.p")
 
 # df_cleaned = pd.read_pickle(tmp_path + "data.census.cleaned__bae49205a1e9b09da2324345552c5d19.p")
 
-# df_raw = pd.read_pickle(tmp_path + "data.census.raw__bae49205a1e9b09da2324345552c5d19.p")
+df_raw = pd.read_pickle(tmp_path + "data.census.raw__bae49205a1e9b09da2324345552c5d19.p")
 
 # df_adresses = pd.read_pickle(tmp_path + "synthesis.locations.home.locations__2b7751b4e24cc2bc3921da0807c1854d.p")
 
@@ -32,3 +32,10 @@ tmp_path = ("C:/Users/arthur.burianne/Documents/tum/simulations/fake_munich_10_t
 # df_census = pd.read_pickle(tmp_path + "data.census.cleaned__bae49205a1e9b09da2324345552c5d19.p")
 
 # df_employees = pd.read_pickle(tmp_path + "data.census.raw_employee__d3aa0ed1bf9355d6a074c12307524194.p")
+
+df_ipf_format = pd.read_pickle(tmp_path + "data.census.ipf_format__f04a9c12cf0890ac6c6c19ea74d2e760.p")
+
+df_ipf_merge = pd.read_pickle(tmp_path + "data.census.ipf_merge__f04a9c12cf0890ac6c6c19ea74d2e760.p")
+
+
+df_ipf_clean = pd.read_pickle(tmp_path + "data.census.ipf_clean__f04a9c12cf0890ac6c6c19ea74d2e760.p")

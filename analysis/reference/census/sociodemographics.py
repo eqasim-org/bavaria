@@ -2,7 +2,7 @@ import analysis.statistics as stats
 import analysis.marginals as marginals
 
 def configure(context):
-    context.stage("data.census.filtered")
+    context.stage("data.census.ipf_cleaned")
 
 def execute(context):
     person_marginals = marginals.combine(
@@ -31,7 +31,7 @@ def execute(context):
         marginals.cross(marginals.SPATIAL_MARGINALS, marginals.CENSUS_HOUSEHOLD_MARGINALS)
     )
 
-    df_persons = context.stage("data.census.filtered")
+    df_persons = context.stage("data.census.ipf_cleaned")
     marginals.prepare_classes(df_persons)
 
     df_households = df_persons.drop_duplicates("household_id").copy()

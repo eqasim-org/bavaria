@@ -112,6 +112,13 @@ def execute(context):
     df_education_candidates = pd.merge(df_education_candidates, df_locations, how = "left", on = "location_id")
     df_education_candidates = gpd.GeoDataFrame(df_education_candidates)
 
+    print(df_work_candidates.dtypes)
+    print(df_work_candidates)
+    
+    print(df_education_candidates.dtypes)
+    print(df_education_candidates)
+    
+
     # Assign destinations
     df_work = process(context, "work", df_work, df_work_candidates)
     df_education = process(context, "education", df_education, df_education_candidates)

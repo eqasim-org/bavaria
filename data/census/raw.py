@@ -12,25 +12,6 @@ def configure(context):
     context.config("census_path", "rp_2019")
     context.config("census_xla", "a1310c_202200.xla")
 
-COLUMNS_DTYPES = {
-    "CANTVILLE":"str",
-    "NUMMI":"str",
-    "AGED":"str",
-    "COUPLE":"str",
-    "CS1":"str",
-    "DEPT":"str",
-    "ETUD":"str",
-    "ILETUD":"str",
-    "ILT":"str",
-    "IPONDI":"str",
-    "IRIS":"str",
-    "REGION":"str",
-    "SEXE":"str",
-    "TACT":"str",
-    "TRANS":"str",
-    "VOIT":"str",
-    "DEROU":"str"
-}
 
 def execute(context):
     df_codes = context.stage("data.spatial.codes")
@@ -85,7 +66,6 @@ def execute(context):
     df_census_cat = pd.DataFrame()
     for dep in requested_departements:
         df_census_ex = df_census.loc[df_census["CANTVILLE"].str.startswith(dep)]
-
         df_census_cat = pd.concat([df_census_cat,df_census_ex])
 
 
