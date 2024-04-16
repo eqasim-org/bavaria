@@ -87,11 +87,11 @@ def find_assignment_problems(df, df_locations):
             problem["destination"] = current_location[LOCATION_FIELDS.index(destination_purpose)] # Shapely POINT
 
 
-        if problem["destination"] is None:
-             problem["destination"] =np.array([721083.26503899, 5340577.00505011])
+        # if problem["destination"] is None:
+        #      problem["destination"] =np.array([721083.26503899, 5340577.00505011])
 
-        else:
-            problem["destination"] = np.array([[problem["destination"].x, problem["destination"].y]])
+        # else:
+        #     problem["destination"] = np.array([[problem["destination"].x, problem["destination"].y]])
 
         if problem["origin"] is None:
             problem["activity_index"] = problem["trip_index"]

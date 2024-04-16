@@ -26,5 +26,8 @@ def execute(context):
     # Define new IDs
     df_locations["location_id"] = np.arange(len(df_locations))
     df_locations["location_id"] = "sec_" + df_locations["location_id"].astype(str)
+    
+    print(df_locations)
+    print(df_locations.dtypes)
 
     return df_locations
