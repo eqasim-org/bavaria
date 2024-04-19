@@ -109,7 +109,7 @@ def execute(context):
 
     # Run algorithm in parallel
     with context.progress(label = "Assigning secondary locations to persons", total = number_of_persons):
-        with context.parallel(processes = 1, data = dict(
+        with context.parallel(processes = processes, data = dict(
             distance_distributions = distance_distributions,
             destinations = destinations
         )) as parallel:

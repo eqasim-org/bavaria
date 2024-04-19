@@ -32,7 +32,7 @@ def define_distance_ordering(df_persons, df_candidates, progress):
 
         progress.update()
 
-    # assert len(set(indices)) == len(df_candidates)
+    assert len(set(indices)) == len(df_candidates)
 
     return indices
 
@@ -53,7 +53,7 @@ def process_municipality(context, origin_id):
     df_candidates = df_candidates[df_candidates["origin_id"] == origin_id]
 
     # From previous step, this should be equal!
-    # assert len(df_persons) == len(df_candidates)
+    assert len(df_persons) == len(df_candidates)
 
     indices = define_ordering(df_persons, df_candidates, context.progress)
     df_candidates = df_candidates.iloc[indices]
@@ -78,7 +78,6 @@ def process(context, purpose, df_persons, df_candidates):
 def execute(context):
     data = context.stage("synthesis.population.spatial.primary.candidates")
     df_persons = data["persons"]
-
 
     # Separate data set
     df_work = df_persons[df_persons["has_work_trip"]]
@@ -111,13 +110,6 @@ def execute(context):
     df_education_candidates = data["education_candidates"]
     df_education_candidates = pd.merge(df_education_candidates, df_locations, how = "left", on = "location_id")
     df_education_candidates = gpd.GeoDataFrame(df_education_candidates)
-
-    print(df_work_candidates.dtypes)
-    print(df_work_candidates)
-    
-    print(df_education_candidates.dtypes)
-    print(df_education_candidates)
-    
 
     # Assign destinations
     df_work = process(context, "work", df_work, df_work_candidates)

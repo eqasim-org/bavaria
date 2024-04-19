@@ -61,7 +61,10 @@ def execute(context):
 
     # filter locations
     df_census['CANTVILLE'] = "09" + df_census['CANTVILLE']
-    df_census = df_census.loc[df_census["CANTVILLE"].str.len()>3] # removes departments from list keeps states city (4 digits)
+    
+    df_census.loc[df_census["CANTVILLE"].str.len()==5,"CANTVILLE"] += "000" 
+
+    df_census = df_census.loc[df_census["CANTVILLE"].str.len()==8] # removes departments from list keeps states city (4 digits)
 
     df_census_cat = pd.DataFrame()
     for dep in requested_departements:

@@ -48,14 +48,6 @@ class AssignmentSolver:
             distance_result = self.distance_sampler.sample(problem)
 
             relaxation_result = self.relaxation_solver.solve(problem, distance_result["distances"])
-            if len(relaxation_result["locations"]) != problem["size"]:
-
-                print(problem)
-                print(relaxation_result)
-                print(distance_result)
-                print("here")
-                raise RuntimeError()
-                
             discretization_result = self.discretization_solver.solve(problem, relaxation_result["locations"])
 
             assignment_result = self.objective.evaluate(problem, distance_result, relaxation_result, discretization_result)
@@ -271,8 +263,6 @@ class FeasibleDistanceSampler(DistanceSampler):
 
     def sample(self, problem):
         origin, destination = problem["origin"], problem["destination"]
-        
-        
 
         if origin is None and destination is None: # This is a free chain
             distances = self.sample_distances(problem)
@@ -285,9 +275,6 @@ class FeasibleDistanceSampler(DistanceSampler):
         elif destination is None: # This is a right tail
             distances = self.sample_distances(problem)
             return dict(valid = True, distances = distances, iterations = None)
-
-        print(origin)
-        print(destination)
 
         direct_distance = la.norm(destination - origin, axis = 1)
 

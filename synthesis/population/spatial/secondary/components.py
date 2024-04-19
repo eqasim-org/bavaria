@@ -58,12 +58,8 @@ class CustomDiscretizationSolver(rda.DiscretizationSolver):
 
             discretized_identifiers.append(identifier)
             discretized_locations.append(location)
-        
-        if not len(discretized_locations) == problem["size"]:
-            print(locations)
-            print(problem)
-            print(discretized_locations)
-            raise RuntimeError()
+
+        assert len(discretized_locations) == problem["size"]
 
         return dict(
             valid = True, locations = np.vstack(discretized_locations), identifiers = discretized_identifiers
