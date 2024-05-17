@@ -10,7 +10,7 @@ Potential TODO: Do this by mode of transport!
 """
 
 def configure(context):
-    context.stage("data.od.cleaned")
+    context.stage("data.od.gravity")
     context.stage("data.spatial.codes")
 
 def fix_origins(df, commune_ids, purpose):
@@ -33,7 +33,8 @@ def execute(context):
     commune_ids = set(df_codes["commune_id"].unique())
 
     # Load data
-    df_work, df_education = context.stage("data.od.cleaned")
+    df_work, df_education = context.stage("data.od.gravity")
+    
 
     # Aggregate work (we do not consider different modes at the moment)
     df_work = df_work[["origin_id", "destination_id", "weight"]].groupby(["origin_id", "destination_id"]).sum().reset_index()
@@ -42,15 +43,25 @@ def execute(context):
     df_work = fix_origins(df_work, commune_ids, "work")
     df_education = fix_origins(df_education, commune_ids, "education")
 
+    print(df_work)
+
     # Compute totals
     df_total = df_work[["origin_id", "weight"]].groupby("origin_id").sum().reset_index().rename({ "weight" : "total" }, axis = 1)
     df_work = pd.merge(df_work, df_total, on = "origin_id")
+    
+    print(df_work)
+
 
     df_total = df_education[["origin_id", "weight"]].groupby("origin_id").sum().reset_index().rename({ "weight" : "total" }, axis = 1)
     df_education = pd.merge(df_education, df_total, on = "origin_id")
 
     # Compute weight
     df_work["weight"] /= df_work["total"]
+    
+    print(df_work)
+
+    print(df_education)
+    exit()
     df_education["weight"] /= df_education["total"]
 
     del df_work["total"]
