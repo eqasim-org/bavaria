@@ -61,7 +61,6 @@ def execute(context):
     print(df_work)
 
     print(df_education)
-    exit()
     df_education["weight"] /= df_education["total"]
 
     del df_work["total"]

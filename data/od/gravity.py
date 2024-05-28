@@ -109,40 +109,18 @@ def execute(context):
             return flow
         
         
-        
-        # Remove local employees from the marginals
-    
-    population = df_population["population"].values - df_employment["local_employees"].values
-    employment = df_employment["employees"].values - df_employment["local_employees"].values
-    
-    population = df_population["population"] - df_employment["local_employees"]
-    employment = df_employment["employees"] - df_employment["local_employees"]
-
-    print(df_employment.loc[df_employment["employees"]>df_employment["local_employees"]])
-
-    print(len(df_employment))
-    # print(np.count_nonzero(population<0))
-    # print(np.count_nonzero(employment<0))
-
-    exit()    
-    
+    population = df_population["population"] 
+    employment = df_employment["employees"]
+   
     # Balancing of the remaining population and workplaces
     observations = min(np.sum(population), np.sum(employment))
     population *= observations / np.sum(population)
     employment *= observations / np.sum(employment)
-    
-    # Friction term (interaction term)
-    friction = np.exp(-0.09 * distances - 2.2)
-    
-    # Remove diagonal, set to zero
-    friction -= np.eye(len(municipalities)) * np.diag(friction)
-    
-    flow = evaluate_gravity(population, employment, friction)
-    
-    # Add back the local employees to the matrix
-    flow += np.eye(len(municipalities)) * df_employment["local_employees"].values
 
-    
+    friction = np.exp(-0.09 * distances - 2.4) + np.eye(len(municipalities)) * 1.0
+
+    flow = evaluate_gravity(population, employment, friction)
+
     # Convert to data frame
     df_flow = pd.DataFrame({
         "flow": flow.reshape((-1,)),
@@ -153,5 +131,5 @@ def execute(context):
     df_flow["weight"] = df_flow["flow"]
     
     print(df_flow)
-    exit()
+    # exit()
     return df_flow,df_flow

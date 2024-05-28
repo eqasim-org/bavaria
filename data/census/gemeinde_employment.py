@@ -40,7 +40,6 @@ def execute(context):
 
     df_census = df_census.drop(3)
     df_census = df_census.drop(4)
-    # df_census = df_census.drop([2251,2252,2253,2254,2255,2256,2257])
     
     # deal with first 3 short length values
     df_census.loc[0,"municipality_id"] = "09161000"
@@ -62,6 +61,5 @@ def execute(context):
     df_census = df_census.loc[df_census["destination_id"].str.startswith("091")].copy()
     
     print(df_census.loc[df_census["employees"]<df_census["local_employees"]])
-    exit()
     
     return df_census

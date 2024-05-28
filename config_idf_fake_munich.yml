@@ -2,14 +2,14 @@
 ## based on the synpp package
 
 # This is the path to a directory where the pipeline can store temporary data
-working_directory: C:/Users/arthur.burianne/Documents/tum/simulations/fake_munich_10_tmp
+working_directory: /home/arthurburianne/tum/munich_10_tmp
 
 # This section defines which parts of the pipeline should be run
 run:
-  - synthesis.output
+  # - synthesis.output
   #- synthesis.population.sampled
   # - data.census.ipf_cleaned # To create the output population in the output_path (see below)
-  #- matsim.output # Uncomment, if you want to run the full simulation (you'll need Java for that)
+  - matsim.output # Uncomment, if you want to run the full simulation (you'll need Java for that)
 
 # Here the configuraiton of the pipeline starts
 config:
@@ -33,8 +33,8 @@ config:
   # short_description : a test of Munich with all fake but real gtfs, osm, codes, communes
   
   # Paths to the input data and where the output should be stored
-  data_path: C:/Users/arthur.burianne/Documents/sources_data/fake_data_munich
-  output_path: C:/Users/arthur.burianne/Documents/tum/simulations/fake_munich_10_output
+  data_path: /home/arthurburianne/tum/munich_data
+  output_path: /home/arthurburianne/tum/munich_10_output
 
   # Only interesting if you run the simulation
   java_memory: 14G
