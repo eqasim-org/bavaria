@@ -1,0 +1,20 @@
+"""
+Generates the IRIS zoning system that is not used in Germany. Instead, we create one
+fake IRIS for each municipality in Germany. See the `codes` stage for more information.
+"""
+
+def configure(context):
+    context.stage("germany.data.population.raw")
+
+def execute(context):
+    # Load shapes
+    df = context.stage("germany.data.population.raw")[["municipality_code", "geometry"]]
+
+    # Clean up identifiers
+    df["commune_id"] = df["municipality_code"].astype("category")
+
+    # Fake IRIS
+    df["iris_id"] = df["commune_id"].astype(str) + "0000"
+    df["iris_id"] = df["iris_id"].astype("category")
+
+    return df[["iris_id", "commune_id", "geometry"]]
