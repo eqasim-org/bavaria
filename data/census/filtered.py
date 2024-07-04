@@ -35,7 +35,7 @@ def execute(context):
         raise RuntimeError("""
             Multiple regions are defined, so the filtering for people going outside
             of Île-de-France does not make sense in that case. Consider adjusting the
-            data.census.filtered (or ipf_cleaned) stage!
+            data.census.filtered stage!
         """)
 
     print(

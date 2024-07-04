@@ -102,7 +102,7 @@ this code.
 
 ## Mode choice
 
-The population files for MATSim will automatically contain randomly assigned transport modes for the trips performed by the agents. In the mode choice process of MATSim, the modes will be adjusted and chosen according to the specific travel conditions of the agents.
+The population files for MATSim will automatically contain randomly assigned transport modes for the trips performed by the agents. In the mode choice process of MATSim, the modes will be adjusted and chosen according to the specific travel conditions of the agents. 
 
 It is possible to perform an upfront mode choice based on freeflow travel times that assigns more realistic modes by performing a 100% mode choice on ideal traffic conditions. To do so, update the `mode_choice` configuration entry in the `config.yml` configuration file. Once the pipeline is run again, the modes will be present in the population:
 
@@ -167,7 +167,7 @@ java -cp ile_de_france-1.0.6.jar org.eqasim.ile_de_france.emissions.RunExportEmi
 ```
 
 ```bash
-java -cp ile_de_france-1.0.6.jar org.eqasim.ile_de_france.emissions.RunComputeEmissionsGrid --config-path config.xml --domain-shp-path idf_25832.shp
+java -cp ile_de_france-1.0.6.jar org.eqasim.ile_de_france.emissions.RunComputeEmissionsGrid --config-path config.xml --domain-shp-path idf_2154.shp
 ```
 
 Please note that you need a copy of the HBEFA database in order to run those.

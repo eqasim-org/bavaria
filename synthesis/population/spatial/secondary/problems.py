@@ -79,11 +79,6 @@ def find_assignment_problems(df, df_locations):
 
         if origin_purpose in FIXED_PURPOSES:
             problem["origin"] = current_location[LOCATION_FIELDS.index(origin_purpose)] # Shapely POINT
-            
-            if problem["origin"] is None:
-                print(problem)
-                exit()
-            
             problem["origin"] = np.array([[problem["origin"].x, problem["origin"].y]])
 
         if destination_purpose in FIXED_PURPOSES:

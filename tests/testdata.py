@@ -556,7 +556,7 @@ def create(output_path):
     z = random.randint(100, 400, observations) # Not used but keeping unit test hashes constant
 
     ids = [
-        "BATIMENT{:016d}".format(n) for n in random.randint(1000, 1000000, observations)
+        "BATIMENT{:016d}".format(n) for n in random.randint(1000, 1000000, observations) 
     ]
 
     ids[0] = ids[1] # setting multiple adresses for 1 building usecase
@@ -657,7 +657,7 @@ def create(output_path):
 
     df_sirene_geoloc.to_csv("%s/sirene/GeolocalisationEtablissement_Sirene_pour_etudes_statistiques_utf8.zip" % output_path, index = False, sep=";", compression={'method': 'zip', 'archive_name': 'GeolocalisationEtablissement_Sirene_pour_etudes_statistiques_utf8.csv'})
 
-
+    
     # Data set: OSM
     # We add add a road grid of 500m
     print("Creating OSM ...")

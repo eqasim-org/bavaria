@@ -111,10 +111,9 @@ def execute(context):
 
     df_homes = context.stage("synthesis.population.spatial.home.zones")
     df_persons = pd.merge(df_persons, df_homes, on = "household_id")
-    
+
     # Prepare spatial data
     df_work_od, df_education_od = context.stage("data.od.weighted")
-    # issue with weights in df_work_od    
 
     # Sampling
     random = np.random.RandomState(context.config("random_seed"))
@@ -129,7 +128,7 @@ def execute(context):
     df_education = process(context, "education", random, df_persons,
         df_education_od, df_locations
     )
-    
+
     return dict(
         work_candidates = df_work,
         education_candidates = df_education,

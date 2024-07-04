@@ -48,8 +48,6 @@ def execute(context):
     # Validation
     initial_count = len(df_locations)
     df_locations = pd.concat([df_home_locations, df_work_locations, df_education_locations, df_secondary_locations])
-    # df_locations = pd.concat([df_home_locations, df_work_locations, df_education_locations])
-
 
     df_locations = df_locations.sort_values(by = ["person_id", "activity_index"])
     final_count = len(df_locations)

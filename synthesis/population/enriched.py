@@ -31,7 +31,6 @@ def execute(context):
         "socioprofessional_class"
     ]]
 
-
     # Attach matching information
     df_matching = context.stage("synthesis.population.matched")
     df_population = pd.merge(df_population, df_matching, on = "person_id")
@@ -85,6 +84,5 @@ def execute(context):
     df_population.loc[df_population["number_of_bikes"] < df_population["household_size"], "bike_availability"] = "some"
     df_population.loc[df_population["number_of_bikes"] == 0, "bike_availability"] = "none"
     df_population["bike_availability"] = df_population["bike_availability"].astype("category")
-
 
     return df_population
