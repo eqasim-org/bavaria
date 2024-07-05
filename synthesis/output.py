@@ -178,11 +178,7 @@ def execute(context):
     ]], how = "left", on = ["person_id", "activity_index"])
 
     # Write spatial activities
-<<<<<<< HEAD
-    df_spatial = gpd.GeoDataFrame(df_activities, crs = "EPSG:25832")
-=======
     df_spatial = gpd.GeoDataFrame(df_activities, crs = df_locations.crs)
->>>>>>> develop
     df_spatial["purpose"] = df_spatial["purpose"].astype(str)
     if "gpkg" in output_formats:
         path = "%s/%sactivities.gpkg" % (output_path, output_prefix)
@@ -248,11 +244,7 @@ def execute(context):
 
     df_spatial = df_spatial.drop(columns = ["preceding_geometry", "following_geometry"])
 
-<<<<<<< HEAD
-    df_spatial = gpd.GeoDataFrame(df_spatial, crs = "EPSG:25832")
-=======
     df_spatial = gpd.GeoDataFrame(df_spatial, crs = df_locations.crs)
->>>>>>> develop
     df_spatial["following_purpose"] = df_spatial["following_purpose"].astype(str)
     df_spatial["preceding_purpose"] = df_spatial["preceding_purpose"].astype(str)
 
