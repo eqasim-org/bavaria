@@ -9,7 +9,7 @@ run:
   - synthesis.population.spatial.primary.candidates
   #- synthesis.population.sampled
   # - data.census.ipf_cleaned # To create the output population in the output_path (see below)
-  #- matsim.output # Uncomment, if you want to run the full simulation (you'll need Java for that)
+  - matsim.output # Uncomment, if you want to run the full simulation (you'll need Java for that)
 
 
 ### TODO: Set matching attributes after merging the latest pipeline version

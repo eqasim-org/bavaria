@@ -97,6 +97,9 @@ def execute(context):
     df_persons = context.stage("synthesis.population.enriched")
     df_persons = df_persons.sort_values(by = ["household_id", "person_id"])
     df_persons = df_persons[PERSON_FIELDS]
+    
+    df_persons.loc[df_persons["sex"] == 1,"sex"] = "male"
+    df_persons.loc[df_persons["sex"] == 2,"sex"] = "female"
 
     df_activities = context.stage("synthesis.population.activities").sort_values(by = ["person_id", "activity_index"])
     df_locations = context.stage("synthesis.population.spatial.locations")[[

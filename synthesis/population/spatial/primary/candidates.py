@@ -120,6 +120,7 @@ def execute(context):
 
     df_locations = context.stage("synthesis.locations.work")
     df_locations["weight"] = df_locations["employees"]
+    
     df_work = process(context, "work", random, df_persons,
         df_work_od, df_locations
     )
