@@ -6,11 +6,10 @@ working_directory: /home/shoerl/tum/pipeline/cache
 
 # This section defines which parts of the pipeline should be run
 run:
-  - synthesis.population.spatial.primary.candidates
-  #- synthesis.population.sampled
+  #- germany.gravity.distance_matrix
+  #- germany.gravity.model
+  - synthesis.population.spatial.locations
   # - data.census.ipf_cleaned # To create the output population in the output_path (see below)
-  - matsim.output # Uncomment, if you want to run the full simulation (you'll need Java for that)
-
 
 ### TODO: Set matching attributes after merging the latest pipeline version
 
@@ -22,6 +21,7 @@ aliases:
   synthesis.locations.education: germany.data.buildings
   synthesis.locations.secondary: germany.data.buildings
   synthesis.locations.work: germany.data.buildings
+  data.od.weighted: germany.gravity.model
 
 # Here the configuraiton of the pipeline starts
 config:

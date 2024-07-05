@@ -32,3 +32,10 @@ WOHNORT
 
 
 https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=hausumringe
+
+
+
+
+
+https://www.statistik.bayern.de/statistik/gebiet_bevoelkerung/erwerbstaetigkeit/index.html
+a6502c_202200

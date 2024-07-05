@@ -43,13 +43,13 @@ def execute(context):
     df_buildings = gpd.sjoin(df_buildings, df_zones[["geometry", "commune_id", "iris_id"]], 
         how = "left", predicate = "within").reset_index(drop=True).drop(columns = ["index_right"])
     
-    ## TODO: Maybe we need to fix missing municipalities?
-
     # As a replacement for BPE
-    df_buildings["offers_leisure"] = False
-    df_buildings["offers_shop"] = False
-    df_buildings["offers_other"] = False
+    df_buildings["offers_leisure"] = True
+    df_buildings["offers_shop"] = True
+    df_buildings["offers_other"] = True
 
     return df_buildings[[
-        "building_id", "weight", "commune_id", "iris_id", "geometry"
+        "building_id", "weight", "commune_id", "iris_id", "geometry",
+        "location_id", "employees", "fake",
+        "offers_leisure", "offers_shop", "offers_other"
     ]]

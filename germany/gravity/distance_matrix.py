@@ -1,30 +1,19 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue May 14 14:41:06 2024
-
-@author: arthur.burianne
-"""
-
 from tqdm import tqdm
 import pandas as pd
 import numpy as np
 import numpy.linalg as la
 
 """
-Transforms absolute OD flows from French census into a weighted destination
-matrix given a certain origin commune for work and education.
-
-Potential TODO: Do this by mode of transport!
+Generates a distance matrix for the German municipalities.
 """
 
 def configure(context):
-    context.stage("data.spatial.municipalities")
+    context.stage("germany.data.spatial.iris")
 
 def execute(context):
-    df_municipalities = context.stage("data.spatial.municipalities")
-    
+    # One municipality per "IRIS"
+    df_municipalities = context.stage("germany.data.spatial.iris")
     municipalities = df_municipalities["commune_id"].values
-    
         
     # Initialize matrix to zero
     distance_matrix = np.ones((len(municipalities), len(municipalities)))

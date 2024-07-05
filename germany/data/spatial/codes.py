@@ -34,4 +34,8 @@ def execute(context):
     df_codes["iris_id"] = df_codes["commune_id"].astype(str) + "0000"
     df_codes["iris_id"] = df_codes["iris_id"].astype("category")
 
-    return df_codes[["region_id", "departement_id", "commune_id", "iris_id"]]
+    # Track outdated AGS code for conversion
+    df_codes["ags"] = df_codes["commune_id"].str[:5] + df_codes["commune_id"].str[9:]
+    df_codes["ags"] = df_codes["ags"].astype("category")
+
+    return df_codes[["region_id", "departement_id", "commune_id", "iris_id", "ags"]]
