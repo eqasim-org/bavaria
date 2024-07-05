@@ -104,7 +104,7 @@ The IRIS zoning system is available from IGN:
 We make use of a zoning registry by INSEE that establishes a connection between
 the identifiers of IRIS, municipalities, departments and regions:
 
-- [Zoning data](https://www.insee.fr/fr/information/2017499)
+- [Zoning data](https://www.insee.fr/fr/information/7708995)
 - Download the **2021** edition as a *zip* file.
 - Copy the *zip* file into `data/codes_2021`.
 
@@ -238,6 +238,8 @@ and arranging all the raw data sets as described above.
 - `output_path`: This should be the path to the folder where the output data
 of the pipeline should be stored. It must exist and should ideally be empty
 for now.
+- `output_formats`: This should specify the formats of outputs. Available formats are
+csv, gpkg, parquet and geoparquet. Default value is csv and gpkg: ["csv", "gpkg"].
 
 To set up the working/output directory, create, for instance, a `cache` and a
 `output` directory. These are already configured in `config.yml`:
@@ -290,3 +292,54 @@ config:
 ```
 
 Running the pipeline again will add the `mode` colum to the `trips.csv` file and its spatial equivalent.
+
+### Population projections
+
+The pipeline allows to make use of population projections from INSEE up to 2070. The same methodology can also be used to scale down the population. The process takes into account the marginal distribution of sex, age, their combination, and the total number of persons. The census data for the base year (see above) is reweighted according to those marginals using *Iterative Proportional Updating*.
+
+- To make use of the scaling, [download the projection data from INSEE](https://www.insee.fr/fr/statistiques/5894093?sommaire=5760764). There are various scenarios in Excel format that you can choose from. The default is the *Scénario centrale*, the central scenario. 
+- Put the downloaded file into `data/projection_2021`, so you will have the file `data/projection_2021/00_central.xlsx`
+
+Then, activate the projection procedure by defining the projection year in the configuration:
+
+```yaml
+config: 
+  # [...]
+  projection_year: 2030
+```
+
+You may choose any year (past or future) that is contained in the projection scenario Excel file. In case you want to use a different scenario, download the corresponding file, put it into the folder mentioned above, and choose the scenario name via configuration:
+
+```yaml
+config: 
+  # [...]
+  projection_scenario: 00_central
+```
+
+### Urban type
+
+The pipeline allows to work with INSEE's urban type classification (unité urbaine) that distinguishes municipalities in *center cities*, *suburbs*, *isolated cities*, and unclassified ones. To impute the data (currently only for some HTS), activate it via the configuration:
+
+```yaml
+config:
+  # [...]
+  use_urban_type: true
+```
+
+In order to make use of it for activity chain matching, you can set a custom list of matching attributes like so:
+
+```yaml
+config:
+  # [...]
+  matching_attributes: ["urban_type", "*default*"]
+```
+
+The `*default*` trigger will be replaced by the default list of matching attributes.
+
+Note that not all HTS implement the urban type, so matching may not work with some implementations. Most of them, however, contain the data, we just need to update the code to read them in.
+
+To make use of the urban type, the following data is needed:
+- [Download the urban type data from INSEE](https://www.insee.fr/fr/information/4802589). The pipeline is currently compatible with the 2023 data set (referencing 2020 boundaries). 
+- Put the downloaded *zip* file into `data/urban_type`, so you will have the file `data/urban_type/UU2020_au_01-01-2023.zip`
+
+Then, you should be able to run the pipeline with the configuration explained above.

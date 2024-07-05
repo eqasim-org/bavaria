@@ -301,7 +301,7 @@ def create(output_path):
                 "De 1 000", "De 1 200", "De 1 500", "De 1800",
                 "De 2 000", "De 2 500", "De 3 000", "De 4 000",
                 "De 6 000", "10 000"
-            ])
+            ]), numcom_UU2010 = ["B", "C", "I", "R"][household_index % 4]
         ))
 
         for person_index in range(HTS_HOUSEHOLD_MEMBERS):
@@ -388,8 +388,9 @@ def create(output_path):
         trips = []
     )
 
+    person_index = 0
     for household_index in range(HTS_HOUSEHOLDS):
-        household_id = household_index
+        household_id = household_index * 1000 + 50
 
         municipality = random.choice(df["municipality"].unique())
         region = df[df["municipality"] == municipality]["region"].values[0]
@@ -402,8 +403,7 @@ def create(output_path):
             MNP = 3, REVENU = random.randint(12)
         ))
 
-        for person_index in range(HTS_HOUSEHOLD_MEMBERS):
-            person_id = household_id * 1000 + person_index
+        for person_id in range(1, HTS_HOUSEHOLD_MEMBERS + 1):
             studies = random.random_sample() < 0.3
 
             data["persons"].append(dict(
@@ -421,7 +421,7 @@ def create(output_path):
             work_region = df[df["municipality"] == work_municipality]["region"].values[0]
             work_department = df[df["municipality"] == work_municipality]["department"].values[0]
 
-            purpose = 21 if studies else 11
+            purpose = 4 if studies else 2
             mode = random.choice([1, 2, 3, 5, 7])
 
             origin_hour = 8
@@ -429,7 +429,7 @@ def create(output_path):
 
             if person_index % 100 == 0:
                 # Testing proper diffusion of plan times
-                orign_hour = 0
+                origin_hour = 0
                 origin_minute = 12
 
             data["trips"].append(dict(
@@ -442,18 +442,27 @@ def create(output_path):
 
             data["trips"].append(dict(
                 NQUEST = household_id, NP = person_id,
-                ND = 1, ORDEP = work_department, DESTDEP = home_department,
+                ND = 2, ORDEP = work_department, DESTDEP = home_department,
                 ORH = 8, ORM = 0, DESTH = 9, DESTM = 0, ORCOMM = work_municipality,
                 DESTCOMM = home_municipality, DPORTEE = 3, MODP_H7 = 2,
-                DESTMOT_H9 = 31, ORMOT_H9 = purpose
+                DESTMOT_H9 = 5, ORMOT_H9 = purpose
             ))
 
             data["trips"].append(dict(
                 NQUEST = household_id, NP = person_id,
-                ND = 2, ORDEP = home_department, DESTDEP = home_department,
+                ND = 3, ORDEP = home_department, DESTDEP = home_department,
                 ORH = 17, ORM = 0, DESTH = 18, DESTM = 0, ORCOMM = home_municipality,
                 DESTCOMM = home_municipality, DPORTEE = 3, MODP_H7 = 2,
-                DESTMOT_H9 = 1, ORMOT_H9 = 31
+                DESTMOT_H9 = 1, ORMOT_H9 = 5
+            ))
+
+            # Tail
+            data["trips"].append(dict(
+                NQUEST = household_id, NP = person_id,
+                ND = 4, ORDEP = home_department, DESTDEP = home_department,
+                ORH = 22, ORM = 0, DESTH = 21, DESTM = 0, ORCOMM = home_municipality,
+                DESTCOMM = home_municipality, DPORTEE = 3, MODP_H7 = 2,
+                DESTMOT_H9 = 5, ORMOT_H9 = 1
             ))
 
     os.mkdir("%s/egt_2010" % output_path)
@@ -657,7 +666,22 @@ def create(output_path):
     
     df_sirene_geoloc.to_csv("%s/sirene/GeolocalisationEtablissement_Sirene_pour_etudes_statistiques_utf8.zip" % output_path, index = False, sep=";", compression={'method': 'zip', 'archive_name': 'GeolocalisationEtablissement_Sirene_pour_etudes_statistiques_utf8.csv'})
 
-    
+    # Data set: Urban type
+    print("Creating urban type ...")
+    df_urban_type = df_codes[["DEPCOM"]].copy().rename(columns = { "DEPCOM": "CODGEO" })
+    df_urban_type = df_urban_type.drop_duplicates()
+    df_urban_type["STATUT_2017"] = [["B", "C", "I", "H"][k % 4] for k in range(len(df_urban_type))]
+
+    df_urban_type = pd.concat([df_urban_type, pd.DataFrame({
+        "CODGEO": ["75056", "69123", "13055"],
+        "STATUT_2017": ["C", "C", "C"]
+    })])
+
+    os.mkdir("%s/urban_type" % output_path)
+    with zipfile.ZipFile("%s/urban_type/UU2020_au_01-01-2023.zip" % output_path, "w") as archive:
+        with archive.open("UU2020_au_01-01-2023.xlsx", "w") as f:
+            df_urban_type.to_excel(f, startrow = 5, sheet_name = "Composition_communale", index = False)
+
     # Data set: OSM
     # We add add a road grid of 500m
     print("Creating OSM ...")
@@ -795,6 +819,51 @@ def create(output_path):
 
     import data.gtfs.utils
     data.gtfs.utils.write_feed(feed, "%s/gtfs_idf/IDFM-gtfs.zip" % output_path)
+
+    # Dataset: Parc automobile
+    df_vehicles_region = pd.DataFrame(index = pd.MultiIndex.from_product([
+        df["region"].unique(),
+        np.arange(20),
+    ], names = [
+        "Code région", "Age au 01/01/2015"
+    ])).reset_index()
+
+    # to enforce string
+    df_vehicles_region = pd.concat([df_vehicles_region, pd.DataFrame({
+        "Code région": ["AB"],
+        "Age au 01/01/2015": [0],
+    })])
+
+    df_vehicles_region["Code région"] = df_vehicles_region["Code région"].astype(str)
+
+    df_vehicles_region["Parc au 01/01/2015"] = 100
+    df_vehicles_region["Energie"] = "Gazole"
+    df_vehicles_region["Vignette crit'air"] = "Crit'air 1"
+
+    df_vehicles_region["Age au 01/01/2015"] = df_vehicles_region["Age au 01/01/2015"].astype(str)
+    df_vehicles_region["Age au 01/01/2015"] = df_vehicles_region["Age au 01/01/2015"].replace("20", ">20")
+    df_vehicles_region["Age au 01/01/2015"] = df_vehicles_region["Age au 01/01/2015"] + " ans"
+
+    df_vehicles_commune = pd.DataFrame({
+        "municipality": df["municipality"].unique()
+    })
+    df_vehicles_commune["Parc au 01/01/2015"] = 100
+    df_vehicles_commune["Energie"] = "Gazole"
+    df_vehicles_commune["Vignette Crit'air"] = "Crit'air 1"
+
+    df_vehicles_commune = pd.merge(df_vehicles_commune, df[[
+        "municipality", "region", "department"
+    ]], on = "municipality")
+
+    df_vehicles_commune = df_vehicles_commune.rename(columns = {
+        "municipality": "Code commune",
+        "department": "Code départment",
+        "region": "Code région",
+    })
+
+    os.mkdir("%s/vehicles_2015" % output_path)
+    df_vehicles_region.to_excel("%s/vehicles_2015/Parc_VP_Regions_2015.xlsx" % output_path)
+    df_vehicles_commune.to_excel("%s/vehicles_2015/Parc_VP_Communes_2015.xlsx" % output_path)
 
 if __name__ == "__main__":
     import sys

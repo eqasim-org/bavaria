@@ -54,7 +54,11 @@ def _test_determinism(index, data_path, tmpdir):
         regions = [10, 11], sampling_rate = 1.0, hts = "entd",
         random_seed = 1000, processes = 1,
         secloc_maximum_iterations = 10,
-        maven_skip_tests = True
+        maven_skip_tests = True,
+        matching_attributes = [
+            "sex", "any_cars", "age_class", "socioprofessional_class",
+            "income_class", "departement_id"
+        ]
     )
 
     stages = [
@@ -64,17 +68,17 @@ def _test_determinism(index, data_path, tmpdir):
     synpp.run(stages, config, working_directory = cache_path)
 
     REFERENCE_CSV_HASHES = {
-        "ile_de_france_activities.csv":     "dcf8e08e9f238c90bff0298048251dac",
-        "ile_de_france_households.csv":     "fa08f930689b27f9772c79d35075960d",
-        "ile_de_france_persons.csv":        "ed87e2b6dfd2a9914d5fc7b2bf6d52d3",
-        "ile_de_france_trips.csv":          "63425b21b452b65418db6f6d987a0162",
+        "ile_de_france_activities.csv":     "e520003e1876a9542ff1a955a6efcfdc",
+        "ile_de_france_households.csv":     "709ce7ded8a2487e6691d4fb3374754b",
+        "ile_de_france_persons.csv":        "ddbe9b418c915b14e888b54efbdf9b1e",
+        "ile_de_france_trips.csv":          "6c5f3427e41e683da768eeb53796a806",
     }
 
     REFERENCE_GPKG_HASHES = {
-        "ile_de_france_activities.gpkg":    "f9e519cb5665c314431bcd16bbb8b1b8",
-        "ile_de_france_commutes.gpkg":      "2e752795b7cd8e0cd4c8d32e736e455e",
-        "ile_de_france_homes.gpkg":         "6f028d84944df9c4ae9342a47a932074",
-        "ile_de_france_trips.gpkg":         "c5fdcff9416563823dd824c2a8ea85bd",
+        "ile_de_france_activities.gpkg":    "f8a4138f0dc92802d36ae30e449bfc74",
+        "ile_de_france_commutes.gpkg":      "5a4180390a69349cc655c07c5671e8d3",
+        "ile_de_france_homes.gpkg":         "033d1aa7a5350579cbd5e8213b9736f2",
+        "ile_de_france_trips.gpkg":         "5248a832eb56797b6f298c5aeb653dac",
     }
 
     generated_csv_hashes = {
@@ -111,7 +115,11 @@ def _test_determinism_matsim(index, data_path, tmpdir):
         regions = [10, 11], sampling_rate = 1.0, hts = "entd",
         random_seed = 1000, processes = 1,
         secloc_maximum_iterations = 10,
-        maven_skip_tests = True
+        maven_skip_tests = True,
+        matching_attributes = [
+            "sex", "any_cars", "age_class", "socioprofessional_class",
+            "income_class", "departement_id"
+        ]
     )
 
     stages = [
@@ -123,9 +131,9 @@ def _test_determinism_matsim(index, data_path, tmpdir):
     REFERENCE_HASHES = {
         #"ile_de_france_population.xml.gz":  "e1407f918cb92166ebf46ad769d8d085",
         #"ile_de_france_network.xml.gz":     "5f10ec295b49d2bb768451c812955794",
-        "ile_de_france_households.xml.gz":  "cdbd6ed5b175328861f237dc58dee1ff",
+        "ile_de_france_households.xml.gz":  "64a0c9fab72aad51bc6adb926a1c9d44",
         #"ile_de_france_facilities.xml.gz":  "5ad41afff9ae5c470082510b943e6778",
-        "ile_de_france_config.xml":         "f374807f12a5151fe1efb6e9904e1a56"
+        "ile_de_france_config.xml":         "481fac5fb3e7b90810caa38ff460c00a"
     }
 
     # activities.gpkg, trips.gpkg, meta.json,
