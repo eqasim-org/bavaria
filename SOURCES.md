@@ -12,3 +12,23 @@ IRIS            ->
 
 
 EPSG:25832
+
+
+
+https://www.statistik.bayern.de/statistik/gebiet_bevoelkerung/bevoelkerungsstand/
+A1310C 202200 	Bevölkerung in den Gemeinden nach Altersgruppen und Geschlecht 2022 
+2022
+
+
+
+https://www.statistikdaten.bayern.de/genesis/online?operation=statistic&levelindex=1&levelid=1720112584563&code=13111#abreadcrumb
+ 13111-004r
+Sozialversicherungspflichtig Beschäftigte: Kreise, Beschäftigte am Arbeitsort/Beschäftigte am Wohnort, Geschlecht, Nationalität, Altersgruppen, Stichtag
+
+WOHNORT
+
+
+
+
+
+https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=hausumringe

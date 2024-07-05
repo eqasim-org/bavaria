@@ -34,7 +34,4 @@ def execute(context):
     df_codes["iris_id"] = df_codes["commune_id"].astype(str) + "0000"
     df_codes["iris_id"] = df_codes["iris_id"].astype("category")
 
-    # Cleanup 
-    del df_codes["municipality_id"]
-
     return df_codes[["region_id", "departement_id", "commune_id", "iris_id"]]

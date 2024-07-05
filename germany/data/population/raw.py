@@ -10,7 +10,7 @@ def configure(context):
     context.config("data_path")
     context.config("germany.political_prefix", "091") # Default: Oberbayern 091
     context.config("germany.population_path", "germany/vg250-ew_12-31.utm32s.gpkg.ebenen.zip")
-    context.config("germany.population_source", "vg250-ew_ebenen_1231/DE_VG250.gpkg")
+    context.config("germany.population_source", "vg250-ew_12-31.utm32s.gpkg.ebenen/vg250-ew_ebenen_1231/DE_VG250.gpkg")
 
 def execute(context):
     # Load IRIS registry
@@ -22,15 +22,15 @@ def execute(context):
             ]]
 
     # Filter for prefix
-    prefix = context.config("germany.political_prefix", "091")
-    df_population = df_population[df_population["Regionalschlüssel_ARS"].startswith(prefix)].copy()
+    prefix = context.config("germany.political_prefix")
+    df_population = df_population[df_population["Regionalschlüssel_ARS"].str.startswith(prefix)].copy()
 
     # Rename
     df_population = df_population.rename(columns = { 
         "Regionalschlüssel_ARS": "municipality_code",
         "Einwohnerzahl_EWZ": "population"
     })
-
+    
     return df_population
 
 def validate(context):

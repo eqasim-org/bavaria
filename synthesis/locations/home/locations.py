@@ -15,18 +15,16 @@ def execute(context):
     # Find required IRIS
     df_iris = context.stage("data.spatial.iris")
     required_iris = set(df_iris["iris_id"].unique())
-
-    df_addresses = df_iris[["iris_id", "commune_id", "geometry"]].copy()
-
+    
     # Load all addresses and add IRIS information
     df_addresses = context.stage("synthesis.locations.home.addresses")
 
     print("Imputing IRIS into addresses ...")
-
+   
     df_addresses = gpd.sjoin(df_addresses,
         df_iris[["iris_id", "commune_id", "geometry"]], predicate = "within")
     del df_addresses["index_right"]
-
+    
     df_addresses.loc[df_addresses["iris_id"].isna(), "iris_id"] = "unknown"
     df_addresses["iris_id"] = df_addresses["iris_id"].astype("category")
 
@@ -55,10 +53,6 @@ def execute(context):
         df_added["fake"] = True
 
         df_addresses = pd.concat([df_addresses, df_added])
-
-
-    # generate fake adresses
-
 
     # Add home identifier
     df_addresses["location_id"] = np.arange(len(df_addresses))

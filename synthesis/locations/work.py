@@ -14,16 +14,14 @@ place at their centroid to be in line with INSEE OD data.
 def configure(context):
     context.stage("data.sirene.localized")
     context.stage("data.spatial.municipalities")
-    context.stage("data.bdtopo.raw")
 
 def execute(context):
-  
-    df_workplaces = context.stage("data.bdtopo.raw")
-    df_workplaces = df_workplaces.loc[np.random.randint(0,len(df_workplaces)-1,10000)].copy()
-
+    df_workplaces = context.stage("data.sirene.localized")[[
+        "commune_id", "minimum_employees", "maximum_employees", "geometry"
+    ]].copy()
 
     # Use minimum number of employees as weight
-    df_workplaces["employees"] = df_workplaces["weight"]
+    df_workplaces["employees"] = df_workplaces["minimum_employees"]
     df_workplaces["fake"] = False
 
     ## Use centroids for municipalities where no work places exist

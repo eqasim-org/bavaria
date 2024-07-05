@@ -19,8 +19,7 @@ def _sample_locations(context, args):
 
     # Select home candidates and locations for the selected IRIS
     df_homes = df_homes[df_homes["iris_id"] == iris_id].copy()
-    # df_locations = df_locations[df_locations["iris_id"] == iris_id].copy()
-    # CLEANUP: Why is this commented out?
+    df_locations = df_locations[df_locations["iris_id"] == iris_id].copy()
 
     # Verify counts
     home_count = len(df_homes)

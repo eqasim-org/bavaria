@@ -4,21 +4,20 @@ import pandas as pd
 import geopandas as gpd
 
 def configure(context):
-    context.stage("data.bdtopo.raw")
+    context.stage("data.bpe.cleaned")
     context.stage("data.spatial.municipalities")
 
-
 def execute(context):
-    df_locations = context.stage("data.bdtopo.raw")
-    df_locations = df_locations.loc[np.random.randint(0,len(df_locations)-1,10000)].copy()
-    
+    df_locations = context.stage("data.bpe.cleaned")[[
+        "enterprise_id", "activity_type", "commune_id", "geometry"
+    ]]
+
+    df_locations = df_locations[df_locations["activity_type"] == "education"]
     df_locations = df_locations[["commune_id", "geometry"]].copy()
     df_locations["fake"] = False
 
-
     # Add education destinations to the centroid of zones that have no other destinations
     df_zones = context.stage("data.spatial.municipalities")
-
 
     required_communes = set(df_zones["commune_id"].unique())
     missing_communes = required_communes - set(df_locations["commune_id"].unique())

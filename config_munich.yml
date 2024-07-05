@@ -2,14 +2,26 @@
 ## based on the synpp package
 
 # This is the path to a directory where the pipeline can store temporary data
-working_directory: C:/Users/arthur.burianne/Documents/tum/simulations/fake_munich_10_tmp
+working_directory: /home/shoerl/tum/pipeline/cache
 
 # This section defines which parts of the pipeline should be run
 run:
-  - synthesis.output
+  - synthesis.population.spatial.primary.candidates
   #- synthesis.population.sampled
   # - data.census.ipf_cleaned # To create the output population in the output_path (see below)
   #- matsim.output # Uncomment, if you want to run the full simulation (you'll need Java for that)
+
+
+### TODO: Set matching attributes after merging the latest pipeline version
+
+aliases:
+  data.census.filtered: germany.ipf.attributed
+  synthesis.population.income: germany.income
+  synthesis.population.spatial.home.zones: germany.locations.home.zones
+  synthesis.locations.home.locations: germany.data.buildings
+  synthesis.locations.education: germany.data.buildings
+  synthesis.locations.secondary: germany.data.buildings
+  synthesis.locations.work: germany.data.buildings
 
 # Here the configuraiton of the pipeline starts
 config:
@@ -24,8 +36,6 @@ config:
   random_seed: 1234
   acquisition_sample_size: 1
   home_location_sampling: weighted
-  regions: []
-  departments: ["091"]
   mode_choice: true
   output_prefix: mun_
  
@@ -33,13 +43,13 @@ config:
   # short_description : a test of Munich with all fake but real gtfs, osm, codes, communes
   
   # Paths to the input data and where the output should be stored
-  data_path: C:/Users/arthur.burianne/Documents/sources_data/fake_data_munich
-  output_path: C:/Users/arthur.burianne/Documents/tum/simulations/fake_munich_10_output
+  data_path: /home/shoerl/tum/pipeline/data
+  output_path: /home/shoerl/tum/pipeline/output
 
   # Only interesting if you run the simulation
-  java_memory: 14G
+  java_memory: 12G
 
-  population_year: 19
+  # population_year: 19
 
   # Uncommented below to enable vehicle fleet generation
   # generate_vehicles_file: True
