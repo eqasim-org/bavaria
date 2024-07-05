@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 """
-Yield home zones for Germany based on synthetic population data.
+Yield home location candidates for Germany.
 """
 
 def configure(context):
@@ -12,7 +12,6 @@ def execute(context):
     # Load data
     df = context.stage("germany.data.buildings")
 
-    # Format data
-    df = df.drop_duplicates("household_id")
-
-    return df[["household_id", "departement_id", "commune_id", "iris_id"]]
+    return df[[
+        "building_id", "weight", "commune_id", "iris_id", "geometry",
+    ]]

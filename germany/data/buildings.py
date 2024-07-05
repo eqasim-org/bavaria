@@ -34,22 +34,11 @@ def execute(context):
         (df_buildings["weight"] >= 40) & (df_buildings["weight"] < 400)
     ].copy()
 
-    # As a replacement for SIRENE
-    df_buildings["location_id"] = df_buildings["building_id"]
-    df_buildings["employees"] = df_buildings["weight"]
-    df_buildings["fake"] = False
-
+    # Impute spatial identifiers
     df_zones = context.stage("germany.data.spatial.iris")
     df_buildings = gpd.sjoin(df_buildings, df_zones[["geometry", "commune_id", "iris_id"]], 
         how = "left", predicate = "within").reset_index(drop=True).drop(columns = ["index_right"])
-    
-    # As a replacement for BPE
-    df_buildings["offers_leisure"] = True
-    df_buildings["offers_shop"] = True
-    df_buildings["offers_other"] = True
 
     return df_buildings[[
-        "building_id", "weight", "commune_id", "iris_id", "geometry",
-        "location_id", "employees", "fake",
-        "offers_leisure", "offers_shop", "offers_other"
+        "building_id", "weight", "commune_id", "iris_id", "geometry"
     ]]

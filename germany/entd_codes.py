@@ -19,4 +19,3 @@ def execute(context):
     values |= set(df_trips["destination_departement_id"])
     
     return pd.DataFrame({ "departement_id": sorted(values) })
-

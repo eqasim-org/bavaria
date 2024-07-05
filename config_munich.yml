@@ -7,18 +7,20 @@ working_directory: /home/shoerl/tum/pipeline/cache
 # This section defines which parts of the pipeline should be run
 run:
   - synthesis.output
+  - matsim.output
 
 ### TODO: Set matching attributes after merging the latest pipeline version
+### TODO: Clean up this configuration file for defaults
 
 # Overrides for the Munich pipeline compared to the Île-de-France pipeline
 aliases:
   data.census.filtered: germany.ipf.attributed
   synthesis.population.income: germany.income
-  synthesis.population.spatial.home.zones: germany.locations.home.zones
-  synthesis.locations.home.locations: germany.data.buildings
-  synthesis.locations.education: germany.data.buildings
-  synthesis.locations.secondary: germany.data.buildings
-  synthesis.locations.work: germany.data.buildings
+  synthesis.population.spatial.home.zones: germany.homes
+  synthesis.locations.home.locations: germany.locations.home
+  synthesis.locations.education: germany.locations.education
+  synthesis.locations.secondary: germany.locations.secondary
+  synthesis.locations.work: germany.locations.work
   data.od.weighted: germany.gravity.model
   data.spatial.iris: germany.data.spatial.iris
   data.spatial.codes: germany.entd_codes
@@ -36,7 +38,7 @@ config:
   random_seed: 1234
   acquisition_sample_size: 1
   home_location_sampling: weighted
-  mode_choice: false
+  mode_choice: true
   output_prefix: mun_
  
   # Paths to the input data and where the output should be stored
