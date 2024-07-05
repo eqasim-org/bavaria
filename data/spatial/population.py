@@ -27,34 +27,17 @@ def execute(context):
                 "P%s_POP" % year: "population"
             })
 
-    # df_population["iris_id"] = df_population["iris_id"].astype("category")
-    # df_population["commune_id"] = df_population["commune_id"].astype("category")
-    # df_population["departement_id"] = df_population["departement_id"].astype("category")
-    df_population["region_id"] = df_population["region_id"].astype(int)
-
-
-
-
-
-    # Merge into code data and verify integrity
-    df_codes = context.stage("data.spatial.codes")
-    df_codes = df_codes.astype({'iris_id':'float','commune_id':'float','departement_id':'float','region_id':'int'})
-
-
-
-    df_population = pd.merge(df_population, df_codes, on = ["iris_id", "commune_id", "departement_id", "region_id"])
-
-
     df_population["iris_id"] = df_population["iris_id"].astype("category")
     df_population["commune_id"] = df_population["commune_id"].astype("category")
     df_population["departement_id"] = df_population["departement_id"].astype("category")
+    df_population["region_id"] = df_population["region_id"].astype(int)
 
-
-
+    # Merge into code data and verify integrity
+    df_codes = context.stage("data.spatial.codes")
+    df_population = pd.merge(df_population, df_codes, on = ["iris_id", "commune_id", "departement_id", "region_id"])
 
     requested_iris = set(df_codes["iris_id"].unique())
     merged_iris = set(df_population["iris_id"].unique())
-
 
     if requested_iris != merged_iris:
         raise RuntimeError("Some IRIS are missing: %s" % (requested_iris - merged_iris,))
@@ -66,3 +49,4 @@ def validate(context):
         raise RuntimeError("Aggregated census data is not available")
 
     return os.path.getsize("{}/{}".format(context.config("data_path"), context.config("population_path")))
+     

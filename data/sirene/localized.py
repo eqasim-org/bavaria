@@ -17,11 +17,6 @@ def execute(context):
 
 
     # merging geographical SIREN file (containing only SIRET and location) with full SIREN file (all variables and processed)
-
-    df_siret_geoloc =  df_siret_geoloc.drop_duplicates(subset=['siret'])
-    df_sirene =  df_sirene.drop_duplicates(subset=['siret'])
-
-
     df_siret_geoloc.set_index(("siret"),inplace=True,verify_integrity=True)
     df_sirene.set_index(("siret"),inplace=True,verify_integrity=True)
     df_siret_geoloc.sort_index(inplace=True)
@@ -31,8 +26,8 @@ def execute(context):
     df_sirene.dropna(subset=['x', 'y'],inplace=True)
 
 
-    # convert to geopandas dataframe with Lambert 93, EPSG:25832 french official projection
-    df_sirene = gpd.GeoDataFrame(df_sirene, geometry=gpd.points_from_xy(df_sirene.x, df_sirene.y),crs="EPSG:25832")
+    # convert to geopandas dataframe with Lambert 93, EPSG:2154 french official projection
+    df_sirene = gpd.GeoDataFrame(df_sirene, geometry=gpd.points_from_xy(df_sirene.x, df_sirene.y),crs="EPSG:2154")
 
 
     return df_sirene
