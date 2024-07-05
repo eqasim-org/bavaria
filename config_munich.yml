@@ -1,4 +1,4 @@
-## Synthetic population pipeline for Île-de-France
+## Synthetic population pipeline for Munich
 ## based on the synpp package
 
 # This is the path to a directory where the pipeline can store temporary data
@@ -6,13 +6,11 @@ working_directory: /home/shoerl/tum/pipeline/cache
 
 # This section defines which parts of the pipeline should be run
 run:
-  #- germany.gravity.distance_matrix
-  #- germany.gravity.model
-  - synthesis.population.spatial.locations
-  # - data.census.ipf_cleaned # To create the output population in the output_path (see below)
+  - synthesis.output
 
 ### TODO: Set matching attributes after merging the latest pipeline version
 
+# Overrides for the Munich pipeline compared to the Île-de-France pipeline
 aliases:
   data.census.filtered: germany.ipf.attributed
   synthesis.population.income: germany.income
@@ -22,6 +20,8 @@ aliases:
   synthesis.locations.secondary: germany.data.buildings
   synthesis.locations.work: germany.data.buildings
   data.od.weighted: germany.gravity.model
+  data.spatial.iris: germany.data.spatial.iris
+  data.spatial.codes: germany.entd_codes
 
 # Here the configuraiton of the pipeline starts
 config:
@@ -39,19 +39,9 @@ config:
   mode_choice: true
   output_prefix: mun_
  
-  # scenario_name : fake_Munich
-  # short_description : a test of Munich with all fake but real gtfs, osm, codes, communes
-  
   # Paths to the input data and where the output should be stored
   data_path: /home/shoerl/tum/pipeline/data
   output_path: /home/shoerl/tum/pipeline/output
 
   # Only interesting if you run the simulation
   java_memory: 12G
-
-  # population_year: 19
-
-  # Uncommented below to enable vehicle fleet generation
-  # generate_vehicles_file: True
-  # generate_vehicles_method: fleet_sample
-  # vehicles_data_year: 2015

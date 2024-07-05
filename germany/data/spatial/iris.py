@@ -17,4 +17,7 @@ def execute(context):
     df["iris_id"] = df["commune_id"].astype(str) + "0000"
     df["iris_id"] = df["iris_id"].astype("category")
 
-    return df[["iris_id", "commune_id", "geometry"]]
+    # Departement identifiers
+    df["departement_id"] = df["commune_id"].str[:5]
+
+    return df[["iris_id", "commune_id", "departement_id", "geometry"]]

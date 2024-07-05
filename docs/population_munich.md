@@ -4,85 +4,13 @@ The following sections describe how to generate a synthetic population for
 Munich using the pipeline. First all necessary data must be gathered.
 Afterwards, the pipeline can be run to create a synthetic population in *CSV*
 and *GPKG* format. These outputs can be used for analysis, or serve as input
-to [run a transport simulation in MATSim](simulation.md).
+to a MATSim simulation.
 
 This guide will cover the following steps:
 
 - [Gathering the data](#section-data)
 - [Running the pipeline](#section-population)
-
-
-## <a name="section-data"></a> Notes about the papers on that matter
-
-### Lelke et al.
-Really matches our goal
-
-list of dataset :
-- Census (2011) and its cells grid system of 100m x 100m (33 millions + 3.6 million empty)
-- MiD (2017) Germany mobility survey (300 000 persons, over 1 million trips)
-- Regional Statistical Spatial Typology for Mobility and Transport
-Research (RegioStaR) => kind of unités urbaines or more likely aires urbaines
-- CORINE Land Cover - CLC - 2018 for land use classification
-- Open Street Maps - OSM network
-- geometry defining the planning area 
-
-interesting points :
-- model based on the 100m x 100m grid system
-- RegioStaR match for each cells
-- CLC attributes match for each cells
-- OSM enchancement of CLC (university, schools) for each cells
-
-Then fiter to geo match : grids vs communes (France) brings flexibility in spatial perimeter definition.
-
-
-### Moreno and Moeckel
-For general purpose (no mobility focus), interesting methods about sampling and attributes selection.
-
-list of dataset :
-- Open Street Maps - OSM network and other attributes
-
-
-interesting points :
-- synthesis population 
-- sampling and weigts methods (Montercarlo, Markov, combinatorial,Iterative Proportional 
-Fitting) 
-- attributes : 47 identified, subset selection
-- different geographical scales data match
-- computation ressources (time)
-
-### Strobel and Pruckner
-
-list of dataset :
-- Open Street Maps - OSM network and other attributes
-- Optional : Germany census at different geographical scale agregation
-- Optional : MiD (2017) Germany mobility survey (300 000 persons, over 1 million trips)
-
-
-interesting points :
-- OSM based (world wide capable)
-- temporal and spatial micro dissagregated (every minutes, every buildings) like Synpp
-- 200 0000 to 2.5 million inhabitants perimeters validated model (Germany)
-- no mode and route choice (affectation) steps
-- calibrated with comparison to MiD
-- not really self sufficiant with OMS (uses proxy for MiD)
-- key words for activities in OSM
-
-
-### TUM project tasks schedule
-1. read articles => done
-2. Check open sources data availability (and dates)
-3. Propose data replacement and method replacement if required
-4. develop (need to priorize) step by step (and set uniform random draw for dataset not yet processed)
-5. check for caliration data and assesses results
-
-### TUM project adaptations 1st draft 
-1. Census Data : choose aggregation level (100m x 100m grid or higher)
-2. MiD : hope there is an english verson (or some translate tool)
-3. OSM : probably the best option to replace BDE and SIRENE (no article mentions this kind of open source data)
-4. Mobpro - Mobsco : MiD?  
-5. Filosofi : no need?
-6/ Building and adresses database : OSM
-
+- [Running a simulation](#section-simulation)
 
 ## <a name="section-data"></a>Gathering the data
 
@@ -91,52 +19,61 @@ to start with an empty folder, e.g. `/data`. All data sets need to be named
 in a specific way and put into specific sub-directories. The following paragraphs
 describe this process.
 
-### 1) Census data (RP 2019)
+### 1) German administrative boundaries
 
-Census data containing the socio-demographic information of people living in
-France is available from INSEE:
+- [Administrative boundary data](https://gdz.bkg.bund.de/index.php/default/digitale-geodaten/verwaltungsgebiete/verwaltungsgebiete-1-250-000-mit-einwohnerzahlen-stand-31-12-vg250-ew-31-12.html)
+- Go to "Direktdownload"
+- Download the version for the *UTM32s* projection and in *geopackage* format
+- Put the downloaded *zip* file into `/data/germany`
 
-- [Census data](https://www.insee.fr/fr/statistiques/6544333)
-- Download the data set in **csv** format by clicking the link under *Individus localisés au canton-ou-ville*.
-- Copy the *zip* file into the folder `data/rp_2019`
+### 2) Bavarian population data (municipality, sex, age group)
 
-### 2) Population totals (RP 2019)
+- [Population data](https://www.statistik.bayern.de/statistik/gebiet_bevoelkerung/bevoelkerungsstand/)
+- Search for **A1310C** and click on the box
+- Download the data for 2022 (*202200*) in *XLS* format
+- Put the resulting *xla* file into `/data/bavaria`
 
-We also make use of more aggregated population totals available from INSEE:
+### 3) Bavarian employment data (district, sex, age group)
 
-- [Population data](https://www.insee.fr/fr/statistiques/6543200)
-- Download the data for *France hors Mayotte* in **xlsx** format.
-- Copy the *zip* file into the folder `data/rp_2019`.
+TODO SEEMS TO BE DOWN RIGHT NOW
 
-### 3) Origin-destination data (RP-MOBPRO / RP-MOBSCO 2019)
+https://www.statistikdaten.bayern.de/genesis/online?operation=statistic&levelindex=1&levelid=1720112584563&code=13111#abreadcrumb
+ 13111-004r
+Sozialversicherungspflichtig Beschäftigte: Kreise, Beschäftigte am Arbeitsort/Beschäftigte am Wohnort, Geschlecht, Nationalität, Altersgruppen, Stichtag
+WOHNORT
 
-Origin-destination data is available from INSEE (at two locations):
+### 4) Bavarian employment data (municipality, total)
 
-- [Work origin-destination data](https://www.insee.fr/fr/statistiques/6456056)
-- [Education origin-destination data](https://www.insee.fr/fr/statistiques/6456052)
-- Download the data from the links, both in **csv** format.
-- Copy both *zip* files into the folder `data/rp_2019`.
+- [Employment data](https://www.statistik.bayern.de/statistik/gebiet_bevoelkerung/erwerbstaetigkeit/index.html)
+- Search for **a6502c** and click on the box
+- Download the data for 2022 (*202200*) in *XLS* format
+- Put the resulting *xla* file into `/data/bavaria`
 
-### 4) Income tax data (Filosofi 2019)
+### 5) Bavarian building registry (Oberbayern)
 
-The tax data set is available from INSEE:
+- [Building registry](https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=hausumringe)
+- Click on **Karte aktivieren** to activate the map
+- Click on the region around Munich
+- In the opened window (for "Oberbayern") click **Download**
+- Put the resulting *zip* file into `/data/bavaria`
 
-- [Income tax data](https://insee.fr/fr/statistiques/6036907)
-- Download the munipality data (first link): *Base niveau communes en 2019* in **xlsx** format
-- Copy the *zip* file into the folder `data/filosofi_2019`
-- Download the administrative level data (second link): *Base niveau administratif en 2019* in **xlsx** format
-- Copy the second *zip* file into `data/filosofi_2019`
+### 6) German GTFS
 
-### 5) Service and facility census (BPE 2021)
+This data set is only needed if you run a MATSim simulation or enable mode choice in the population synthesis.
 
-The census of services and facilities in France is available from INSEE:
+- [GTFS data](https://gtfs.de/de/feeds/de_full/)
+- Click on **Download**
+- Put the resulting *zip* file into `/data/gtfs_idf`
 
-- [Service and facility census](https://www.insee.fr/fr/statistiques/3568638)
-- Download the uppermost data set in **csv** format. It contains all available
-services while the lower data sets only contain observations for specific sectors.
-- Copy the *zip* file into the folder `data/bpe_2021`.
+### 6) OpenStreetMap (Oberbayern)
 
-### 6a) National household travel survey (ENTD 2008)
+This data set is only needed if you run a MATSim simulation or enable mode choice in the population synthesis.
+
+- [Geofabrik Bayern](http://download.geofabrik.de/europe/germany/bayern.html)
+- Download the data set for **Oberbayern** in *osm.pbf* format
+- Put the resulting *osm.pbf* file into `/data/osm_idf`
+
+### 7) French National household travel survey (ENTD 2008)
 
 The national household travel survey is available from the Ministry of Ecology:
 
@@ -153,122 +90,23 @@ a few are actually relevant for the pipeline. Those are:
   - Données mobilité déplacements locaux (K_deploc.csv)
 - Put the downloaded *csv* files in to the folder `data/entd_2008`.
 
-### 6b) *(Optional)* Regional household travel survey (EGT)
-
-Usually, you do not have access to the regional household travel
-survey, which is not available publicly. In case you have access (but we cannot
-guarantee that you have exactly the correct format), you should make sure that
-the following files are accessible in the folder `data/egt_2010`:
-`Menages_semaine.csv`, `Personnes_semaine.csv`, `Deplacements_semaine.csv`.
-
-### 7) IRIS zoning system (2021)
-
-The IRIS zoning system is available from IGN:
-
-- [IRIS data](https://geoservices.ign.fr/contoursiris)
-- Download the **2021** edition.
-- Copy the *7z* file into the folder `data/iris_2021`
-
-
-### 8) Zoning registry (2021)
-
-We make use of a zoning registry by INSEE that establishes a connection between
-the identifiers of IRIS, municipalities, departments and regions:
-
-- [Zoning data](https://www.insee.fr/fr/information/2017499)
-- Download the **2021** edition as a *zip* file.
-- Copy the *zip* file into `data/codes_2021`.
-
-### 9) Enterprise census (SIRENE)
-
-The enterprise census of France is available on data.gouv.fr:
-
-- [Enterprise census](https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/)
-- Scroll down and click on the blue download button on the right for the two following data sets:
-  - **Sirene : Fichier StockUniteLegale** (followed by a date), the database of enterprises
-  - **Sirene : Fichier StockEtablissement** (followed by a date), the database of enterprise facilities
-- The files are updated monthly and are rather large. After downloading, you should have two files:
-  - `StockEtablissement_utf8.zip`
-  - `StockUniteLegale_utf8.zip`
-- Move both *zip* files into `data/sirene`.
-
-The geolocated enterprise census is available on data.gouv.fr:
-
-- [Geolocated enterprise census](https://www.data.gouv.fr/fr/datasets/geolocalisation-des-etablissements-du-repertoire-sirene-pour-les-etudes-statistiques/)
-- Scroll down and click on the blue download button on the right for the following data set:
-    - **Sirene : Fichier GeolocalisationEtablissement_Sirene_pour_etudes_statistiques** (followed by a date), 
-- Put the downloaded *zip* file into `data/sirene`
-
-### 10) Buildings database (BD TOPO)
-
-The French Buildings database is available from IGN:
-
-- [Buildings database](https://geoservices.ign.fr/bdtopo)
-- In the sidebar on the right, under *Téléchargement anciennes éditions*, click on *BD TOPO® 2022 GeoPackage Départements* to go to the saved data publications from 2022.
-- The data is split by department and they are identified with a number. For the Île-de-France region, download:
-  - Paris (75)
-  - Seine-et-Marne (77)
-  - Yvelines (78)
-  - Essonne (91)
-  - Hauts-de-Seine (92)
-  - Seine-Saint-Denis (93)
-  - Val-de-Marne (94)
-  - Val-d'Oise (95)
-- Copy the eight *7z* files into `data/bdtopo_idf`.
-
-### 11) Adresses database (BAN)
-
-The French adresses database is available on data.gouv.fr :
-
-- [Adresses database](https://adresse.data.gouv.fr/data/ban/adresses/latest/csv/)
-- Click on the link *adresses-xx.csv.gz* where xx = departments codes (75, 77, 78, 91, 92, 93, 94, 95) 
-- Copy the *gz* files into `data/ban_idf`.
-
-
 ### Overview
 
 Your folder structure should now have at least the following files:
 
-- `data/rp_2019/RP2019_INDCVI_csv.zip`
-- `data/rp_2019/RP2019_MOBPRO_csv.zip`
-- `data/rp_2019/RP2019_MOBSCO_csv.zip`
-- `data/rp_2019/base-ic-evol-struct-pop-2019.zip`
-- `data/filosofi_2019/indic-struct-distrib-revenu-2019-COMMUNES.zip`
-- `data/filosofi_2019/indic-struct-distrib-revenu-2019-SUPRA.zip`
-- `data/bpe_2021/bpe21_ensemble_xy_csv.zip`
+- `data/bavaria/091_Oberbayern_Hausumringe.zip`
+- `data/bavaria/13111-004r.xlsx`
+- `data/bavaria/a1310c_202200.xla`
+- `data/bavaria/a6502c_202200.xla`
 - `data/entd_2008/Q_individu.csv`
 - `data/entd_2008/Q_tcm_individu.csv`
 - `data/entd_2008/Q_menage.csv`
 - `data/entd_2008/Q_tcm_menage_0.csv`
 - `data/entd_2008/K_deploc.csv`
 - `data/entd_2008/Q_ind_lieu_teg.csv`
-- `data/iris_2021/CONTOURS-IRIS_2-1__SHP__FRA_2021-01-01.7z`
-- `data/codes_2021/reference_IRIS_geo2021.zip`
-- `data/sirene/StockEtablissement_utf8.csv`
-- `data/sirene/StockUniteLegale_utf8.zip`
-- `data/sirene/GeolocalisationEtablissement_Sirene_pour_etudes_statistiques_utf8.zip`
-- `data/bdtopo_idf/BDTOPO_3-0_TOUSTHEMES_GPKG_LAMB93_D075_2022-03-15.7z`
-- `data/bdtopo_idf/BDTOPO_3-0_TOUSTHEMES_GPKG_LAMB93_D077_2022-03-15.7z`
-- `data/bdtopo_idf/BDTOPO_3-0_TOUSTHEMES_GPKG_LAMB93_D078_2022-03-15.7z`
-- `data/bdtopo_idf/BDTOPO_3-0_TOUSTHEMES_GPKG_LAMB93_D091_2022-03-15.7z`
-- `data/bdtopo_idf/BDTOPO_3-0_TOUSTHEMES_GPKG_LAMB93_D092_2022-03-15.7z`
-- `data/bdtopo_idf/BDTOPO_3-0_TOUSTHEMES_GPKG_LAMB93_D093_2022-03-15.7z`
-- `data/bdtopo_idf/BDTOPO_3-0_TOUSTHEMES_GPKG_LAMB93_D094_2022-03-15.7z`
-- `data/bdtopo_idf/BDTOPO_3-0_TOUSTHEMES_GPKG_LAMB93_D095_2022-03-15.7z`
-- `data/ban_idf/adresses-75.csv.gz`
-- `data/ban_idf/adresses-77.csv.gz`
-- `data/ban_idf/adresses-78.csv.gz`
-- `data/ban_idf/adresses-91.csv.gz`
-- `data/ban_idf/adresses-92.csv.gz`
-- `data/ban_idf/adresses-93.csv.gz`
-- `data/ban_idf/adresses-94.csv.gz`
-
-In case you are using the regional household travel survey (EGT), the following
-files should also be in place:
-
-- `data/egt_2010/Menages_semaine.csv`
-- `data/egt_2010/Personnes_semaine.csv`
-- `data/egt_2010/Deplacements_semaine.csv`
+- `data/germany/vg250-ew_12-31.utm32s.gpkg.ebenen.zip`
+- `data/gtfs_idf/latest.zip`
+- `data/osm_idf/oberbayern-latest.osm.pbf`
 
 ## <a name="section-population">Running the pipeline
 
@@ -276,31 +114,31 @@ The pipeline code is available in [this repository](https://github.com/eqasim-or
 To use the code, you have to clone the repository with `git`:
 
 ```bash
-git clone https://github.com/eqasim-org/ile-de-france
+git clone https://github.com/eqasim-org/ile-de-france pipeline
 ```
 
-which will create the `ile-de-france` folder containing the pipeline code. To
+which will create the `pipeline` folder containing the pipeline code. To
 set up all dependencies, especially the [synpp](https://github.com/eqasim-org/synpp) package,
 which is the code of the pipeline code, we recommend setting up a Python
 environment using [Anaconda](https://www.anaconda.com/):
 
 ```bash
-cd ile-de-france
-conda env create -f environment.yml
+cd pipeline
+conda env create -f environment.yml -n munich
 ```
 
-This will create a new Anaconda environment with the name `ile-de-france`.
+This will create a new Anaconda environment with the name `munich`.
 
 To activate the environment, run:
 
 ```bash
-conda activate ile-de-france
+conda activate munich
 ```
 
-Now have a look at `config.yml` which is the configuration of the pipeline code.
+Now have a look at `config_munich.yml` which is the configuration of the pipeline code.
 Have a look at [synpp](https://github.com/eqasim-org/synpp) in case you want to get a more general
 understanding of what it does. For the moment, it is important to adjust
-two configuration values inside of `config.yml`:
+two configuration values inside of `config_munich.yml`:
 
 - `working_directory`: This should be an *existing* (ideally empty) folder where
 the pipeline will put temporary and cached files during runtime.
@@ -318,16 +156,16 @@ mkdir cache
 mkdir output
 ```
 
-Everything is set now to run the pipeline. The way `config.yml` is configured
+Everything is set now to run the pipeline. The way `config_munich.yml` is configured
 it will create the relevant output files in the `output` folder.
 
 To run the pipeline, call the [synpp](https://github.com/eqasim-org/synpp) runner:
 
 ```bash
-python3 -m synpp
+python3 -m synpp config_munich.yml
 ```
 
-It will automatically deshptect the `config.yml`, process all the pipeline code
+It will read `config_munich.yml`, process all the pipeline code
 and eventually create the synthetic population. You should see a couple of
 stages running one after another. Most notably, first, the pipeline will read all
 the raw data sets to filter them and put them into the correct internal formats.
@@ -347,17 +185,54 @@ activities, but in the spatial *GPKG* format. Activities contain point
 geometries to indicate where they happen and the trips file contains line
 geometries to indicate origin and destination of each trip.
 
-### Mode choice
+## <a name="section-simulation">Running the simulation
 
-The synthetic data generated by the pipeine so far does not include transport modes (car, bike, walk, pt, ...) for the individual trips as assigning them consistently is a more computation-heavy process (including routing the individual trips for the modes). To add modes to the trip table, a light-weight MATSim simulation needs to be performed. For that, please configure the additional data requirements as described in the procedure to run a MATSim simulation:
+The pipeline can be used to generate a full runnable [MATSim](https://matsim.org/)
+scenario and run it for a couple of iterations to test it. For that, you need
+to make sure that the following tools are installed on your system (you can just
+try to run the pipeline, it will complain if this is not the case):
 
-- [Running a MATSim simulation](https://github.com/eqasim-org/ile-de-france/blob/develop/docs/simulation.md)
+- **Java** needs to be installed, with a minimum version of Java 11. In case
+you are not sure, you can download the open [AdoptJDK](https://adoptopenjdk.net/). *Attention:* There are incompatibilities with more recent version (for instance 17), so for the time being we recommend using version 17.
+- **Maven** `>= 3.8.7` needs to be installed to build the necessary Java packages for setting
+up the scenario (such as pt2matsim) and running the simulation. Maven can be
+downloaded [here](https://maven.apache.org/) if it does not already exist on
+your system.
+- **Osmosis** needs to be accessible from the command line to convert and filter
+to convert, filter and merge OSM data sets. Alternatively, you can set the path
+to the binary using the `osmosis_binary` option in the confiuration file. Osmosis
+can be downloaded [here](https://wiki.openstreetmap.org/wiki/Osmosis).
+- **git** `=> 2.39.2` is used to clone the repositories containing the simulation code. In
+case you clone the pipeline repository previously, you should be all set. However, Windows has problems with working with the long path names that result from the pipelien structure of the project. To avoid the problem, you very likely should set git into *long path mode* by calling `git config --system core.longpaths true`.
+- In recent versions of **Ubuntu** you may need to install the `font-config` package to avoid crashes of MATSim when writing images (`sudo apt install fontconfig`).
 
-After that, you can change the `mode_choice` entry in the pipeline configuration file `config.yml` to `true`:
+Then, open your `config.yml` and uncomment the `matsim.output` stage in the
+`run` section. If you call `python3 -m synpp` again, the pipeline will know
+already which stages have been running before, so it will only run additional
+stages that are needed to set up and test the simulation.
 
-```yaml
-config:
-  mode_choice: true
+After running, you should find the MATSim scenario files in the `output`
+folder:
+
+- `munich_population.xml.gz` containing the agents and their daily plans.
+- `munich_facilities.xml.gz` containing all businesses, services, etc.
+- `munich_network.xml.gz` containing the road and transit network
+- `munich_households.xml.gz` containing additional household information
+- `munich_transit_schedule.xml.gz` and `munich_transit_vehicles.xml.gz` containing public transport data
+- `munich_config.xml` containing the MATSim configuration values
+- `munich-1.0.6.jar` containing a fully packaged version of the simulation code including MATSim and all other dependencies
+
+If you want to run the simulation again (in the pipeline it is only run for
+two iterations to test that everything works), you can now call the following:
+
+```bash
+java -Xmx14G -cp munich-1.0.6.jar org.eqasim.ile_de_france.RunSimulation --config-path munich_config.xml
 ```
 
-Running the pipeline again will add the `mode` colum to the `trips.csv` file and its spatial equivalent.
+This will create a `simulation_output` folder (as defined in the `munich_config.xml`)
+where all simulation is written.
+
+For more flexibility and advanced simulations, have a look at the MATSim
+simulation code provided at https://github.com/eqasim-org/eqasim-java. The generated
+`munich-*.jar` from this pipeline is an automatically compiled version of
+this code.

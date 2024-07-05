@@ -25,7 +25,7 @@ def execute(context):
     ]).T
     
     # Calculate Euclidean distances per row
-    for k in tqdm(range(len(locations))):
+    for k in range(len(locations)):
         distance_matrix[k,:] = la.norm(locations[k] - locations, axis = 1)
     
     # Convert to km
