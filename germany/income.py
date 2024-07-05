@@ -9,11 +9,11 @@ downstream stages for Germany.
 """
 
 def configure(context):
-    context.stage("germany.ipf.attributed")
+    context.stage("synthesis.population.sampled")
 
 def execute(context):
     # Load data
-    df = context.stage("germany.ipf.attributed")[["household_id", "commune_id"]]
+    df = context.stage("synthesis.population.sampled")[["household_id"]]
     
     # Format
     df = df.drop_duplicates("household_id")

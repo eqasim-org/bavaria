@@ -6,11 +6,11 @@ Yield home zones for Germany based on synthetic population data.
 """
 
 def configure(context):
-    context.stage("germany.ipf.attributed")
+    context.stage("synthesis.population.sampled")
 
 def execute(context):
     # Load data
-    df = context.stage("germany.ipf.attributed")
+    df = context.stage("synthesis.population.sampled")
 
     # Format data
     df = df.drop_duplicates("household_id")
