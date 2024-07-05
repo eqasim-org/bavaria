@@ -36,7 +36,7 @@ config:
   random_seed: 1234
   acquisition_sample_size: 1
   home_location_sampling: weighted
-  mode_choice: true
+  mode_choice: false
   output_prefix: mun_
  
   # Paths to the input data and where the output should be stored
