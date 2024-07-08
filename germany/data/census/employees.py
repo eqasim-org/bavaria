@@ -32,9 +32,12 @@ def execute(context):
     df = df[df["municipality_name"] != "Insgesamt"].copy()
 
     # Obtain Kreis identifier from lines without count
-    f = df["count"].isna() & (df["municipality_code"] != "nan")
+    f = df["count"].isna()
     df.loc[f, "kreis"] = df.loc[f, "municipality_code"]
     df["kreis"] = df["kreis"].ffill()
+
+    # Set Kreis to Na for cities without a Kreis
+    df.loc[df["municipality_name"].astype(str).str.contains("Krfr."), "kreis"] = np.nan
 
     # Only rows with values
     df = df[~df["count"].isna() & (df["count"] != "•")].copy()
