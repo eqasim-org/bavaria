@@ -121,9 +121,16 @@ def execute(context):
         "origin_id", "destination_id"
     ])).reset_index()
 
-    # Convert to probability
+    # Calculate totals
     df_total = df_matrix[["origin_id", "weight"]].groupby("origin_id").sum().reset_index().rename({ "weight" : "total" }, axis = 1)
     df_matrix = pd.merge(df_matrix, df_total, on = "origin_id")
+
+    # Fix missing flows
+    f_missing_total = df_matrix["total"] == 0.0
+    df_matrix.loc[f_missing_total & (df_matrix["origin_id"] == df_matrix["destination_id"]), "weight"] = 1.0
+    df_matrix.loc[f_missing_total, "total"] = 1.0
+
+    # Convert to probability
     df_matrix["weight"] = df_matrix["weight"] / df_matrix["total"]
     df_matrix = df_matrix[["origin_id", "destination_id", "weight"]]
 

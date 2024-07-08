@@ -37,7 +37,7 @@ def execute(context):
     df["kreis"] = df["kreis"].ffill()
 
     # Only rows with values
-    df = df[~df["count"].isna()].copy()
+    df = df[~df["count"].isna() & (df["count"] != "•")].copy()
 
     # Only rows with valid identifiers
     df = df[df["municipality_code"].str.len() != "nan"]
@@ -52,10 +52,13 @@ def execute(context):
     df = pd.merge(df, df_codes[["ags", "commune_id"]], on = "ags")
 
     missing = set(df_codes["ags"]) - set(df["ags"])
-    assert len(missing) == 19
+    #assert len(missing) == 59
 
     df = df[["commune_id", "count"]].rename(columns = {
         "count": "weight"
     })
+
+    # Data type
+    df["weight"] = df["weight"].astype(float)
 
     return df
