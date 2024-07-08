@@ -30,8 +30,8 @@ def execute(context):
     df["studies"] = False
     df["socioprofessional_class"] = 0
 
-    # Vehicles (attention, may be tricky for choice model)
-    df["number_of_vehicles"] = 0
+    # Vehicles (we base it here on whether the person has a license)
+    df["number_of_vehicles"] = df["license"].astype(int)
 
     # Commute mode (is this important?)
     df["commute_mode"] = np.nan

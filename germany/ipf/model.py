@@ -11,7 +11,7 @@ def configure(context):
     context.stage("germany.ipf.prepare")
  
 def execute(context):
-    df_population, df_employment = context.stage("germany.ipf.prepare")
+    df_population, df_employment, df_licenses_country, df_licenses_kreis = context.stage("germany.ipf.prepare")
 
     # Create a map that maps communes to the departement
     df_unique = df_population[["commune_id", "departement_id"]].drop_duplicates()
@@ -22,31 +22,37 @@ def execute(context):
     # Construct a combined age category
     df_population["age_class_population"] = df_population["age_class"]
     df_employment["age_class_employment"] = df_employment["age_class"]
+    df_licenses_country["age_class_licenses"] = df_licenses_country["age_class"]
 
     unique_age_classes = np.array(np.sort(list(
         set(df_population["age_class_population"]) | 
-        set(df_employment["age_class_employment"]))))
+        set(df_employment["age_class_employment"]) |
+        set(df_licenses_country["age_class_licenses"]))))
 
     unique_population_age_classes = np.sort(df_population["age_class_population"].unique())
     unique_employment_age_classes = np.sort(df_employment["age_class_employment"].unique())
+    unique_licenses_age_classes = np.sort(df_licenses_country["age_class_licenses"].unique())
 
     population_age_mapping = {}
     employment_age_mapping = {}
+    licenses_age_mapping = {}
 
     for age_class in unique_age_classes:
         population_age_mapping[age_class] = unique_population_age_classes[np.count_nonzero(age_class > unique_population_age_classes)]
         employment_age_mapping[age_class] = unique_employment_age_classes[np.count_nonzero(age_class > unique_employment_age_classes)]
+        licenses_age_mapping[age_class] = unique_licenses_age_classes[np.count_nonzero(age_class > unique_licenses_age_classes)]
 
     # Construct other unique values
     unique_sexes = np.sort(list(set(df_population["sex"]) | set(df_employment["sex"])))
     unique_employed = [True, False]
     unique_communes = np.sort(df_population["commune_id"].unique())
     unique_departements = np.sort(df_employment["departement_id"].unique())
+    unique_license = [True, False]
 
     # Initialize the seed with all combinations of values
     index = pd.MultiIndex.from_product([
-        unique_communes, unique_sexes, unique_age_classes, unique_employed
-    ], names = ["commune_id", "sex", "age_class", "employed"])
+        unique_communes, unique_sexes, unique_age_classes, unique_employed, unique_license
+    ], names = ["commune_id", "sex", "age_class", "employed", "license"])
 
     df_model = pd.DataFrame(index = index).reset_index()
     df_model["weight"] = 1.0
@@ -57,6 +63,7 @@ def execute(context):
     # Attach individual age classes
     df_model["age_class_population"] = df_model["age_class"].replace(population_age_mapping)
     df_model["age_class_employment"] = df_model["age_class"].replace(employment_age_mapping)
+    df_model["age_class_licenses"] = df_model["age_class"].replace(licenses_age_mapping)
 
     # Initialize weighting selectors and targets
     selectors = []
@@ -91,6 +98,32 @@ def execute(context):
         selectors.append(f_model)
     
         target_weight = df_employment.loc[f_reference, "weight"].sum()
+        targets.append(target_weight)
+
+    # License country constraints    
+    combinations = list(itertools.product(unique_sexes, unique_licenses_age_classes))
+    for combination in context.progress(combinations, total = len(combinations), label = "Generating license constraints"):
+        f_reference = df_licenses_country["sex"] == combination[0]
+        f_reference &= df_licenses_country["age_class_licenses"] == combination[1] 
+    
+        f_model = df_model["sex"] == combination[0]
+        f_model &= df_model["age_class_licenses"] == combination[1]
+        f_model &= df_model["license"] # Only select license owners!
+        selectors.append(f_model)
+    
+        target_weight = df_licenses_country.loc[f_reference, "weight"].sum()
+        targets.append(target_weight)
+
+    # License Kreis constraints    
+    combinations = list(itertools.product(unique_departements))
+    for combination in context.progress(combinations, total = len(combinations), label = "Generating license constraints per Kreis"):
+        f_reference = df_licenses_kreis["departement_id"] == combination[0]
+    
+        f_model = df_model["departement_id"] == combination[0]
+        f_model &= df_model["license"] # Only select license owners!
+        selectors.append(f_model)
+    
+        target_weight = df_licenses_kreis.loc[f_reference, "weight"].sum()
         targets.append(target_weight)
     
     # Perform IPF
@@ -127,4 +160,4 @@ def execute(context):
     # Reestablish sex categories
     df_model["sex"] = df_model["sex"].replace({ 1: "male", 2: "female" }).astype("category")
 
-    return df_model[["commune_id", "departement_id", "sex", "age_class", "employed", "weight"]]
+    return df_model[["commune_id", "departement_id", "sex", "age_class", "employed", "license", "weight"]]

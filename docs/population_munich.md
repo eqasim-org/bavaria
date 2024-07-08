@@ -35,12 +35,12 @@ describe this process.
 
 ### 3) Bavarian employment data (district, sex, age group)
 
-TODO SEEMS TO BE DOWN RIGHT NOW
-
-https://www.statistikdaten.bayern.de/genesis/online?operation=statistic&levelindex=1&levelid=1720112584563&code=13111#abreadcrumb
- 13111-004r
-Sozialversicherungspflichtig Beschäftigte: Kreise, Beschäftigte am Arbeitsort/Beschäftigte am Wohnort, Geschlecht, Nationalität, Altersgruppen, Stichtag
-WOHNORT
+- [Employment data](https://www.statistikdaten.bayern.de/genesis/online?operation=statistic&levelindex=1&levelid=1720112584563&code=13111#abreadcrumb)
+- Search for **13111-004r** and click on the link
+- For **ERW032**, select *Wohnort* (last word in the dropdown
+- Click *Werteabruf*
+- In the following view, click *XLSX* on top to download the file
+- Put the resulting *xlsx* file into `/data/bavaria`
 
 ### 4) Bavarian employment data (municipality, total)
 
@@ -49,7 +49,14 @@ WOHNORT
 - Download the data for 2022 (*202200*) in *XLS* format
 - Put the resulting *xla* file into `/data/bavaria`
 
-### 5) Bavarian building registry (Oberbayern)
+### 5) German driving license ownership data (municipality; Germany sex, age, type; Bundesland, sex, type)
+
+- [License ownership data](https://www.kba.de/DE/Statistik/Kraftfahrer/Fahrerlaubnisse/Fahrerlaubnisbestand/fahrerlaubnisbestand_node.html)
+- Download the *XLSX* file at the bottom of the page
+- Put the resulting file into `/data/germany`
+
+
+### 6) Bavarian building registry (Oberbayern)
 
 - [Building registry](https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=hausumringe)
 - Click on **Karte aktivieren** to activate the map
@@ -57,7 +64,7 @@ WOHNORT
 - In the opened window (for "Oberbayern") click **Download**
 - Put the resulting *zip* file into `/data/bavaria`
 
-### 6) German GTFS
+### 7) German GTFS
 
 This data set is only needed if you run a MATSim simulation or enable mode choice in the population synthesis.
 
@@ -65,7 +72,7 @@ This data set is only needed if you run a MATSim simulation or enable mode choic
 - Click on **Download**
 - Put the resulting *zip* file into `/data/gtfs_idf`
 
-### 6) OpenStreetMap (Oberbayern)
+### 8) OpenStreetMap (Oberbayern)
 
 This data set is only needed if you run a MATSim simulation or enable mode choice in the population synthesis.
 
@@ -73,7 +80,7 @@ This data set is only needed if you run a MATSim simulation or enable mode choic
 - Download the data set for **Oberbayern** in *osm.pbf* format
 - Put the resulting *osm.pbf* file into `/data/osm_idf`
 
-### 7) French National household travel survey (ENTD 2008)
+### 9) French National household travel survey (ENTD 2008)
 
 The national household travel survey is available from the Ministry of Ecology:
 
@@ -104,6 +111,7 @@ Your folder structure should now have at least the following files:
 - `data/entd_2008/Q_tcm_menage_0.csv`
 - `data/entd_2008/K_deploc.csv`
 - `data/entd_2008/Q_ind_lieu_teg.csv`
+- `data/germany/fe4_2024.xlsx`
 - `data/germany/vg250-ew_12-31.utm32s.gpkg.ebenen.zip`
 - `data/gtfs_idf/latest.zip`
 - `data/osm_idf/oberbayern-latest.osm.pbf`
