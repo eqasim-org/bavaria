@@ -56,13 +56,14 @@ describe this process.
 - Put the resulting file into `/data/germany`
 
 
-### 6) Bavarian building registry (Oberbayern)
+### 6) Bavarian building registry (Upper bavarian, Lower Bavaria, Swabia)
 
 - [Building registry](https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=hausumringe)
 - Click on **Karte aktivieren** to activate the map
 - Click on the region around Munich
-- In the opened window (for "Oberbayern") click **Download**
-- Put the resulting *zip* file into `/data/bavaria`
+- In the opened window (for **Oberbayern**) click **Download**
+- Put the resulting *zip* file into `/data/bavaria/buildings`
+- Repeat the process for the zone left of Munich (**Schaben**) and the zone to the right (**Niederbayern**)
 
 ### 7) German GTFS
 
@@ -72,12 +73,12 @@ This data set is only needed if you run a MATSim simulation or enable mode choic
 - Click on **Download**
 - Put the resulting *zip* file into `/data/gtfs_idf`
 
-### 8) OpenStreetMap (Oberbayern)
+### 8) OpenStreetMap (Bavaria)
 
 This data set is only needed if you run a MATSim simulation or enable mode choice in the population synthesis.
 
 - [Geofabrik Bayern](http://download.geofabrik.de/europe/germany/bayern.html)
-- Download the data set for **Oberbayern** in *osm.pbf* format
+- Download the data set for **Bavaria** in *osm.pbf* format ("Commonly used formats")
 - Put the resulting *osm.pbf* file into `/data/osm_idf`
 
 ### 9) French National household travel survey (ENTD 2008)
@@ -101,10 +102,12 @@ a few are actually relevant for the pipeline. Those are:
 
 Your folder structure should now have at least the following files:
 
-- `data/bavaria/091_Oberbayern_Hausumringe.zip`
 - `data/bavaria/13111-004r.xlsx`
 - `data/bavaria/a1310c_202200.xla`
 - `data/bavaria/a6502c_202200.xla`
+- `data/bavaria/buildings/091_Oberbayern_Hausumringe.zip`
+- `data/bavaria/buildings/092_Niederbayern_Hausumringe.zip`
+- `data/bavaria/buildings/097_Schwaben_Hausumringe.zip`
 - `data/entd_2008/Q_individu.csv`
 - `data/entd_2008/Q_tcm_individu.csv`
 - `data/entd_2008/Q_menage.csv`
@@ -114,7 +117,7 @@ Your folder structure should now have at least the following files:
 - `data/germany/fe4_2024.xlsx`
 - `data/germany/vg250-ew_12-31.utm32s.gpkg.ebenen.zip`
 - `data/gtfs_idf/latest.zip`
-- `data/osm_idf/oberbayern-latest.osm.pbf`
+- `data/osm_idf/bayern-latest.osm.pbf`
 
 ## <a name="section-population">Running the pipeline
 
