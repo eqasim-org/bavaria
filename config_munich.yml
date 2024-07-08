@@ -7,7 +7,7 @@ working_directory: /home/shoerl/tum/pipeline/cache
 # This section defines which parts of the pipeline should be run
 run:
   - synthesis.output
-  - matsim.output
+  #- matsim.output
 
 ### TODO: Set matching attributes after merging the latest pipeline version
 ### TODO: Clean up this configuration file for defaults
@@ -34,12 +34,12 @@ config:
   hts: entd
 
   # Define sampling rate and random seed for the output population
-  sampling_rate: 0.01
+  sampling_rate: 0.1
   random_seed: 1234
-  acquisition_sample_size: 1
   home_location_sampling: weighted
   mode_choice: true
   output_prefix: mun_
+  matching_attributes: ["sex", "age_class", "any_cars"]
  
   # Paths to the input data and where the output should be stored
   data_path: /home/shoerl/tum/pipeline/data
