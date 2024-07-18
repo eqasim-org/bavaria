@@ -6,8 +6,9 @@ working_directory: /home/shoerl/tum/pipeline/cache
 
 # This section defines which parts of the pipeline should be run
 run:
-  - synthesis.output
+  #- synthesis.output
   #- matsim.output
+  - germany.analysis.zones
 
 ### TODO: Set matching attributes after merging the latest pipeline version
 ### TODO: Clean up this configuration file for defaults
