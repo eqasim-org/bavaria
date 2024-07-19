@@ -6,9 +6,11 @@ working_directory: /home/shoerl/tum/pipeline/cache
 
 # This section defines which parts of the pipeline should be run
 run:
-  #- synthesis.output
+  - synthesis.output
   #- matsim.output
-  - germany.analysis.zones
+  # - germany.analysis.zones
+  # - germany.locations.synthesis.replacement
+  # - synthesis.population.spatial.primary.candidates
 
 ### TODO: Set matching attributes after merging the latest pipeline version
 ### TODO: Clean up this configuration file for defaults
@@ -25,6 +27,7 @@ aliases:
   data.od.weighted: germany.gravity.model
   data.spatial.iris: germany.data.spatial.iris
   data.spatial.codes: germany.entd_codes
+  synthesis.population.spatial.primary.locations: germany.locations.synthesis.replacement
 
 # Here the configuraiton of the pipeline starts
 config:
