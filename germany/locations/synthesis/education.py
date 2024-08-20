@@ -17,9 +17,9 @@ def configure(context):
     context.stage("synthesis.population.spatial.primary.candidates")
 
 ASSIGNMENT = [
-    { "filter": lambda x: x["age"].between(0, 6), "education_type": "kindergarten", "distance": 0e3 }, # 5
-    { "filter": lambda x: x["age"].between(7, 17), "education_type": "school", "distance": 0e3,  }, # 10
-    { "filter": lambda x: x["age"].between(18, np.inf), "education_type": "university", "distance": 0e3 }, # 50
+    { "filter": lambda x: x["age"].between(0, 6), "education_type": "kindergarten", "distance": 2e3 }, # 5
+    { "filter": lambda x: x["age"].between(7, 17), "education_type": "school", "distance": 2e3,  }, # 10
+    { "filter": lambda x: x["age"].between(18, np.inf), "education_type": "university", "distance": 10e3 }, # 50
 ]
 
 def execute(context):
@@ -66,8 +66,6 @@ def execute(context):
             df_location_candidates["geometry"].x,
             df_location_candidates["geometry"].y
         ]).T
-
-        print("persons:", len(df_person_selection), "locations:", len(df_location_candidates))
 
         # Set up spatial index for querying
         spatial_index = KDTree(location_coordinates)
