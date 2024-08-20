@@ -17,9 +17,9 @@ def configure(context):
     context.stage("synthesis.population.spatial.primary.candidates")
 
 ASSIGNMENT = [
-    { "filter": lambda x: x["age"].between(0, 6), "education_type": "kindergarten", "distance": 5e3 },
-    { "filter": lambda x: x["age"].between(7, 17), "education_type": "school", "distance": 10e3,  },
-    { "filter": lambda x: x["age"].between(18, np.inf), "education_type": "university", "distance": 50e3 },
+    { "filter": lambda x: x["age"].between(0, 6), "education_type": "kindergarten", "distance": 0e3 }, # 5
+    { "filter": lambda x: x["age"].between(7, 17), "education_type": "school", "distance": 0e3,  }, # 10
+    { "filter": lambda x: x["age"].between(18, np.inf), "education_type": "university", "distance": 0e3 }, # 50
 ]
 
 def execute(context):
