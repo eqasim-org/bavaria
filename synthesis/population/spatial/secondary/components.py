@@ -12,7 +12,7 @@ class CustomDistanceSampler(rda.FeasibleDistanceSampler):
     def sample_distances(self, problem):
         distances = np.zeros((len(problem["modes"])))
 
-        for index, (mode, travel_time) in enumerate(zip(problem["modes"], problem["travel_times"])):
+        for index, (mode, travel_time, purpose) in enumerate(zip(problem["modes"], problem["travel_times"], problem["purposes"])):
             mode_distribution = self.distributions[mode]
 
             bound_index = np.count_nonzero(travel_time > mode_distribution["bounds"])
@@ -21,6 +21,10 @@ class CustomDistanceSampler(rda.FeasibleDistanceSampler):
             distances[index] = mode_distribution["values"][
                 np.count_nonzero(self.random.random_sample() > mode_distribution["cdf"])
             ]
+
+            if purpose == "leisure":
+                LEISURE_CORRECTION_FACTOR = 2.0
+                distances[index] *= LEISURE_CORRECTION_FACTOR
 
         return distances
 
