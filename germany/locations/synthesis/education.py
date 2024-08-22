@@ -19,7 +19,7 @@ def configure(context):
 ASSIGNMENT = [
     { "filter": lambda x: x["age"].between(0, 6), "education_type": "kindergarten", "distance": 2e3 }, # 5
     { "filter": lambda x: x["age"].between(7, 17), "education_type": "school", "distance": 2e3,  }, # 10
-    { "filter": lambda x: x["age"].between(18, np.inf), "education_type": "university", "distance": 7e3 }, # 50
+    { "filter": lambda x: x["age"].between(18, np.inf), "education_type": "university", "distance": 10e3 }, # 50
 ]
 
 def execute(context):

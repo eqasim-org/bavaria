@@ -23,7 +23,7 @@ class CustomDistanceSampler(rda.FeasibleDistanceSampler):
             ]
 
             if purpose == "leisure":
-                LEISURE_CORRECTION_FACTOR = 2.0
+                LEISURE_CORRECTION_FACTOR = 2.5
                 distances[index] *= LEISURE_CORRECTION_FACTOR
 
         return distances
