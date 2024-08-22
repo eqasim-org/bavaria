@@ -44,9 +44,14 @@ def execute(context):
     df_hts_persons = df_hts_persons.rename(columns = { "person_id": "hts_id", "household_id": "hts_household_id" })
     df_hts_households = df_hts_households.rename(columns = { "household_id": "hts_household_id" })
 
-    df_population = pd.merge(df_population, df_hts_persons[[
+    attributes = [
         "hts_id", "hts_household_id", "has_license", "has_pt_subscription", "is_passenger"
-    ]], on = "hts_id")
+    ]
+
+    if "has_license" in df_population.columns:
+        attributes.remove("has_license")
+
+    df_population = pd.merge(df_population, df_hts_persons[attributes], on = "hts_id")
 
     df_population = pd.merge(df_population, df_hts_households[[
         "hts_household_id", "number_of_bikes"

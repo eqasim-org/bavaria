@@ -31,7 +31,8 @@ def execute(context):
     df["socioprofessional_class"] = 0
 
     # Vehicles (we base it here on whether the person has a license)
-    df["number_of_vehicles"] = df["license"].astype(int)
+    df["number_of_vehicles"] = 1 # df["license"].astype(int)
+    df["has_license"] = df["license"]
 
     # Commute mode (is this important?)
     df["commute_mode"] = np.nan

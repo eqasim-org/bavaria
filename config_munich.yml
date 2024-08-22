@@ -1,6 +1,8 @@
 ## Synthetic population pipeline for Munich
 ## based on the synpp package
 
+#### TODO: Update instructions with osmconvert !
+
 # This is the path to a directory where the pipeline can store temporary data
 working_directory: /home/shoerl/tum/pipeline/cache
 
@@ -43,7 +45,7 @@ config:
   home_location_sampling: weighted
   mode_choice: false
   output_prefix: mun_
-  matching_attributes: ["sex", "age_class", "any_cars"]
+  matching_attributes: ["sex", "age_class", "has_license"]
  
   # Paths to the input data and where the output should be stored
   data_path: /home/shoerl/tum/pipeline/data
