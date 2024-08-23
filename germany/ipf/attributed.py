@@ -30,9 +30,15 @@ def execute(context):
     df["studies"] = False
     df["socioprofessional_class"] = 0
 
-    # Vehicles (we base it here on whether the person has a license)
-    df["number_of_vehicles"] = 1 # df["license"].astype(int)
+    # License
     df["has_license"] = df["license"]
+
+    # Don't consider vehicle availability
+    df["number_of_vehicles"] = 1
+    df["number_of_bikes"] = 1
+
+    # Ignore PT subscription
+    df["has_pt_subscription"] = False
 
     # Commute mode (is this important?)
     df["commute_mode"] = np.nan

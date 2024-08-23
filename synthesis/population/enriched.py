@@ -51,11 +51,19 @@ def execute(context):
     if "has_license" in df_population.columns:
         attributes.remove("has_license")
 
+    if "has_pt_subscription" in df_population.columns:
+        attributes.remove("has_pt_subscription")
+
     df_population = pd.merge(df_population, df_hts_persons[attributes], on = "hts_id")
 
-    df_population = pd.merge(df_population, df_hts_households[[
+    attributes = [
         "hts_household_id", "number_of_bikes"
-    ]], on = "hts_household_id")
+    ]
+
+    if "number_of_bikes" in df_population.columns:
+        attributes.remove("number_of_bikes")
+
+    df_population = pd.merge(df_population, df_hts_households[attributes], on = "hts_household_id")
 
     # Attach income
     df_income = context.stage("synthesis.population.income")
