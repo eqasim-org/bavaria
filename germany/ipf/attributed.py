@@ -43,20 +43,30 @@ def execute(context):
     # Commute mode (is this important?)
     df["commute_mode"] = np.nan
 
-    # Age distribution
-    random = np.random.RandomState(context.config("random_seed"))
-    
+    # Age distribution (we inflate the categories and distribute the ages uniformly in each group)
+    initial_weight = df["weight"].sum()
+
     age_values = np.sort(df["age_class"].unique())
     MAXIMUM_AGE = 100
 
+    df_age = []
     for k in range(len(age_values)):
         lower = 0 if k == 0 else age_values[k - 1]
         upper = age_values[k]
+        count = min(age_values[k], MAXIMUM_AGE) - lower
 
-        f = df["age_class"] == upper
-        upper = min(upper, MAXIMUM_AGE + 1)
-                    
-        df.loc[f, "age"] = random.randint(lower, upper, np.count_nonzero(f))
+        df_age.append(pd.DataFrame({ 
+            "age_class": [upper] * count,
+            "age": lower + np.arange(count) + 1,
+            "age_factor": [1.0 / count] * count
+        }))
 
-    df["age"] = df["age"].astype(int)
+    df_age = pd.concat(df_age)
+
+    df = pd.merge(df, df_age, on = "age_class")
+    df["weight"] *= df["age_factor"]
+    df = df.drop(columns = ["age"])
+    final_weight = df["weight"].sum()
+    assert np.abs(initial_weight - final_weight) < 1e-6
+
     return df
