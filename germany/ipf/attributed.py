@@ -65,7 +65,11 @@ def execute(context):
 
     df = pd.merge(df, df_age, on = "age_class")
     df["weight"] *= df["age_factor"]
-    df = df.drop(columns = ["age"])
+    df = df.drop(columns = ["age_class", "age_factor"])
+    
+    df["person_id"] = np.arange(len(df))
+    df["household_id"] = np.arange(len(df))
+
     final_weight = df["weight"].sum()
     assert np.abs(initial_weight - final_weight) < 1e-6
 
