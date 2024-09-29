@@ -7,10 +7,17 @@ import numpy as np
 Apply gravity model to generate a distance matrix for Oberbayern.
 """
 
+DEFAULT_SLOPE = -0.09
+DEFAULT_CONSTANT = -2.4
+DEFAULT_DIAGONAL = 1.0
+
 def configure(context):
     context.stage("germany.gravity.distance_matrix")
     context.stage("germany.ipf.attributed")
     context.stage("germany.data.census.employees")
+    context.config("gravity_slope", DEFAULT_SLOPE)
+    context.config("gravity_constant", DEFAULT_CONSTANT)
+    context.config("gravity_diagonal", DEFAULT_DIAGONAL)
 
 def evaluate_gravity(population, employees, friction):
     # Initizlize production, attraction, and flow
@@ -111,7 +118,11 @@ def execute(context):
     employees *= observations / np.sum(employees)
 
     # Model parameters estimated from Île-de-France
-    friction = np.exp(-0.09 * distances - 2.4) + np.eye(len(municipalities)) * 1.0
+    slope = context.config("gravity_slope")
+    constant = context.config("gravity_constant")
+    diagonal = context.config("gravity_diagonal")
+
+    friction = np.exp(slope * distances + constant) + np.eye(len(municipalities)) * diagonal
     flow = evaluate_gravity(population, employees, friction)
 
     # Convert to data frame
