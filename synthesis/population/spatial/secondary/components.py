@@ -3,11 +3,12 @@ import sklearn.neighbors
 import numpy as np
 
 class CustomDistanceSampler(rda.FeasibleDistanceSampler):
-    def __init__(self, random, distributions, maximum_iterations = 1000):
+    def __init__(self, random, distributions, maximum_iterations = 1000, leisure_correction_factor = 1.0):
         rda.FeasibleDistanceSampler.__init__(self, random = random, maximum_iterations = maximum_iterations)
 
         self.random = random
         self.distributions = distributions
+        self.leisure_correction_factor = leisure_correction_factor
 
     def sample_distances(self, problem):
         distances = np.zeros((len(problem["modes"])))
@@ -23,8 +24,7 @@ class CustomDistanceSampler(rda.FeasibleDistanceSampler):
             ]
 
             if purpose == "leisure":
-                LEISURE_CORRECTION_FACTOR = 2.5
-                distances[index] *= LEISURE_CORRECTION_FACTOR
+                distances[index] *= self.leisure_correction_factor
 
         return distances
 

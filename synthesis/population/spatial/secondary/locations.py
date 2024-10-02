@@ -21,6 +21,9 @@ def configure(context):
 
     context.config("secloc_maximum_iterations", np.inf)
 
+    DEFAULT_LEISURE_CORRECTION_FACTOR = 2.5
+    context.config("leisure_correction_factor", DEFAULT_LEISURE_CORRECTION_FACTOR)
+
 def prepare_locations(context):
     # Load persons and their primary locations
     df_home = context.stage("synthesis.population.spatial.home.locations")
@@ -141,10 +144,13 @@ def process(context, arguments):
 
   # Set up distance sampler
   distance_distributions = context.data("distance_distributions")
+  leisure_correction_factor = context.config("leisure_correction_factor")
+  
   distance_sampler = CustomDistanceSampler(
         maximum_iterations = min(1000, maximum_iterations),
         random = random,
-        distributions = distance_distributions)
+        distributions = distance_distributions,
+        leisure_correction_factor = leisure_correction_factor)
 
   # Set up relaxation solver; currently, we do not consider tail problems.
   chain_solver = GravityChainSolver(
