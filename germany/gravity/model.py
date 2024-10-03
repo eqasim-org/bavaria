@@ -27,7 +27,7 @@ def evaluate_gravity(population, employees, friction):
     converged = False
 
     # Perform maximum 100 iterations (but convergence will hopefully happen earlier)
-    for iteration in range(1000):
+    for iteration in range(int(1e6)):
         # Backup to calculate change
         previous_production = np.copy(production)
         previous_attraction = np.copy(attraction)
