@@ -7,7 +7,7 @@ import numpy as np
 Apply gravity model to generate a distance matrix for Oberbayern.
 """
 
-DEFAULT_SLOPE = -0.09
+DEFAULT_SLOPE = -2.0 # -0.09 came from IDF, value -2.0 has been calibrated
 DEFAULT_CONSTANT = -2.4
 DEFAULT_DIAGONAL = 1.0
 
