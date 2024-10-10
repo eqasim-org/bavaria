@@ -21,7 +21,7 @@ def configure(context):
 
     context.config("secloc_maximum_iterations", np.inf)
 
-    DEFAULT_LEISURE_CORRECTION_FACTOR = 2.5
+    DEFAULT_LEISURE_CORRECTION_FACTOR = 2.0
     context.config("leisure_correction_factor", DEFAULT_LEISURE_CORRECTION_FACTOR)
 
 def prepare_locations(context):
