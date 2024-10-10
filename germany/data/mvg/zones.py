@@ -5,6 +5,7 @@ import shapely.geometry as sgeo
 
 """
 Loads station data for MVG
+https://www.mvg.de/.rest/zdm/stations
 """
 
 def configure(context):
