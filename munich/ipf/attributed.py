@@ -34,7 +34,7 @@ def execute(context):
     df["has_license"] = df["license"]
 
     # Don't consider vehicle availability
-    df["number_of_vehicles"] = 1
+    df["number_of_cars"] = 1
     df["number_of_bicycles"] = 1
 
     # Ignore PT subscription
