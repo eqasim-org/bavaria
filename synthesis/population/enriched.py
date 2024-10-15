@@ -46,7 +46,7 @@ def execute(context):
     df_hts_households = df_hts_households.rename(columns = { "household_id": "hts_household_id" })
 
     attributes = [
-        "hts_id", "hts_household_id", "has_license", "has_pt_subscription", "is_passenger"
+        "hts_id", "hts_household_id", "has_license", "has_pt_subscription"
     ]
 
     if "has_license" in df_population.columns:
