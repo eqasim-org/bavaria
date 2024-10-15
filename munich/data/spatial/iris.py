@@ -20,4 +20,8 @@ def execute(context):
     # Departement identifiers
     df["departement_id"] = df["commune_id"].str[:5]
 
+    # Region dummu
+    df["region_id"] = 1
+    df["region_id"] = df["region_id"].astype("category")
+
     return df[["iris_id", "commune_id", "departement_id", "geometry"]]
