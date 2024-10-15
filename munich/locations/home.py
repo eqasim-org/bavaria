@@ -11,7 +11,8 @@ def configure(context):
 def execute(context):
     # Load data
     df = context.stage("munich.data.buildings")
+    df = df.rename(columns = { "building_id": "home_location_id" })
 
     return df[[
-        "building_id", "weight", "commune_id", "iris_id", "geometry",
+        "home_location_id", "weight", "commune_id", "iris_id", "geometry",
     ]]
