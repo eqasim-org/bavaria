@@ -14,11 +14,12 @@ def configure(context):
     context.stage("synthesis.population.spatial.locations")
 
     context.stage("synthesis.population.trips")
+    context.stage("synthesis.vehicles.vehicles")
 
 PERSON_FIELDS = [
-    "person_id", "household_income", "car_availability", "bike_availability",
+    "person_id", "household_income", "car_availability", "bicycle_availability",
     "census_household_id", "census_person_id", "household_id",
-    "has_license", "has_pt_subscription", "is_passenger",
+    "has_license", "has_pt_subscription",
     "hts_id", "hts_household_id",
     "age", "employed", "sex"
 ]
@@ -31,7 +32,11 @@ TRIP_FIELDS = [
     "person_id", "mode", "departure_time", "travel_time"
 ]
 
-def add_person(writer, person, activities, trips):
+VEHICLE_FIELDS = [
+    "owner_id", "vehicle_id", "mode"
+]
+
+def add_person(writer, person, activities, trips, vehicles):
     writer.start_person(person[PERSON_FIELDS.index("person_id")])
 
     writer.start_attributes()
@@ -39,7 +44,7 @@ def add_person(writer, person, activities, trips):
     writer.add_attribute("householdIncome", "java.lang.Double", person[PERSON_FIELDS.index("household_income")])
 
     writer.add_attribute("carAvailability", "java.lang.String", person[PERSON_FIELDS.index("car_availability")])
-    writer.add_attribute("bikeAvailability", "java.lang.String", person[PERSON_FIELDS.index("bike_availability")])
+    writer.add_attribute("bicycleAvailability", "java.lang.String", person[PERSON_FIELDS.index("bicycle_availability")])
 
     writer.add_attribute("censusHouseholdId", "java.lang.Long", person[PERSON_FIELDS.index("census_household_id")])
     writer.add_attribute("censusPersonId", "java.lang.Long", person[PERSON_FIELDS.index("census_person_id")])
@@ -50,11 +55,14 @@ def add_person(writer, person, activities, trips):
     writer.add_attribute("hasPtSubscription", "java.lang.Boolean", person[PERSON_FIELDS.index("has_pt_subscription")])
     writer.add_attribute("hasLicense", "java.lang.String", writer.yes_no(person[PERSON_FIELDS.index("has_license")]))
 
-    writer.add_attribute("isPassenger", "java.lang.Boolean", person[PERSON_FIELDS.index("is_passenger")])
-
     writer.add_attribute("age", "java.lang.Integer", person[PERSON_FIELDS.index("age")])
     writer.add_attribute("employed", "java.lang.String", person[PERSON_FIELDS.index("employed")])
     writer.add_attribute("sex", "java.lang.String", person[PERSON_FIELDS.index("sex")][0])
+
+    writer.add_attribute("vehicles", "org.matsim.vehicles.PersonVehicles", "{{{content}}}".format(content = ",".join([
+        "\"{mode}\":\"{id}\"".format(mode = v[VEHICLE_FIELDS.index("mode")], id = v[VEHICLE_FIELDS.index("vehicle_id")])
+        for v in vehicles
+    ])))
 
     writer.end_attributes()
 
@@ -108,6 +116,9 @@ def execute(context):
     df_trips = context.stage("synthesis.population.trips")
     df_trips["travel_time"] = df_trips["arrival_time"] - df_trips["departure_time"]
 
+    df_vehicles = context.stage("synthesis.vehicles.vehicles")[1]
+    df_vehicles = df_vehicles.sort_values(by = ["owner_id"])
+
     with gzip.open(output_path, 'wb+') as writer:
         with io.BufferedWriter(writer, buffer_size = 2 * 1024**3) as writer:
             writer = writers.PopulationWriter(writer)
@@ -115,6 +126,7 @@ def execute(context):
 
             activity_iterator = backlog_iterator(iter(df_activities[ACTIVITY_FIELDS].itertuples(index = False)))
             trip_iterator = backlog_iterator(iter(df_trips[TRIP_FIELDS].itertuples(index = False)))
+            vehicle_iterator = backlog_iterator(iter(df_vehicles[VEHICLE_FIELDS].itertuples(index = False)))
 
             with context.progress(total = len(df_persons), label = "Writing population ...") as progress:
                 for person in df_persons.itertuples(index = False):
@@ -122,6 +134,7 @@ def execute(context):
 
                     activities = []
                     trips = []
+                    vehicles = []
 
                     # Track all activities for person
                     while activity_iterator.has_next():
@@ -147,7 +160,17 @@ def execute(context):
 
                     assert len(trips) == len(activities) - 1
 
-                    add_person(writer, person, activities, trips)
+                    # Track all vehicles for person
+                    while vehicle_iterator.has_next():
+                        vehicle = vehicle_iterator.next()
+
+                        if not vehicle[VEHICLE_FIELDS.index("owner_id")] == person_id:
+                            vehicle_iterator.previous()
+                            break
+                        else:
+                            vehicles.append(vehicle)
+
+                    add_person(writer, person, activities, trips, vehicles)
                     progress.update()
 
             writer.end_population()

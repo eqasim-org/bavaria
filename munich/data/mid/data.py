@@ -19,7 +19,7 @@ def execute(context):
         { "zone": "bavaria", "target": 0.82 },
     ]
 
-    data["bike_availability_constraints"] = [
+    data["bicycle_availability_constraints"] = [
         { "zone": "mvv", "target": 0.84 },
         { "zone": "munich", "target": 0.83 },
         { "zone": "umland", "target": 0.87 },
