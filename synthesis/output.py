@@ -91,17 +91,17 @@ def execute(context):
     df_activities["preceding_trip_index"] = df_activities["preceding_trip_index"].astype(int)
     # Prepare spatial data sets
     df_locations = context.stage("synthesis.population.spatial.locations")[[
-        "person_id",  "iris_id", "commune_id","departement_id","region_id","activity_index", "geometry"
+        "person_id",  "iris_id", "commune_id","departement_id","activity_index", "geometry"
     ]]
 
     df_activities = pd.merge(df_activities, df_locations[[
-        "person_id", "iris_id", "commune_id","departement_id","region_id","activity_index", "geometry"
+        "person_id", "iris_id", "commune_id","departement_id","activity_index", "geometry"
     ]], how = "left", on = ["person_id", "activity_index"])
 
     # Prepare spatial activities
     df_spatial = gpd.GeoDataFrame(df_activities[[
             "person_id", "household_id", "activity_index",
-            "iris_id", "commune_id","departement_id","region_id",
+            "iris_id", "commune_id","departement_id",
             "preceding_trip_index", "following_trip_index",
             "purpose", "start_time", "end_time",
             "is_first", "is_last", "geometry"
@@ -111,7 +111,7 @@ def execute(context):
     # Write activities
     df_activities = df_activities[[
         "person_id", "household_id", "activity_index",
-        "iris_id", "commune_id","departement_id","region_id",
+        "iris_id", "commune_id","departement_id",
         "preceding_trip_index", "following_trip_index",
         "purpose", "start_time", "end_time",
         "is_first", "is_last"
@@ -128,9 +128,9 @@ def execute(context):
     ).drop_duplicates("household_id")
 
     df_households = pd.merge(df_households,df_activities[df_activities["purpose"] == "home"][["household_id",
-        "iris_id", "commune_id","departement_id","region_id"]].drop_duplicates("household_id"),how="left")
+        "iris_id", "commune_id","departement_id"]].drop_duplicates("household_id"),how="left")
     df_households = df_households[[
-        "household_id","iris_id", "commune_id", "departement_id","region_id",
+        "household_id","iris_id", "commune_id", "departement_id",
         "car_availability", "bicycle_availability",
         "number_of_cars", "number_of_bicycles",
         "income",
@@ -205,7 +205,7 @@ def execute(context):
     df_spatial_homes = df_spatial[
         df_spatial["purpose"] == "home"
     ].drop_duplicates("household_id")[[
-        "household_id","iris_id", "commune_id","departement_id","region_id", "geometry"
+        "household_id","iris_id", "commune_id","departement_id", "geometry"
     ]]
     if "gpkg" in output_formats:
         path = "%s/%shomes.gpkg" % (output_path, output_prefix)
