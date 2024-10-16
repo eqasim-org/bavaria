@@ -105,7 +105,7 @@ def execute(context):
             "purpose", "start_time", "end_time",
             "is_first", "is_last", "geometry"
         ]], crs = df_locations.crs)
-    df_spatial = df_spatial.astype({'purpose': 'str', "departement_id": 'str'})
+    df_spatial = df_spatial.astype({'purpose': 'str'})
 
     # Write activities
     df_activities = df_activities[[
