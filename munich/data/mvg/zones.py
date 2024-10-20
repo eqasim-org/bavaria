@@ -54,6 +54,6 @@ def execute(context):
 
 def validate(context):
     if not os.path.exists("{}/{}".format(context.config("data_path"), context.config("mvg_stations_path"))):
-        raise RuntimeError("RP MOBPRO data is not available")
+        raise RuntimeError("MVG zone data is not available")
 
     return os.path.getsize("{}/{}".format(context.config("data_path"), context.config("mvg_stations_path")))
