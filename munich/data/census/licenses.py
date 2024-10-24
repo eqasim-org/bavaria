@@ -36,16 +36,11 @@ def execute(context):
     df_country.loc[df_country["sex"].str.contains("Frauen"), "sex"] = "female"
     df_country["sex"] = df_country["sex"].astype("category")
 
-    print(df_country["relative_weight"].sum())
-
     # Weight
     df_country["relative_weight"] = df_country["relative_weight"] / df_country["relative_weight"].sum()
 
     # Clean age column
     df_country["age_class"] = df_country["age_class"].apply(clean_age_class).astype(int)
-
-    print(df_country)
-    exit()
 
     # Load Bundesland-specific data
     df_land = pd.read_excel("{}/{}".format(context.config("data_path"), context.config("munich.licenses_path")),
@@ -156,6 +151,9 @@ def execute(context):
 
     # Check that we have fixed all Kreis
     assert len(missing_kreis) == 0
+
+    print(df_kreis)
+    exit()
 
     # Scale up the sociodemographics for the study area
     df_country["weight"] = df_country["relative_weight"] * df_kreis["weight"].sum()
