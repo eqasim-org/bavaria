@@ -22,8 +22,6 @@ def execute(context):
     df_country = df_country[["Geschlecht und\nLebensalter (in Jahren)", "B"]]
     df_country.columns = ["age_class", "relative_weight"]
 
-    print(df_country["relative_weight"].sum())
-
     # Construct sex column
     f_sex = df_country["age_class"].str.contains("Männer")
     f_sex |= df_country["age_class"].str.contains("Frauen")
@@ -37,6 +35,8 @@ def execute(context):
     df_country.loc[df_country["sex"].str.contains("Männer"), "sex"] = "male"
     df_country.loc[df_country["sex"].str.contains("Frauen"), "sex"] = "female"
     df_country["sex"] = df_country["sex"].astype("category")
+
+    print(df_country["relative_weight"].sum())
 
     # Weight
     df_country["relative_weight"] = df_country["relative_weight"] / df_country["relative_weight"].sum()
