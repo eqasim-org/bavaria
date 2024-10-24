@@ -42,6 +42,9 @@ def execute(context):
     # Clean age column
     df_country["age_class"] = df_country["age_class"].apply(clean_age_class).astype(int)
 
+    print(df_country)
+    exit()
+
     # Load Bundesland-specific data
     df_land = pd.read_excel("{}/{}".format(context.config("data_path"), context.config("munich.licenses_path")),
         sheet_name = "FE4.3", skiprows = 8)
