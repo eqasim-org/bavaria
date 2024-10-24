@@ -153,6 +153,7 @@ def execute(context):
     assert len(missing_kreis) == 0
 
     print(df_kreis)
+    print(df_kreis["weight"].sum())
     exit()
 
     # Scale up the sociodemographics for the study area
