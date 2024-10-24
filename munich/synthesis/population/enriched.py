@@ -66,6 +66,8 @@ def execute(context):
             df_persons.loc[f, "car_availability"] *= factor
             factors.append(factor)
 
+    print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
+    
     # BIKE AVAILABILITY
     df_persons["bicycle_availability"] = 1.0
     constraints = mid["bicycle_availability_constraints"]
