@@ -49,8 +49,4 @@ def execute(context):
     # Departement ID
     df_population["departement_id"] = df_population["commune_id"].str[:5].astype("category")
 
-    print(df_licenses_country)
-    print(df_licenses_kreis)
-    exit()
-
     return df_population, df_employment, df_licenses_country, df_licenses_kreis
