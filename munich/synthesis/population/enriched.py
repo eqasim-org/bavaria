@@ -67,6 +67,7 @@ def execute(context):
             factors.append(factor)
 
     print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
+    exit()
     
     # BIKE AVAILABILITY
     df_persons["bicycle_availability"] = 1.0
