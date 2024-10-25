@@ -44,7 +44,8 @@ def execute(context):
     iterations = 1000
 
     # CAR AVAILABILITY
-    df_persons["car_availability"] = 1.0
+    df_persons["car_availability"] = 0.0
+    df_persons.loc[df_persons["has_license"], "car_availability"] = 1.0
     constraints = mid["car_availability_constraints"]
 
     filters = []
@@ -53,7 +54,6 @@ def execute(context):
     for constraint in constraints:
         f = df_persons["inside_{}".format(constraint["zone"])]
         targets.append(constraint["target"] * np.count_nonzero(f))
-        f &= df_persons["has_license"] # Distribute over license owners
         filters.append(f)
     
 
