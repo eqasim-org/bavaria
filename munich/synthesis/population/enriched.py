@@ -65,7 +65,7 @@ def execute(context):
             df_persons.loc[f, "car_availability"] *= factor
             factors.append(factor)
 
-    print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
+        print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
     #print(df_persons["car_availability"].min(), df_persons["car_availability"].max())
     #exit()
     
@@ -103,7 +103,7 @@ def execute(context):
             df_persons.loc[f, "bicycle_availability"] *= factor
             factors.append(factor)
 
-    print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
+        print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
 
     # PT SUBSCRIPTION
     df_persons["has_pt_subscription"] = 1.0
@@ -139,7 +139,7 @@ def execute(context):
             df_persons.loc[f, "has_pt_subscription"] *= factor
             factors.append(factor)
 
-    print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
+        print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
 
     # Sample values
     random = np.random.RandomState(context.config("random_seed") + 8572)
@@ -159,5 +159,7 @@ def execute(context):
     u = random.random_sample(len(df_persons))
     selection = u < df_persons["has_pt_subscription"]
     df_persons["has_pt_subscription"] = selection
+
+    exit()
     
     return df_persons
