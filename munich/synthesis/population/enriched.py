@@ -66,7 +66,9 @@ def execute(context):
             df_persons.loc[f, "car_availability"] *= factor
             factors.append(factor)
 
-    print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
+        print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
+    
+    print(df_persons["car_availability"].min(), df_persons["car_availability"].max(), df_persons["car_availability"].mean())
     exit()
     
     # BIKE AVAILABILITY
