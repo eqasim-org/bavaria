@@ -13,13 +13,15 @@ def configure(context):
     context.stage("munich.data.spatial.codes")
     context.stage("munich.data.census.population")
 
+COUNT_COLUMN = "Fahrerlaubnisse bzw. Führerscheine"
+
 def execute(context):
     # Load country-wide data
     df_country = pd.read_excel("{}/{}".format(context.config("data_path"), context.config("munich.licenses_path")),
         sheet_name = "FE4.2", skiprows = 8)
     
     # Select columns
-    df_country = df_country[["Geschlecht und\nLebensalter (in Jahren)", "B"]]
+    df_country = df_country[["Geschlecht und\nLebensalter (in Jahren)", COUNT_COLUMN]]
     df_country.columns = ["age_class", "relative_weight"]
 
     # Construct sex column
@@ -47,7 +49,7 @@ def execute(context):
         sheet_name = "FE4.3", skiprows = 8)
     
     # Select columns
-    df_land = df_land[["Geschlecht und Land", "B"]]
+    df_land = df_land[["Geschlecht und Land", COUNT_COLUMN]]
     df_land.columns = ["land", "relative_weight"]
 
     # Construct sex column

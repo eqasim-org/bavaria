@@ -48,27 +48,28 @@ def execute(context):
     df_persons.loc[df_persons["has_license"], "car_availability"] = 1.0
     constraints = mid["car_availability_constraints"]
 
-    # ATTENTION: Disabled distribution here
-    #filters = []
-    #targets = []
+    filters = []
+    targets = []
 
-    #for constraint in constraints:
-    #    f = df_persons["inside_{}".format(constraint["zone"])]
-    #    targets.append(constraint["target"] * np.count_nonzero(f))
-    #    f &= df_persons["has_license"] # Distribute over license owners
-    #    filters.append(f)
+    for constraint in constraints:
+        f = df_persons["inside_{}".format(constraint["zone"])]
+        targets.append(constraint["target"] * np.count_nonzero(f))
+        f &= df_persons["has_license"] # Distribute over license owners
+        filters.append(f)
     
 
-    #for iteration in context.progress(range(iterations), label = "imputing car availability"):
-    #    factors = []
+    for iteration in context.progress(range(iterations), label = "imputing car availability"):
+        factors = []
 
-    #    for f, target in zip(filters, targets):
-    #        current = df_persons.loc[f, "car_availability"].sum()
-    #        factor = target / current
-    #        df_persons.loc[f, "car_availability"] *= factor
-    #        factors.append(factor)
+        for f, target in zip(filters, targets):
+            current = df_persons.loc[f, "car_availability"].sum()
+            factor = target / current
+            df_persons.loc[f, "car_availability"] *= factor
+            factors.append(factor)
 
-    #print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
+    print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
+    print(df_persons["car_availability"].min(), df_persons["car_availability"].max())
+    exit()
     
     # BIKE AVAILABILITY
     df_persons["bicycle_availability"] = 1.0
