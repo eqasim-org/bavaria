@@ -44,8 +44,8 @@ def execute(context):
     iterations = 1000
 
     # CAR AVAILABILITY
-    df_persons["car_availability"] = 0.0
-    df_persons.loc[df_persons["has_license"], "car_availability"] = 1.0
+    df_persons["car_availability"] = 1.0
+    # df_persons.loc[df_persons["has_license"], "car_availability"] = 1.0
     constraints = mid["car_availability_constraints"]
 
     filters = []
@@ -66,8 +66,8 @@ def execute(context):
             factors.append(factor)
 
     print("Factors", "min:", min(factors), "max:", max(factors), "mean:", np.mean(factors))
-    print(df_persons["car_availability"].min(), df_persons["car_availability"].max())
-    exit()
+    #print(df_persons["car_availability"].min(), df_persons["car_availability"].max())
+    #exit()
     
     # BIKE AVAILABILITY
     df_persons["bicycle_availability"] = 1.0
