@@ -158,7 +158,5 @@ def execute(context):
     u = random.random_sample(len(df_persons))
     selection = u < df_persons["has_pt_subscription"]
     df_persons["has_pt_subscription"] = selection
-
-    exit()
     
     return df_persons
