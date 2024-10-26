@@ -14,6 +14,7 @@ def configure(context):
     context.stage("munich.data.census.population")
 
 COUNT_COLUMN = "Fahrerlaubnisse bzw. Führerscheine"
+COUNT_COLUMN = "Zusammen"
 
 def execute(context):
     # Load country-wide data

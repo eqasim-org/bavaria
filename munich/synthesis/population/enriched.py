@@ -45,7 +45,6 @@ def execute(context):
 
     # CAR AVAILABILITY
     df_persons["car_availability"] = 1.0
-    # df_persons.loc[df_persons["has_license"], "car_availability"] = 1.0
     constraints = mid["car_availability_constraints"]
 
     filters = []
