@@ -80,7 +80,7 @@ def execute(context):
     assert df_kreis.columns[1].startswith("Amtlicher")
     assert df_kreis.columns[5].startswith("Pkw")
 
-    df_kreis = df_kreis[[df_kreis.columns[1], df_kreis.columns[5]]]
+    df_kreis = df_kreis[["Amtlicher Gemeindeschlüssel"], COUNT_COLUMN]
     df_kreis.columns = ["kreis_code", "weight"]
 
     # Select columns

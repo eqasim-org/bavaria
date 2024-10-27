@@ -29,11 +29,13 @@ def execute(context):
     mid = context.stage("munich.data.mid.data")
 
     # assign zone membership to each person
+    f_covered = np.zeros(len(df_homes), dtype = bool)
     for zone in df_zones["name"].unique():
         df_query = gpd.sjoin(df_homes, df_zones[df_zones["name"] == zone], predicate = "within")
         df_homes["inside_{}".format(zone)] = df_homes["household_id"].isin(df_query["household_id"])
-        
-    df_homes["inside_bavaria"] = True
+        f_covered |= df_homes["inside_{}".format(zone)]
+
+    df_homes["inside_external"] = ~f_covered
 
     df_persons = gpd.GeoDataFrame(
         pd.merge(df_persons, df_homes, on = "household_id"),
