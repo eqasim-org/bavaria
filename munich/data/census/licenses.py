@@ -155,18 +155,6 @@ def execute(context):
     # Check that we have fixed all Kreis
     assert len(missing_kreis) == 0
 
-    # Consolidate totals
-    for department_id in df_kreis["departement_id"].unique():
-        population = df_population.loc[df_population["commune_id"].str[:5] == department_id, "weight"].sum()
-        licenses = df_kreis.loc[df_kreis["departement_id"] == department_id, "weight"].sum()
-
-        if licenses > population:
-            df_population.loc[df_population["commune_id"].str[:5] == department_id, "weight"] *= population / licenses
-            print("Reducing licenses for", department_id)
-
-    # Scale up the sociodemographics for the study area
-    df_country["weight"] = df_country["relative_weight"] * df_kreis["weight"].sum()
-
     return df_country, df_land, df_kreis
 
 def clean_age_class(age_class):
