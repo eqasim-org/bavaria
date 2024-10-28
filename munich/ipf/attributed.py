@@ -18,7 +18,7 @@ def execute(context):
     df["household_id"] = np.arange(len(df))
 
     # Spatial
-    df["iris_id"] = df["commune_id"] + "0000"
+    df["iris_id"] = df["commune_id"].astype(str) + "0000"
     df["iris_id"] = df["iris_id"].astype("category")
 
     # Fixed attributes
