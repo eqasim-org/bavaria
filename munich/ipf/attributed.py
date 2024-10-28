@@ -51,13 +51,13 @@ def execute(context):
 
     df_age = []
     for k in range(len(age_values)):
-        lower = 0 if k == 0 else age_values[k - 1]
-        upper = age_values[k]
-        count = min(age_values[k], MAXIMUM_AGE) - lower
+        lower = age_values[k]
+        upper = MAXIMUM_AGE if k == len(age_values) - 1 else age_values[k + 1]
+        count = upper - lower
 
         df_age.append(pd.DataFrame({ 
-            "age_class": [upper] * count,
-            "age": lower + np.arange(count) + 1,
+            "age_class": [lower] * count,
+            "age": lower + np.arange(count),
             "age_factor": [1.0 / count] * count
         }))
 
