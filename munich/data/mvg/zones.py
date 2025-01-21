@@ -10,7 +10,7 @@ https://www.mvg.de/.rest/zdm/stations
 
 def configure(context):
     context.config("data_path")
-    context.config("mvg_stations_path", "mvg/stations")
+    context.config("mvg_stations_path", "mvg/stations.json")
 
 def execute(context):
     # Load raw data

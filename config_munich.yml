@@ -2,12 +2,12 @@
 ## based on the synpp package
 
 # This is the path to a directory where the pipeline can store temporary data
-working_directory: cache
+working_directory: /home/shoerl/tum/january/cache
 
 # This section defines which parts of the pipeline should be run
 run:
   - synthesis.output
-  #- matsim.output
+  - matsim.output
 
 # Here the configuraiton of the pipeline starts
 config:
@@ -22,8 +22,8 @@ config:
   random_seed: 1234
  
   # Paths to the input data and where the output should be stored
-  data_path: /path/to/my/data
-  output_path: output
+  data_path: /home/shoerl/tum/january/data
+  output_path: /home/shoerl/tum/january/output
   output_prefix: munich_
 
   # Only interesting if you run the simulation
@@ -33,6 +33,9 @@ config:
   home_location_sampling: weighted
   mode_choice: false
   matching_attributes: ["sex", "age_class", "has_license"]
+
+  gtfs_path: gtfs
+  osm_path: osm
 
 # Overrides for the Munich pipeline compared to the Île-de-France pipeline
 aliases:
