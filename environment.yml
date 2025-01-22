@@ -28,7 +28,8 @@ dependencies:
   - pyarrow=16.1.0
   - pyrosm=0.6.2
   - statsmodels=0.14.3
-  - pyogrio=
+  - requests=2.32.3
+  - pyogrio=0.10.0
 
   - pip:
     - synpp==1.5.1

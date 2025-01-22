@@ -7,14 +7,13 @@ it more easily later on.
 """
 
 def configure(context):
-    context.stage("data.osm.cleaned")
     context.stage("data.spatial.municipalities")
     context.stage("munich.data.osm.osmconvert")
 
     context.config("processes")
 
     context.config("data_path")
-    context.config("osm_path_bavaria", "osm_idf/bayern-latest.osm.pbf")
+    context.config("osm_path_bavaria", "osm/bayern-latest.osm.pbf")
 
 def process_municipality(context, zone_id):
     input_path = context.data("input_path")
