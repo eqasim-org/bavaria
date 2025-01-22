@@ -1,4 +1,4 @@
-import os, json
+import os, json, re
 import geopandas as gpd
 import pandas as pd
 import shapely.geometry as sgeo
@@ -19,9 +19,10 @@ def execute(context):
 
     # Extract all existing zones
     zones = set()
+    split_expression = re.compile(r"[\|/]")
 
     for station in data:
-        zones |= set(station["tariffZones"].split("|"))
+        zones |= set(re.split(split_expression, station["tariffZones"]))
 
     zones = set(z for z in zones if len(z) > 0)
 
@@ -29,7 +30,7 @@ def execute(context):
     df_stations = []
 
     for station in data:
-        station_zones = set(station["tariffZones"].split("|"))
+        station_zones = set(re.split(split_expression, station["tariffZones"]))
         record = { "geometry": sgeo.Point(station["longitude"], station["latitude"]) }
 
         for z in zones:
