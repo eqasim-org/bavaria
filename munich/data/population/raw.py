@@ -18,27 +18,27 @@ def execute(context):
     with zipfile.ZipFile(
         "{}/{}".format(context.config("data_path"), context.config("munich.population_path"))) as archive:
         with archive.open(context.config("munich.population_source")) as f:
-            df_population = gpd.read_file(f, layer = "v_vg250_gem")[[
-                "Regionalschlüssel_ARS", "Einwohnerzahl_EWZ", "geometry"
+            df_population = gpd.read_file(f, layer = "vg250_gem")[[
+                "ARS", "EWZ", "geometry"
             ]]
 
     # Filter for prefix
     prefix = context.config("munich.political_prefix")
 
     if type(prefix) == str:
-        df_population = df_population[df_population["Regionalschlüssel_ARS"].str.startswith(prefix)].copy()
+        df_population = df_population[df_population["ARS"].str.startswith(prefix)].copy()
     else:
         f = np.zeros((len(df_population,)), dtype = bool)
 
         for item in prefix:
-            f |= df_population["Regionalschlüssel_ARS"].str.startswith(item)
+            f |= df_population["ARS"].str.startswith(item)
         
         df_population = df_population[f].copy()
 
     # Rename
     df_population = df_population.rename(columns = { 
-        "Regionalschlüssel_ARS": "municipality_code",
-        "Einwohnerzahl_EWZ": "population"
+        "ARS": "municipality_code",
+        "EWZ": "population"
     })
     
     return df_population
