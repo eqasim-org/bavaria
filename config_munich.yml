@@ -37,6 +37,9 @@ config:
   gtfs_path: gtfs
   osm_path: osm
 
+  # Activate if only certain "Bezirk" should be generated
+  # munich.political_prefix: ["091", "092", "097"] # Oberbayern, Niederbayern, Schwaben
+
 # Overrides for the Munich pipeline compared to the Île-de-France pipeline
 aliases:
   data.census.filtered: munich.ipf.attributed

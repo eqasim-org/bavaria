@@ -64,7 +64,7 @@ describe this process.
 - Click on the region around Munich
 - In the opened window (for **Oberbayern**) click **Download**
 - Put the resulting *zip* file into `/data/bavaria/buildings`
-- Repeat the process for the zone left of Munich (**Schaben**) and the zone to the right (**Niederbayern**)
+- Repeat the process for all other zones, in total you should download *seven* files
 
 ### 7) French National household travel survey (ENTD 2008)
 
@@ -209,3 +209,13 @@ of activities.
 activities, but in the spatial *GPKG* format. Activities contain point
 geometries to indicate where they happen and the trips file contains line
 geometries to indicate origin and destination of each trip.
+
+## Generating smaller areas
+
+You can create smaller areas in Bavaria by selecting the *Regierungsbezirk* that you would like to generate. For that, activate the following option in the configuration:
+
+```yaml
+munich.political_prefix: ["091", "092", "097"] # Oberbayern, Niederbayern, Schwaben
+```
+
+In that case, only the *Bezirke* with the identifiers *091*, *092*, and *093* are generated. Those are the ones that are directly located around Munich.

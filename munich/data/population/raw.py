@@ -9,7 +9,7 @@ This stages loads a file containing population data for Germany including the ad
 
 def configure(context):
     context.config("data_path")
-    context.config("munich.political_prefix", ["091", "092", "097"]) # Default: Oberbayern 091, Niederbayern 092, Schwaben 097
+    context.config("munich.political_prefix", ["091", "092", "093", "094", "095", "096", "097"])
     context.config("munich.population_path", "germany/vg250-ew_12-31.utm32s.gpkg.ebenen.zip")
     context.config("munich.population_source", "vg250-ew_12-31.utm32s.gpkg.ebenen/vg250-ew_ebenen_1231/DE_VG250.gpkg")
 

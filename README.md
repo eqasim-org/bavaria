@@ -1,9 +1,9 @@
-# An open synthetic population of Munich
+# An open synthetic population of Bavaria
 
-![Munich](docs/teaser.png "Munich")
+![Bavaria](docs/teaser.png "Bavaria")
 
 This repository contains the code to create an open data synthetic population
-for Munich, Germany. It has been a joint project result between *IRT SystemX* and *TU Munich*.
+for Bavaria, Germany. It has been a joint project result between *IRT SystemX* and *TU Munich*.
 
 ## Main reference
 
@@ -14,7 +14,7 @@ It is based on a methodolgy that was originally developed for the Île-de-France
 ## What is this?
 
 This repository contains the code to create an open data synthetic population
-of Munich.
+of Bavaria.
 It takes as input several publicly
 available data sources to create a data set that closely represents the
 socio-demographic attributes of persons in the region, as well
@@ -29,7 +29,7 @@ Most notably, such a synthetic population serves as input to agent-based
 on a spatially and temporally detailed scale. Moreover, such data has been used
 to study the **spreading of diseases**, or the **placement of services** and facilities.
 
-The synthetic population for Munich can be generated from scratch by
+The synthetic population for Bavaria can be generated from scratch by
 everybody who has basic knowledge in using Python. Detailed instructions
 on how to generate a synthetic population with this repository are available below.
 
@@ -45,10 +45,10 @@ as well!
 ## Documentation
 
 This pipeline fulfils two purposes: First, to create synthetic populations
-of Munich in *CSV* and *GLPK* format including persons
+of Bavaria in *CSV* and *GLPK* format including persons
 and their daily localized activities. Second, the pipeline makes use of
 infrastructure data to generate the inputs to agent-based transport simulations.
 These steps are described in the following documents:
 
-- [How to create a synthetic population of Munich](docs/population.md)
-- [How to run a MATSim simulation of Munich](docs/simulation.md)
+- [How to create a synthetic population of Bavaria](docs/population.md)
+- [How to run a MATSim simulation of Bavaria](docs/simulation.md)
