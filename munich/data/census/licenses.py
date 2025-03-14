@@ -8,17 +8,17 @@ This stage loads the driving license ownership information for Germany.
 
 def configure(context):
     context.config("data_path")
-    context.config("munich.licenses_path", "germany/fe4_2024.xlsx")
+    context.config("bavaria.licenses_path", "germany/fe4_2024.xlsx")
 
-    context.stage("munich.data.spatial.codes")
-    context.stage("munich.data.census.population")
+    context.stage("bavaria.data.spatial.codes")
+    context.stage("bavaria.data.census.population")
 
 COUNT_COLUMN = "Fahrerlaubnisse bzw. Führerscheine"
 # COUNT_COLUMN = "Zusammen"
 
 def execute(context):
     # Load country-wide data
-    df_country = pd.read_excel("{}/{}".format(context.config("data_path"), context.config("munich.licenses_path")),
+    df_country = pd.read_excel("{}/{}".format(context.config("data_path"), context.config("bavaria.licenses_path")),
         sheet_name = "FE4.2", skiprows = 8)
     
     # Select columns
@@ -46,7 +46,7 @@ def execute(context):
     df_country["age_class"] = df_country["age_class"].apply(clean_age_class).astype(int)
 
     # Load Bundesland-specific data
-    df_land = pd.read_excel("{}/{}".format(context.config("data_path"), context.config("munich.licenses_path")),
+    df_land = pd.read_excel("{}/{}".format(context.config("data_path"), context.config("bavaria.licenses_path")),
         sheet_name = "FE4.3", skiprows = 8)
     
     # Select columns
@@ -74,7 +74,7 @@ def execute(context):
     df_land["relative_weight"] = df_land["relative_weight"] / df_land["relative_weight"].sum()
 
     # Load Kreis-specific data
-    df_kreis = pd.read_excel("{}/{}".format(context.config("data_path"), context.config("munich.licenses_path")),
+    df_kreis = pd.read_excel("{}/{}".format(context.config("data_path"), context.config("bavaria.licenses_path")),
         sheet_name = "FE4.4", skiprows = 7)
     
     assert df_kreis.columns[1].startswith("Amtlicher")
@@ -91,11 +91,11 @@ def execute(context):
     df_kreis = df_kreis[["departement_id", "weight"]]
 
     # Selection of districts
-    df_codes = context.stage("munich.data.spatial.codes")
+    df_codes = context.stage("bavaria.data.spatial.codes")
     df_kreis = df_kreis[df_kreis["departement_id"].isin(df_codes["departement_id"])]
 
     # Consolidation with population data
-    df_population = context.stage("munich.data.census.population")
+    df_population = context.stage("bavaria.data.census.population")
 
     required_kreis = set(df_population["commune_id"].str[:5].unique())
     available_kreis = set(df_kreis["departement_id"].unique())

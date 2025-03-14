@@ -7,11 +7,11 @@ This stage adds additional attributes to the generated synthetic population from
 """
 
 def configure(context):
-    context.stage("munich.ipf.model")
+    context.stage("bavaria.ipf.model")
     context.config("random_seed")
 
 def execute(context):
-    df = context.stage("munich.ipf.model")
+    df = context.stage("bavaria.ipf.model")
 
     # Identifiers
     df["person_id"] = np.arange(len(df))

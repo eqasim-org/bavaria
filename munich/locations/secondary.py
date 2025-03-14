@@ -6,11 +6,11 @@ Yield work location candidates for Germany.
 """
 
 def configure(context):
-    context.stage("munich.data.osm.locations")
+    context.stage("bavaria.data.osm.locations")
 
 def execute(context):
     # Load data
-    df = context.stage("munich.data.osm.locations")
+    df = context.stage("bavaria.data.osm.locations")
 
     # Activity types    
     df["offers_leisure"] = df["location_type"] == "leisure"

@@ -9,8 +9,8 @@ def configure(context):
 
     context.stage("synthesis.population.spatial.home.locations")
 
-    context.stage("munich.data.mid.data")
-    context.stage("munich.data.mid.zones")
+    context.stage("bavaria.data.mid.data")
+    context.stage("bavaria.data.mid.zones")
     context.config("random_seed")
 
 """
@@ -25,8 +25,8 @@ def execute(context):
     df_homes = context.stage("synthesis.population.spatial.home.locations")[["household_id", "geometry"]].copy()
 
     # load MiD
-    df_zones = context.stage("munich.data.mid.zones")
-    mid = context.stage("munich.data.mid.data")
+    df_zones = context.stage("bavaria.data.mid.zones")
+    mid = context.stage("bavaria.data.mid.data")
 
     # assign zone membership to each person
     f_covered = np.zeros(len(df_homes), dtype = bool)

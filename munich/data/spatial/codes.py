@@ -19,11 +19,11 @@ The correspondance to the code initially developed for France is as follows:
 """
 
 def configure(context):
-    context.stage("munich.data.population.raw")
+    context.stage("bavaria.data.population.raw")
 
 def execute(context):
     # Load codes
-    df_codes = context.stage("munich.data.population.raw")[["municipality_code"]]
+    df_codes = context.stage("bavaria.data.population.raw")[["municipality_code"]]
 
     # Clean up identifiers
     df_codes["region_id"] = df_codes["municipality_code"].str[:2].astype("category")

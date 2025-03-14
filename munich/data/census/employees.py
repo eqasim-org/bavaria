@@ -10,7 +10,7 @@ def configure(context):
     context.config("data_path")
     context.config("bavaria.work_flow_path", "bavaria/a6502c_202200.xla")
 
-    context.stage("munich.data.spatial.codes")
+    context.stage("bavaria.data.spatial.codes")
 
 def execute(context):
     # Load data
@@ -46,7 +46,7 @@ def execute(context):
     df = df[df["municipality_code"].str.len() != "nan"]
 
     # Construct identifiers
-    df_codes = context.stage("munich.data.spatial.codes")
+    df_codes = context.stage("bavaria.data.spatial.codes")
     
     f_kreisfrei = df["kreis"].isna()
     df.loc[f_kreisfrei, "ags"] = "09" + df["municipality_code"] + "000"

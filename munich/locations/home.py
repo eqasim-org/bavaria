@@ -6,11 +6,11 @@ Yield home location candidates for Germany.
 """
 
 def configure(context):
-    context.stage("munich.data.buildings")
+    context.stage("bavaria.data.buildings")
 
 def execute(context):
     # Load data
-    df = context.stage("munich.data.buildings")
+    df = context.stage("bavaria.data.buildings")
     df = df.rename(columns = { "building_id": "home_location_id" })
 
     return df[[

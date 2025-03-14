@@ -9,7 +9,7 @@ TODO: Can this be replaced by a Germany-wide extract from GENESIS?
 """
 
 def configure(context):
-    context.stage("munich.data.spatial.codes")
+    context.stage("bavaria.data.spatial.codes")
 
     context.config("data_path")
     context.config("bavaria.employment_path", "bavaria/13111-004r.xlsx")
@@ -60,7 +60,7 @@ def execute(context):
     df_employment["sex"] = df_employment["sex"].str[4:].astype("category")
 
     # Filter for requested codes
-    df_codes = context.stage("munich.data.spatial.codes")
+    df_codes = context.stage("bavaria.data.spatial.codes")
     df_employment = df_employment[df_employment["departement_id"].isin(df_codes["departement_id"])]
 
     return df_employment[["departement_id", "age_class", "sex", "weight"]]

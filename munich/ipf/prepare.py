@@ -7,17 +7,17 @@ that they can be procesed by the IPF algorithm.
 """
 
 def configure(context):
-    context.stage("munich.data.census.population")
-    context.stage("munich.data.census.employment")
-    context.stage("munich.data.census.licenses")
+    context.stage("bavaria.data.census.population")
+    context.stage("bavaria.data.census.employment")
+    context.stage("bavaria.data.census.licenses")
 
 def execute(context):
     # Load data
-    df_population = context.stage("munich.data.census.population")
-    df_employment = context.stage("munich.data.census.employment")
+    df_population = context.stage("bavaria.data.census.population")
+    df_employment = context.stage("bavaria.data.census.employment")
 
-    df_licenses_country = context.stage("munich.data.census.licenses")[0]
-    df_licenses_kreis = context.stage("munich.data.census.licenses")[2]
+    df_licenses_country = context.stage("bavaria.data.census.licenses")[0]
+    df_licenses_kreis = context.stage("bavaria.data.census.licenses")[2]
 
     # Generate numeric sex
     df_population["sex"] = df_population["sex"].replace({ "male": 1, "female": 2 })

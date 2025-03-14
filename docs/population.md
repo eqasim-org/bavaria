@@ -1,7 +1,7 @@
-# Generating the Munich population
+# Generating the Bavaria population
 
 The following sections describe how to generate a synthetic population for
-Munich using the pipeline. First all necessary data must be gathered.
+Bavaria using the pipeline. First all necessary data must be gathered.
 Afterwards, the pipeline can be run to create a synthetic population in *CSV*
 and *GPKG* format. These outputs can be used for analysis, or serve as input
 to a MATSim simulation.
@@ -135,11 +135,11 @@ The tool `osmconvert` must be accessible from the command line for the pipeline.
 
 ## <a name="section-population">Running the pipeline
 
-The pipeline code is available in [this repository](https://github.com/eqasim-org/munich.git).
+The pipeline code is available in [this repository](https://github.com/eqasim-org/bavaria.git).
 To use the code, you have to clone the repository with `git`:
 
 ```bash
-git clone https://github.com/eqasim-org/munich.git pipeline
+git clone https://github.com/eqasim-org/bavaria.git pipeline
 ```
 
 which will create the `pipeline` folder containing the pipeline code. To
@@ -149,21 +149,21 @@ environment using [Anaconda](https://www.anaconda.com/):
 
 ```bash
 cd pipeline
-conda env create -f environment.yml -n munich
+conda env create -f environment.yml -n bavaria
 ```
 
-This will create a new Anaconda environment with the name `munich`.
+This will create a new Anaconda environment with the name `bavaria`.
 
 To activate the environment, run:
 
 ```bash
-conda activate munich
+conda activate bavaria
 ```
 
-Now have a look at `config_munich.yml` which is the configuration of the pipeline code.
+Now have a look at `config_bavaria.yml` which is the configuration of the pipeline code.
 Have a look at [synpp](https://github.com/eqasim-org/synpp) in case you want to get a more general
 understanding of what it does. For the moment, it is important to adjust
-two configuration values inside of `config_munich.yml`:
+two configuration values inside of `config_bavaria.yml`:
 
 - `working_directory`: This should be an *existing* (ideally empty) folder where
 the pipeline will put temporary and cached files during runtime.
@@ -181,16 +181,16 @@ mkdir cache
 mkdir output
 ```
 
-Everything is set now to run the pipeline. The way `config_munich.yml` is configured
+Everything is set now to run the pipeline. The way `config_bavaria.yml` is configured
 it will create the relevant output files in the `output` folder.
 
 To run the pipeline, call the [synpp](https://github.com/eqasim-org/synpp) runner:
 
 ```bash
-python3 -m synpp config_munich.yml
+python3 -m synpp config_bavaria.yml
 ```
 
-It will read `config_munich.yml`, process all the pipeline code
+It will read `config_bavaria.yml`, process all the pipeline code
 and eventually create the synthetic population. You should see a couple of
 stages running one after another. Most notably, first, the pipeline will read all
 the raw data sets to filter them and put them into the correct internal formats.
@@ -215,7 +215,7 @@ geometries to indicate origin and destination of each trip.
 You can create smaller areas in Bavaria by selecting the *Regierungsbezirk* that you would like to generate. For that, activate the following option in the configuration:
 
 ```yaml
-munich.political_prefix: ["091", "092", "097"] # Oberbayern, Niederbayern, Schwaben
+bavaria.political_prefix: ["091", "092", "097"] # Oberbayern, Niederbayern, Schwaben
 ```
 
-In that case, only the *Bezirke* with the identifiers *091*, *092*, and *093* are generated. Those are the ones that are directly located around Munich.
+In that case, only the *Bezirke* with the identifiers *091*, *092*, and *093* are generated. Those are the ones that are directly located around bavaria.

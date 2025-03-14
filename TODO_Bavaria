@@ -1,0 +1,5 @@
+# TODO for Bavaria migration
+
+- Rename the repository
+- Rename the branch to bavaria-main
+- Rename in eqasim-java to bavaria-main (or integrate properly)

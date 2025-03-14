@@ -1,0 +1,57 @@
+## Synthetic population pipeline for Bavaria
+## based on the synpp package
+
+# This is the path to a directory where the pipeline can store temporary data
+working_directory: /set/your/path/to/cache
+
+# This section defines which parts of the pipeline should be run
+run:
+  - synthesis.output
+  - matsim.output
+
+# Here the configuraiton of the pipeline starts
+config:
+  # Some general configuration
+  processes: 8
+
+  # Define whether to use ENTD or EGT as the household travel survey (HTS)
+  hts: entd
+
+  # Define sampling rate and random seed for the output population
+  sampling_rate: 0.01
+  random_seed: 1234
+ 
+  # Paths to the input data and where the output should be stored
+  data_path: /set/your/path/to/data
+  output_path: /set/your/path/to/output
+  output_prefix: bavaria_
+
+  # Only interesting if you run the simulation
+  java_memory: 12G
+
+  # Defaults for Bavaria
+  home_location_sampling: weighted
+  mode_choice: false
+  matching_attributes: ["sex", "age_class", "has_license"]
+
+  gtfs_path: gtfs
+  osm_path: osm
+
+  # Activate if only certain "Bezirk" should be generated
+  # bavaria.political_prefix: ["091", "092", "097"] # Oberbayern, Niederbayern, Schwaben
+
+# Overrides for the bavaria pipeline compared to the Île-de-France pipeline
+aliases:
+  data.census.filtered: bavaria.ipf.attributed
+  synthesis.population.income.selected: bavaria.income
+  synthesis.population.spatial.home.zones: bavaria.homes
+  synthesis.locations.home.locations: bavaria.locations.home
+  synthesis.locations.education: bavaria.locations.education
+  synthesis.locations.secondary: bavaria.locations.secondary
+  synthesis.locations.work: bavaria.locations.work
+  data.od.weighted: bavaria.gravity.model
+  data.spatial.iris: bavaria.data.spatial.iris
+  data.spatial.codes: bavaria.entd_codes
+  synthesis.population.spatial.primary.locations: bavaria.locations.synthesis.replacement
+  synthesis.population.enriched: bavaria.synthesis.population.enriched
+  matsim.simulation.prepare: bavaria.matsim.simulation.prepare

@@ -3,11 +3,11 @@ Generates a data frame with population count per municipality in Germany.
 """
 
 def configure(context):
-    context.stage("munich.data.population.raw")
+    context.stage("bavaria.data.population.raw")
 
 def execute(context):
     # Load shapes
-    df = context.stage("munich.data.population.raw")[["municipality_code", "population"]]
+    df = context.stage("bavaria.data.population.raw")[["municipality_code", "population"]]
 
     # Clean up identifiers
     df["region_id"] = df["municipality_code"].str[:2].astype("category")

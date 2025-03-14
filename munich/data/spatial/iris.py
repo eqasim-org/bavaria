@@ -4,11 +4,11 @@ fake IRIS for each municipality in Germany. See the `codes` stage for more infor
 """
 
 def configure(context):
-    context.stage("munich.data.population.raw")
+    context.stage("bavaria.data.population.raw")
 
 def execute(context):
     # Load shapes
-    df = context.stage("munich.data.population.raw")[["municipality_code", "geometry"]]
+    df = context.stage("bavaria.data.population.raw")[["municipality_code", "geometry"]]
 
     # Clean up identifiers
     df["commune_id"] = df["municipality_code"].astype("category")

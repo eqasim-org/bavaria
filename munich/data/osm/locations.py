@@ -37,20 +37,20 @@ OSM_FILTERS = [
 DEFAULT_FLOORS = 2
 
 def configure(context):
-    context.stage("munich.data.osm.chunked")
+    context.stage("bavaria.data.osm.chunked")
     context.stage("data.spatial.municipalities")
     context.stage("data.spatial.iris")
 
 def execute(context):
     df_zones = context.stage("data.spatial.iris")[["geometry", "commune_id", "iris_id"]]
-    chunk_ids = context.stage("munich.data.osm.chunked")
+    chunk_ids = context.stage("bavaria.data.osm.chunked")
 
     df_locations = []
     for osm_filter in OSM_FILTERS:
         print("Processing {} ...".format(osm_filter["location_type"]))
 
         for chunk in context.progress(chunk_ids, total = len(chunk_ids)):
-            osm = pyrosm.OSM("{}/{}.osm.pbf".format(context.path("munich.data.osm.chunked"), chunk))
+            osm = pyrosm.OSM("{}/{}.osm.pbf".format(context.path("bavaria.data.osm.chunked"), chunk))
             
             try:
                 with warnings.catch_warnings():

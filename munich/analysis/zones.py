@@ -1,13 +1,13 @@
 import pyogrio
 
 def configure(context):
-    context.stage("munich.data.spatial.iris")
+    context.stage("bavaria.data.spatial.iris")
 
     context.config("output_path")
     context.config("output_prefix")
 
 def execute(context):
-    df = context.stage("munich.data.spatial.iris")
+    df = context.stage("bavaria.data.spatial.iris")
 
     df["municipality_id"] = df["commune_id"].astype(str)
     df["kreis_id"] = df["departement_id"].astype(str)

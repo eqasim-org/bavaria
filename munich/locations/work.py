@@ -6,12 +6,12 @@ Yield work location candidates for Germany.
 """
 
 def configure(context):
-    context.stage("munich.data.osm.locations")
+    context.stage("bavaria.data.osm.locations")
     context.stage("data.spatial.municipalities")
 
 def execute(context):
     # Load data
-    df = context.stage("munich.data.osm.locations")    
+    df = context.stage("bavaria.data.osm.locations")    
     df = df[df["location_type"] == "work"].copy()
 
     df["employees"] = df["area"] * df["floors"]

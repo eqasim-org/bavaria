@@ -1,4 +1,4 @@
-import munich.data.osm.osmconvert
+import bavaria.data.osm.osmconvert
 import os
 
 """
@@ -8,7 +8,7 @@ it more easily later on.
 
 def configure(context):
     context.stage("data.spatial.municipalities")
-    context.stage("munich.data.osm.osmconvert")
+    context.stage("bavaria.data.osm.osmconvert")
 
     context.config("processes")
 
@@ -19,7 +19,7 @@ def process_municipality(context, zone_id):
     input_path = context.data("input_path")
     local_path = context.data("local_path")
 
-    munich.data.osm.osmconvert.run(context, [input_path,
+    bavaria.data.osm.osmconvert.run(context, [input_path,
         "-B={}".format("{}/{}.poly".format(local_path, zone_id)),
         "-o={}".format("{}/{}.osm.pbf".format(local_path, zone_id))], cwd = local_path)
     

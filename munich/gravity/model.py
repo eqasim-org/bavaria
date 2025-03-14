@@ -12,9 +12,9 @@ DEFAULT_CONSTANT = -2.4
 DEFAULT_DIAGONAL = 1.0
 
 def configure(context):
-    context.stage("munich.gravity.distance_matrix")
-    context.stage("munich.ipf.attributed")
-    context.stage("munich.data.census.employees")
+    context.stage("bavaria.gravity.distance_matrix")
+    context.stage("bavaria.ipf.attributed")
+    context.stage("bavaria.data.census.employees")
     context.config("gravity_slope", DEFAULT_SLOPE)
     context.config("gravity_constant", DEFAULT_CONSTANT)
     context.config("gravity_diagonal", DEFAULT_DIAGONAL)
@@ -73,9 +73,9 @@ def evaluate_gravity(population, employees, friction):
 
 def execute(context):
     # Load data
-    df_distances = context.stage("munich.gravity.distance_matrix")
-    df_population = context.stage("munich.ipf.attributed")
-    df_employees = context.stage("munich.data.census.employees")
+    df_distances = context.stage("bavaria.gravity.distance_matrix")
+    df_population = context.stage("bavaria.ipf.attributed")
+    df_employees = context.stage("bavaria.data.census.employees")
 
     # Manage identifiers
     df_population = df_population.rename(columns = {

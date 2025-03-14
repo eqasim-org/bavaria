@@ -8,10 +8,10 @@ with inhabitants from Gemeinde level using Iterative Proportional Fitting
 """
 
 def configure(context):
-    context.stage("munich.ipf.prepare")
+    context.stage("bavaria.ipf.prepare")
  
 def execute(context):
-    df_population, df_employment, df_licenses_country, df_licenses_kreis = context.stage("munich.ipf.prepare")
+    df_population, df_employment, df_licenses_country, df_licenses_kreis = context.stage("bavaria.ipf.prepare")
 
     # Construct a combined age class
     population_age_classes = np.sort(df_population["age_class"].unique())

@@ -9,7 +9,7 @@ TODO: This could be replaced with a Germany-wide extract from GENESIS
 """
 
 def configure(context):
-    context.stage("munich.data.spatial.codes")
+    context.stage("bavaria.data.spatial.codes")
 
     context.config("data_path")
     context.config("bavaria.population_path", "bavaria/a1310c_202200.xla")
@@ -112,7 +112,7 @@ def execute(context):
     df_census["sex"] = df_census["sex"].astype("category")
 
     # Filter for requested codes
-    df_codes = context.stage("munich.data.spatial.codes")
+    df_codes = context.stage("bavaria.data.spatial.codes")
     df_census = df_census[df_census["commune_id"].isin(df_codes["commune_id"])]
 
     return df_census[["commune_id", "sex", "age_class", "weight"]]

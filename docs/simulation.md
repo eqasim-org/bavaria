@@ -19,7 +19,7 @@ can be downloaded [here](https://wiki.openstreetmap.org/wiki/Osmosis).
 case you clone the pipeline repository previously, you should be all set. However, Windows has problems with working with the long path names that result from the pipelien structure of the project. To avoid the problem, you very likely should set git into *long path mode* by calling `git config --system core.longpaths true`.
 - In recent versions of **Ubuntu** you may need to install the `font-config` package to avoid crashes of MATSim when writing images (`sudo apt install fontconfig`).
 
-Then, open your `config_munich.yml` and uncomment the `matsim.output` stage in the
+Then, open your `config_bavaria.yml` and uncomment the `matsim.output` stage in the
 `run` section. If you call `python3 -m synpp` again, the pipeline will know
 already which stages have been running before, so it will only run additional
 stages that are needed to set up and test the simulation.
@@ -27,25 +27,25 @@ stages that are needed to set up and test the simulation.
 After running, you should find the MATSim scenario files in the `output`
 folder:
 
-- `munich_population.xml.gz` containing the agents and their daily plans.
-- `munich_facilities.xml.gz` containing all businesses, services, etc.
-- `munich_network.xml.gz` containing the road and transit network
-- `munich_households.xml.gz` containing additional household information
-- `munich_transit_schedule.xml.gz` and `munich_transit_vehicles.xml.gz` containing public transport data
-- `munich_config.xml` containing the MATSim configuration values
-- `munich_run.jar` containing a fully packaged version of the simulation code including MATSim and all other dependencies
+- `bavaria_population.xml.gz` containing the agents and their daily plans.
+- `bavaria_facilities.xml.gz` containing all businesses, services, etc.
+- `bavaria_network.xml.gz` containing the road and transit network
+- `bavaria_households.xml.gz` containing additional household information
+- `bavaria_transit_schedule.xml.gz` and `bavaria_transit_vehicles.xml.gz` containing public transport data
+- `bavaria_config.xml` containing the MATSim configuration values
+- `bavaria_run.jar` containing a fully packaged version of the simulation code including MATSim and all other dependencies
 
 If you want to run the simulation again (in the pipeline it is only run for
 two iterations to test that everything works), you can now call the following:
 
 ```bash
-java -Xmx14G -cp munich_run.jar org.eqasim.ile_de_france.RunSimulation --config-path munich_config.xml
+java -Xmx14G -cp bavaria_run.jar org.eqasim.ile_de_france.RunSimulation --config-path bavaria_config.xml
 ```
 
-This will create a `simulation_output` folder (as defined in the `munich_config.xml`)
+This will create a `simulation_output` folder (as defined in the `bavaria_config.xml`)
 where all simulation is written.
 
 For more flexibility and advanced simulations, have a look at the MATSim
-simulation code provided at https://github.com/eqasim-org/eqasim-java/tree/munich-2024. The generated
-`munich-*.jar` from this pipeline is an automatically compiled version of
+simulation code provided at https://github.com/eqasim-org/eqasim-java/tree/bavaria-main. The generated
+`bavaria-*.jar` from this pipeline is an automatically compiled version of
 this code.

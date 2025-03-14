@@ -13,10 +13,10 @@ def configure(context):
     context.config("data_path")
     context.config("bavaria.buildings_path", "bavaria/buildings")
     
-    context.stage("munich.data.spatial.iris")
+    context.stage("bavaria.data.spatial.iris")
 
 def execute(context):
-    df_zones = context.stage("munich.data.spatial.iris")
+    df_zones = context.stage("bavaria.data.spatial.iris")
     df_combined = []
     
     start_index = 0

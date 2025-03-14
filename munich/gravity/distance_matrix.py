@@ -8,11 +8,11 @@ Generates a distance matrix for the German municipalities.
 """
 
 def configure(context):
-    context.stage("munich.data.spatial.iris")
+    context.stage("bavaria.data.spatial.iris")
 
 def execute(context):
     # One municipality per "IRIS"
-    df_municipalities = context.stage("munich.data.spatial.iris")
+    df_municipalities = context.stage("bavaria.data.spatial.iris")
     municipalities = df_municipalities["commune_id"].values
         
     # Initialize matrix to zero
