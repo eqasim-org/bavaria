@@ -24,7 +24,7 @@ config:
   # Paths to the input data and where the output should be stored
   data_path: /set/your/path/to/data
   output_path: /set/your/path/to/output
-  output_prefix: bavaria_
+  output_prefix: bavaria_1pct_
 
   # Only interesting if you run the simulation
   java_memory: 12G
