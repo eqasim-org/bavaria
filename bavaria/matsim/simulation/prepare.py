@@ -14,7 +14,7 @@ def execute(context):
     df_zones = context.stage("bavaria.data.mvg.zones")
     df_zones.to_file("{}/transit_zones.shp".format(context.path()))
 
-    eqasim.run(context, "org.eqasim.ile_de_france.bavaria.AddTransitZoneInformation", [
+    eqasim.run(context, "org.eqasim.bavaria.scenario.AddTransitZoneInformation", [
         "--input-path", "{}transit_schedule.xml.gz".format(context.config("output_prefix")),
         "--output-path", "{}transit_schedule.xml.gz".format(context.config("output_prefix")),
         "--zones-path", "transit_zones.shp"
