@@ -104,53 +104,44 @@ def execute(context):
     # (Kreisfreie Stadt) handles the licenses for the surrounding attached (homonymous) Kreis.
     missing_kreis = required_kreis - available_kreis
 
-    if "09187" in missing_kreis:
-        # Rosenheim (the Kreis 09187, not the city itself, 09163) is missing
-        # We assume that both are aggregated as 09163, so we distribute by population ratio
-        city_population = df_population.loc[df_population["commune_id"].str[:5] == "09163", "weight"].sum()
-        kreis_population = df_population.loc[df_population["commune_id"].str[:5] == "09187", "weight"].sum()
-        total_licenses = df_kreis.loc[df_kreis["departement_id"] == "09163", "weight"].sum() 
+    kreis_mapping = {
+        "09187": "09163", # Rosenheim
+        "09274": "09261", # Landshut
+        "09278": "09263", # Straubing
+        "09371": "09361", # Amberg-Sulzbach
+        "09471": "09461", # Bamberg
+        "09375": "09362", # Regensburg
+        "09473": "09463", # Coburg
+        "09475": "09464", # Hof
+        "09472": "09462", # Bayreuth
+        "09678": "09662", # Schweinfurt
+        "09571": "09561", # Ansbach
+        "09572": "09562", # Erlangen
+    }
+
+    for kreis in set(missing_kreis):
+        assert kreis in kreis_mapping
+        city = kreis_mapping[kreis]
+
+        # kreis now contains the Kreis that is missing
+        # city now contains the city that manages the surrounding "kreis"
+
+        # we assume that both are aggregated in the value for "city"
+        # so we distribute by population ratio
+
+        city_population = df_population.loc[df_population["commune_id"].str[:5] == city, "weight"].sum()
+        kreis_population = df_population.loc[df_population["commune_id"].str[:5] == kreis, "weight"].sum()
+
+        total_licenses = df_kreis.loc[df_kreis["departement_id"] == city, "weight"].sum() 
         city_ratio = city_population / (city_population + kreis_population)
 
-        df_kreis.loc[df_kreis["departement_id"] == "09163", "weight"] = total_licenses * city_ratio
+        df_kreis.loc[df_kreis["departement_id"] == city, "weight"] = total_licenses * city_ratio
 
         df_kreis = pd.concat([df_kreis, pd.DataFrame({
-            "departement_id": ["09187"], "weight": [total_licenses * (1 - city_ratio)]
+            "departement_id": [kreis], "weight": [total_licenses * (1 - city_ratio)]
         })])
 
-        missing_kreis.remove("09187")
-
-    if "09274" in missing_kreis:
-        # Landshut (the Kreis 09274, not the city itself, 09261) is missing
-        # We assume that both are aggregated as 09261, so we distribute by population ratio
-        city_population = df_population.loc[df_population["commune_id"].str[:5] == "09261", "weight"].sum()
-        kreis_population = df_population.loc[df_population["commune_id"].str[:5] == "09274", "weight"].sum()
-        total_licenses = df_kreis.loc[df_kreis["departement_id"] == "09261", "weight"].sum() 
-        city_ratio = city_population / (city_population + kreis_population)
-
-        df_kreis.loc[df_kreis["departement_id"] == "09261", "weight"] = total_licenses * city_ratio
-
-        df_kreis = pd.concat([df_kreis, pd.DataFrame({
-            "departement_id": ["09274"], "weight": [total_licenses * (1 - city_ratio)]
-        })])
-
-        missing_kreis.remove("09274")
-
-    if "09278" in missing_kreis:
-        # Straubing (the Kreis 09278, not the city itself, 09263) is missing
-        # We assume that both are aggregated as 09263, so we distribute by population ratio
-        city_population = df_population.loc[df_population["commune_id"].str[:5] == "09263", "weight"].sum()
-        kreis_population = df_population.loc[df_population["commune_id"].str[:5] == "09278", "weight"].sum()
-        total_licenses = df_kreis.loc[df_kreis["departement_id"] == "09263", "weight"].sum() 
-        city_ratio = city_population / (city_population + kreis_population)
-
-        df_kreis.loc[df_kreis["departement_id"] == "09263", "weight"] = total_licenses * city_ratio
-
-        df_kreis = pd.concat([df_kreis, pd.DataFrame({
-            "departement_id": ["09278"], "weight": [total_licenses * (1 - city_ratio)]
-        })])
-
-        missing_kreis.remove("09278")
+        missing_kreis.remove(kreis)
 
     # Check that we have fixed all Kreis
     assert len(missing_kreis) == 0
