@@ -93,7 +93,7 @@ def execute(context):
     assert os.path.exists("%s/generic_config.xml" % context.path())
 
     # Adapt config for Île-de-France
-    eqasim.run(context, "org.eqasim.ile_de_france.scenario.RunAdaptConfig", [
+    eqasim.run(context, "org.eqasim.bavaria.scenario.RunAdaptConfig", [
         "--input-path", "generic_config.xml",
         "--output-path", "%sconfig.xml" % context.config("output_prefix"),
         "--prefix", context.config("output_prefix")
@@ -133,8 +133,7 @@ def execute(context):
             "--write-output-csv-trips", "true",
             "--skip-scenario-check", "true",
             "--config:plans.inputPlansFile", "prepared_population.xml.gz",
-            "--eqasim-configurator-class", "org.eqasim.ile_de_france.IDFConfigurator",
-            "--mode-choice-configurator-class", "org.eqasim.ile_de_france.IDFStandaloneModeChoiceConfigurator"
+            "--eqasim-configurator-class", "org.eqasim.bavaria.BavariaConfigurator"
         ])
 
         assert os.path.exists("%s/mode_choice/output_plans.xml.gz" % context.path())

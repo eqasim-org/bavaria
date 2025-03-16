@@ -39,7 +39,7 @@ If you want to run the simulation again (in the pipeline it is only run for
 two iterations to test that everything works), you can now call the following:
 
 ```bash
-java -Xmx14G -cp bavaria_run.jar org.eqasim.ile_de_france.RunSimulation --config-path bavaria_config.xml
+java -Xmx14G -cp bavaria_run.jar org.eqasim.bavaria.RunSimulation --config-path bavaria_config.xml
 ```
 
 This will create a `simulation_output` folder (as defined in the `bavaria_config.xml`)
