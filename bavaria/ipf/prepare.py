@@ -56,7 +56,7 @@ def execute(context):
 
         if licenses > population:
             factor = population / licenses
-            df_population.loc[df_population["commune_id"].str[:5] == department_id, "weight"] *= factor
+            df_licenses_kreis.loc[df_licenses_kreis["departement_id"] == department_id, "weight"] *= factor
             print("Adapting licenses for {} by factor {}".format(department_id, factor))
 
     # Scale up the sociodemographics for the study area
