@@ -2,7 +2,7 @@
 ## based on the synpp package
 
 # This is the path to a directory where the pipeline can store temporary data
-working_directory: /set/your/path/to/cache
+working_directory: ./data/cache
 
 # This section defines which parts of the pipeline should be run
 run:
@@ -22,8 +22,8 @@ config:
   random_seed: 1234
  
   # Paths to the input data and where the output should be stored
-  data_path: /set/your/path/to/data
-  output_path: /set/your/path/to/output
+  data_path: ./data/
+  output_path: ./data/output
   output_prefix: bavaria_1pct_
 
   # Only interesting if you run the simulation

@@ -118,7 +118,8 @@ def execute(context):
     return df_census[["commune_id", "sex", "age_class", "weight"]]
 
 def validate(context):
-    if not os.path.exists("{}/{}".format(context.config("data_path"), context.config("bavaria.population_path"))):
-        raise RuntimeError("Bavarian census data is not available")
+    expected_file_path = "{}/{}".format(context.config("data_path"), context.config("bavaria.population_path"))
+    if not os.path.exists(expected_file_path ):
+        raise RuntimeError("Bavarian census data is not available at {}".format(expected_file_path))
 
     return os.path.getsize("{}/{}".format(context.config("data_path"), context.config("bavaria.population_path")))
