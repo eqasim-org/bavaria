@@ -73,10 +73,11 @@ def execute(context):
 def validate(context):
     total_size = 0
 
-    for path in glob.glob("{}/{}/*_Hausumringe.zip".format(context.config("data_path"), context.config("bavaria.buildings_path"))):
+    pth = "{}/{}/*_Hausumringe.zip".format(context.config("data_path"), context.config("bavaria.buildings_path"))
+    for path in glob.glob(pth):
         total_size += os.path.getsize(path)
 
     if total_size == 0:
-        raise RuntimeError("Did not find any building data for Bavaria")
+        raise RuntimeError("Did not find any building data for Bavaria in {}".format(pth))
 
     return total_size
