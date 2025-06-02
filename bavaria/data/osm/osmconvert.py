@@ -20,6 +20,7 @@ def run(context, arguments = [], cwd = None):
     ] + arguments
 
     # Run osmconvert
+    print(f"Running Osmconvert. Command:\n{' '.join(command_line)}\n{cwd=}")
     return_code = sp.check_call(command_line, cwd = cwd)
 
     if not return_code == 0:

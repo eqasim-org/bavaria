@@ -28,6 +28,7 @@ def run(context, arguments = [], cwd = None):
     environment["JAVACMD_OPTIONS"] = "-Xmx%s" % context.config("java_memory")
 
     # Run Osmosis
+    print(f"Running Osmosis. Command:\n{' '.join(command_line)}\n{cwd=}")
     return_code = sp.check_call(command_line, cwd = cwd, env = environment)
 
     if not return_code == 0:

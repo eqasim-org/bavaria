@@ -70,12 +70,18 @@ def execute(context):
 
         absolute_path = os.path.abspath(path)
 
-        data.osm.osmosis.run(context, [
+        osmosis_run_args = [
             "--read-%s" % mode, absolute_path,
             "--tag-filter", "accept-ways", "highway=%s" % highway_tags, "railway=%s" % railway_tags,
-            "--bounding-polygon", "file=%s/boundary.poly" % context.path(), "completeWays=yes",
+            # WARNING: specifying the --bounding-polygon option causes osmosis to get stuck
+            #"--bounding-polygon", "file=%s/boundary.poly" % context.path(), 
+            "completeWays=yes",
             "--write-pbf", "filtered_%d.osm.pbf" % index
-        ])
+        ]
+        print("Running osmosis with args: %s" % str(osmosis_run_args))
+
+        data.osm.osmosis.run(context, osmosis_run_args)
+        print("Osmosis run complete")
 
     # Merge filtered files if there are multiple ones
     print("Merging and compressing OSM data...")

@@ -22,7 +22,7 @@ config:
   random_seed: 1234
  
   # Paths to the input data and where the output should be stored
-  data_path: ./data/
+  data_path: ./data
   output_path: ./data/output
   output_prefix: bavaria_1pct_
 

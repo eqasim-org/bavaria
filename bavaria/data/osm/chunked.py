@@ -19,9 +19,11 @@ def process_municipality(context, zone_id):
     input_path = context.data("input_path")
     local_path = context.data("local_path")
 
+    root_dir = os.getcwd() # happens to be repository root
+    print(f"DEBUG processing municipality {zone_id}. Input path: {input_path}, local path: {local_path} cwd: {root_dir}")
     bavaria.data.osm.osmconvert.run(context, [input_path,
         "-B={}".format("{}/{}.poly".format(local_path, zone_id)),
-        "-o={}".format("{}/{}.osm.pbf".format(local_path, zone_id))], cwd = local_path)
+        "-o={}".format("{}/{}.osm.pbf".format(local_path, zone_id))], cwd = root_dir)
     
     return zone_id
     
