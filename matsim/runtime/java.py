@@ -46,7 +46,7 @@ def run(context, entry_point, arguments = [], class_path = None, vm_arguments = 
 
     command_line = list(map(str, command_line))
 
-    print("Executing java:", " ".join(command_line))
+    print("Executing java:", " ".join(command_line), f"\n{cwd=}")
 
     if mode == "raise" or mode == "return_code":
         return_code = sp.check_call(command_line, cwd = cwd)

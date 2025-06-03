@@ -27,7 +27,7 @@ config:
   output_prefix: bavaria_1pct_
 
   # Only interesting if you run the simulation
-  java_memory: 12G
+  java_memory: 32G
 
   # Defaults for Bavaria
   home_location_sampling: weighted
@@ -38,7 +38,7 @@ config:
   osm_path: osm
 
   # Activate if only certain "Bezirk" should be generated
-  # bavaria.political_prefix: ["091", "092", "097"] # Oberbayern, Niederbayern, Schwaben
+  #bavaria.political_prefix: ["091", "092", "097"] # Oberbayern, Niederbayern, Schwaben
 
 # Overrides for the bavaria pipeline compared to the Île-de-France pipeline
 aliases:
