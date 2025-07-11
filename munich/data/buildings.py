@@ -27,8 +27,13 @@ def execute(context):
         with zipfile.ZipFile(path) as archive:
             archive.extractall(context.path())
 
-        df_buildings = pyogrio.read_dataframe("{}/hausumringe.shp".format(
-            context.path()), columns = [])[["geometry"]]
+        # Find the .shp file in the extracted directory
+        shp_files = glob.glob(f"{context.path()}/*/hausumringe.shp")
+        if not shp_files:
+            raise FileNotFoundError(f"hausumringe.shp not found after extracting {path}")
+        shp_path = shp_files[0]
+
+        df_buildings = pyogrio.read_dataframe(shp_path, columns = [])["geometry"].to_frame()
         
         # Weighting by area
         df_buildings["weight"] = df_buildings.area
@@ -72,8 +77,11 @@ def execute(context):
 
 def validate(context):
     total_size = 0
-
-    for path in glob.glob("{}/{}/*_Hausumringe.zip".format(context.config("data_path"), context.config("bavaria.buildings_path"))):
+    pattern = "{}/{}/*_Hausumringe.zip".format(context.config("data_path"), context.config("bavaria.buildings_path"))
+    files = glob.glob(pattern)
+    print("DEBUG: Looking for files in pattern:", pattern)
+    print("DEBUG: Found files:", files)
+    for path in files:
         total_size += os.path.getsize(path)
 
     if total_size == 0:
