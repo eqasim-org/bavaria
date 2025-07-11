@@ -2,12 +2,13 @@
 ## based on the synpp package
 
 # This is the path to a directory where the pipeline can store temporary data
-working_directory: /home/shoerl/tum/january/cache
+# working_directory: /Users/elenanatterer/Desktop/matsim_munich_working_dir/cache
+working_directory: /Users/elenanatterer/Development/pipeline/cache
 
 # This section defines which parts of the pipeline should be run
 run:
   - synthesis.output
-  - matsim.output
+  # - matsim.output
 
 # Here the configuraiton of the pipeline starts
 config:
@@ -18,12 +19,14 @@ config:
   hts: entd
 
   # Define sampling rate and random seed for the output population
-  sampling_rate: 0.01
+  sampling_rate: 0.1
   random_seed: 1234
  
-  # Paths to the input data and where the output should be stored
-  data_path: /home/shoerl/tum/january/data
-  output_path: /home/shoerl/tum/january/output
+  data_path: /Users/elenanatterer/Development/pipeline/munich/data
+  output_path: /Users/elenanatterer/Development/pipeline/output_0.1
+  osm_path: /Users/elenanatterer/Development/pipeline/munich/data/osm/bayern-latest.osm.pbf
+  osmosis_binary: /opt/homebrew/bin/osmosis
+  osmconvert_binary: /Users/elenanatterer/Development/pipeline/munich/data/osm/osmconvert
   output_prefix: munich_
 
   # Only interesting if you run the simulation
