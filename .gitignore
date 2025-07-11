@@ -1,11 +1,23 @@
+# macOS system files
+.DS_Store
+._*
+.history
+
+# Python virtual environments and compiled files
 __pycache__
 env
+
+# Cache, output, and generated files
 cache
 output
+synthesis
 
-data/nantes_2015
-data/lyon_2015
+# Configuration files
+config_local_*.yml
+
+# Data files
+data/*
+
+# IDE and editor-specific files
 .vscode
 .idea
-
-config_local_*.yml
