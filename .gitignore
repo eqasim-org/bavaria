@@ -17,7 +17,24 @@ config_local_*.yml
 
 # Data files
 data/*
+munich/data/bavaria/*
+munich/data/entd_2008/*
+munich/data/germany/*
+munich/data/gtfs/*
+munich/data/mvg/stations.json
+munich/data/osm/bayern-latest.osm.pbf
+munich/data/osm/osmconvert
+munich/data/pipeline.json
 
 # IDE and editor-specific files
 .vscode
 .idea
+
+# output files
+munich/output_0.1/
+munich/output_0.01/
+munich/output_1/
+
+# log files
+synpp_output_0.01.log
+

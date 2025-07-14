@@ -2,13 +2,12 @@
 ## based on the synpp package
 
 # This is the path to a directory where the pipeline can store temporary data
-# working_directory: /Users/elenanatterer/Desktop/matsim_munich_working_dir/cache
-working_directory: /Users/elenanatterer/Development/pipeline/cache
+working_directory: munich/cache
 
 # This section defines which parts of the pipeline should be run
 run:
   - synthesis.output
-  # - matsim.output
+  - matsim.output
 
 # Here the configuraiton of the pipeline starts
 config:
@@ -22,14 +21,17 @@ config:
   sampling_rate: 0.1
   random_seed: 1234
  
-  data_path: /Users/elenanatterer/Development/pipeline/munich/data
-  output_path: /Users/elenanatterer/Development/pipeline/output_0.1
-  osm_path: /Users/elenanatterer/Development/pipeline/munich/data/osm/bayern-latest.osm.pbf
-  osmosis_binary: /opt/homebrew/bin/osmosis
-  osmconvert_binary: /Users/elenanatterer/Development/pipeline/munich/data/osm/osmconvert
+  data_path: munich/data
+  output_path: munich/output_0.1
+  osm_path: munich/data/osm/bayern-latest.osm.pbf
+  # top path for osmosis_binary is for local execution, the bottom path is for the cluster
+  # osmosis_binary: /opt/homebrew/bin/osmosis
+  osmosis_binary: /dss/dsshome1/06/ge49wav3/bin/osmosis  
+  osmconvert_binary: munich/data/osm/osmconvert
   output_prefix: munich_
 
   # Only interesting if you run the simulation
+  # on the server, one can use up to 120GB of memory for the simulation, locally not more than 12GB makes sense usually
   java_memory: 12G
 
   # Defaults for Munich
