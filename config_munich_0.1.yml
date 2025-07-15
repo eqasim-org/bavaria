@@ -23,12 +23,12 @@ config:
  
   data_path: munich/data
   output_path: munich/output_0.1
-  osm_path: munich/data/osm/bayern-latest.osm.pbf
-  # top path for osmosis_binary is for local execution, the bottom path is for the cluster
-  # osmosis_binary: /opt/homebrew/bin/osmosis
-  osmosis_binary: /dss/dsshome1/06/ge49wav3/bin/osmosis  
-  osmconvert_binary: munich/data/osm/osmconvert
   output_prefix: munich_
+
+  # Adapt these to your absolute paths. For executables, always use absolute paths!!!
+  osmosis_binary: /dss/dsshome1/06/ge49wav3/bin/osmosis
+  osm_path_bavaria: /hppfs/work/pn39mu/ge49wav3/mount_point_work_dir/pipeline_server/munich/data/osm/bayern-latest.osm.pbf
+  osmconvert_binary: /hppfs/work/pn39mu/ge49wav3/mount_point_work_dir/pipeline_server/munich/data/osm/osmconvert
 
   # Only interesting if you run the simulation
   # on the server, one can use up to 120GB of memory for the simulation, locally not more than 12GB makes sense usually
