@@ -2,7 +2,7 @@
 ## based on the synpp package
 
 # This is the path to a directory where the pipeline can store temporary data
-working_directory: munich/cache
+working_directory: munich/cache_0.01
 
 # This section defines which parts of the pipeline should be run
 run:

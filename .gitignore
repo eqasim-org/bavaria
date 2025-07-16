@@ -30,10 +30,13 @@ munich/data/pipeline.json
 .vscode
 .idea
 
-# output files
+# output and cache files
 munich/output_0.1/
 munich/output_0.01/
 munich/output_1/
+munich/cache_0.1/
+munich/cache_0.01/
+munich/cache_1/
 
 # log files
 synpp_output_0.01.log

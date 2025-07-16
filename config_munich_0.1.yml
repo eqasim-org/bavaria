@@ -2,7 +2,7 @@
 ## based on the synpp package
 
 # This is the path to a directory where the pipeline can store temporary data
-working_directory: munich/cache
+working_directory: munich/cache_0.1
 
 # This section defines which parts of the pipeline should be run
 run:
@@ -12,7 +12,7 @@ run:
 # Here the configuraiton of the pipeline starts
 config:
   # Some general configuration
-  processes: 8
+  processes: 64
 
   # Define whether to use ENTD or EGT as the household travel survey (HTS)
   hts: entd
@@ -32,7 +32,7 @@ config:
 
   # Only interesting if you run the simulation
   # on the server, one can use up to 120GB of memory for the simulation, locally not more than 12GB makes sense usually
-  java_memory: 12G
+  java_memory: 240G
 
   # Defaults for Munich
   home_location_sampling: weighted
