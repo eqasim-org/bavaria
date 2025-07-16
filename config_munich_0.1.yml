@@ -27,8 +27,8 @@ config:
   output_prefix: munich_
 
   # Adapt these to your absolute paths. For executables, always use absolute paths!!!
-  osmosis_binary: /dss/dsshome1/06/ge49wav3/bin/osmosis
-  osmconvert_binary: /hppfs/work/pn39mu/ge49wav3/mount_point_work_dir/pipeline-bavaria/data/osm/osmconvert
+  osmosis_binary: /...setyourabsolutepath.../osmosis
+  osmconvert_binary: /...setyourabsolutepath.../osmconvert
 
   # Only interesting if you run the simulation
   java_memory: 120G
