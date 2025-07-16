@@ -11,14 +11,14 @@ run:
 
 # Here the configuraiton of the pipeline starts
 config:
-  # Some general configuration
+  # Some general configuration. Set to 64 if you're on a cluster, else 8.
   processes: 64
 
   # Define whether to use ENTD or EGT as the household travel survey (HTS)
   hts: entd
 
   # Define sampling rate and random seed for the output population
-  sampling_rate: 0.01
+  sampling_rate: 0.1
   random_seed: 1234
  
   # Paths to the input data and where the output should be stored
@@ -30,7 +30,7 @@ config:
   osmosis_binary: /...setyourabsolutepath.../osmosis
   osmconvert_binary: /...setyourabsolutepath.../osmconvert
 
-  # Only interesting if you run the simulation
+  # Only interesting if you run the simulation. Set to 120G if you're on a cluster, else 12G.
   java_memory: 120G
 
   # Defaults for Bavaria
