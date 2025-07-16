@@ -1,0 +1,62 @@
+## Synthetic population pipeline for Munich
+## based on the synpp package
+
+# This is the path to a directory where the pipeline can store temporary data
+working_directory: bavaria/cache_0.1
+
+# This section defines which parts of the pipeline should be run
+run:
+  - synthesis.output
+  - matsim.output
+
+# Here the configuraiton of the pipeline starts
+config:
+  # Some general configuration
+  processes: 64
+
+  # Define whether to use ENTD or EGT as the household travel survey (HTS)
+  hts: entd
+
+  # Define sampling rate and random seed for the output population
+  sampling_rate: 0.1
+  random_seed: 1234
+ 
+  data_path: bavaria/data
+  output_path: bavaria/output_0.1
+  output_prefix: munich_
+
+  # Adapt these to your absolute paths. For executables, always use absolute paths!!!
+  osmosis_binary: /...settoabsolutepaths.../osmosis
+  osm_path_bavaria: /...settoabsolutepaths.../bavaria/data/osm/bayern-latest.osm.pbf
+  osmconvert_binary: /...settoabsolutepaths.../bavaria/data/osm/osmconvert
+
+  # Only interesting if you run the simulation
+  # on the server, one can use up to 120GB of memory for the simulation, locally not more than 12GB makes sense usually
+  java_memory: 120G
+
+  # Defaults for Munich
+  home_location_sampling: weighted
+  mode_choice: false
+  matching_attributes: ["sex", "age_class", "has_license"]
+
+  gtfs_path: gtfs
+  osm_path: osm
+
+  bavaria.political_prefix: ["091", "092", "097"] # Oberbayern, Niederbayern, Schwaben
+
+
+# Overrides for the Munich pipeline compared to the Île-de-France pipeline
+aliases:
+  data.census.filtered: bavaria.ipf.attributed
+  synthesis.population.income.selected: bavaria.income
+  synthesis.population.spatial.home.zones: bavaria.homes
+  synthesis.locations.home.locations: bavaria.locations.home
+  synthesis.locations.education: bavaria.locations.education
+  synthesis.locations.secondary: bavaria.locations.secondary
+  synthesis.locations.work: bavaria.locations.work
+  data.od.weighted: bavaria.gravity.model
+  data.spatial.iris: bavaria.data.spatial.iris
+  data.spatial.codes: bavaria.entd_codes
+  synthesis.population.spatial.primary.locations: bavaria.locations.synthesis.replacement
+  synthesis.population.enriched: bavaria.synthesis.population.enriched
+  matsim.simulation.prepare: bavaria.matsim.simulation.prepare

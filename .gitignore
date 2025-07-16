@@ -9,3 +9,22 @@ data/lyon_2015
 .idea
 
 config_local_*.yml
+
+# Data files
+data/*
+bavaria/data/bavaria/*
+bavaria/data/entd_2008/*
+bavaria/data/germany/*
+bavaria/data/gtfs/*
+bavaria/data/mvg/stations.json
+bavaria/data/osm/bayern-latest.osm.pbf
+bavaria/data/osm/osmconvert
+bavaria/data/pipeline.json
+
+# output and cache files
+bavaria/output_0.1/
+bavaria/output_0.01/
+bavaria/output_1/
+bavaria/cache_0.1/
+bavaria/cache_0.01/
+bavaria/cache_1/
