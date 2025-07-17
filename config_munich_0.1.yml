@@ -1,15 +1,23 @@
-## Synthetic population pipeline for Bavaria
-## based on the synpp package
+## Synthetic population pipeline for Munich (regions 091, 092, 097) using synpp (10% sample)
 
-# This is the path to a directory where the pipeline can store temporary data
-working_directory: ../cache_0.1
+# The config works with the following folder structure (relative to the project root):
+#   pipeline-bavaria/
+#     ├── data/                # Input data (see: https://github.com/eqasim-org/bavaria/blob/main/docs/population.md)
+#     ├── bavaria/             # This repository (run the pipeline from here)
+#     ├── cache_munich_0.1/    # Temporary pipeline data
+#     └── munich_output_0.1/   # Pipeline output
+
+# To run the pipeline, use:
+#   nohup python3 -m synpp config_munich_0.1.yml > output_0.1.log 2>&1 &
+
+working_directory: ../cache_munich_0.1
 
 # This section defines which parts of the pipeline should be run
 run:
   - synthesis.output
   - matsim.output
 
-# Here the configuraiton of the pipeline starts
+# Here the configuration of the pipeline starts
 config:
   # Some general configuration. Set to 64 if you're on a cluster, else 8.
   processes: 64
@@ -21,9 +29,9 @@ config:
   sampling_rate: 0.1
   random_seed: 1234
  
-  # Paths to the input data and where the output should be stored
-  data_path: ../data
-  output_path: ../output_0.1
+  # Paths to the input data and where the output should be stored. The data path need to be absolute! 
+  data_path: /...setyourabsolutepath.../data
+  output_path: ../munich_output_0.1
   output_prefix: munich_
 
   # Adapt these to your absolute paths. For executables, always use absolute paths!!!
