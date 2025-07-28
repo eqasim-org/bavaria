@@ -13,9 +13,9 @@ def configure(context):
     context.stage("bavaria.data.mid.zones")
     context.config("random_seed")
 
-    context.config("bavaria.minimum_age.car_availability", 0)
-    context.config("bavaria.minimum_age.bicycle_availability", 0)
-    context.config("bavaria.minimum_age.pt_subscription", 0)
+    context.config("bavaria.minimum_age.car_availability", 5)
+    context.config("bavaria.minimum_age.bicycle_availability", 5)
+    context.config("bavaria.minimum_age.pt_subscription", 5)
 
 """
 This stage overrides car availability, bike availability and transit subscription based on MiD data
