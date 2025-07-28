@@ -9,7 +9,7 @@ with inhabitants from Gemeinde level using Iterative Proportional Fitting
 
 def configure(context):
     context.stage("bavaria.ipf.prepare")
-    context.config("bavaria.minimum_employment_age", 0)
+    context.config("bavaria.minimum_age.employment", 0)
  
 def execute(context):
     df_population, df_employment, df_licenses_country, df_licenses_kreis = context.stage("bavaria.ipf.prepare")
@@ -21,7 +21,7 @@ def execute(context):
     employment_age_classes = np.sort(df_employment["age_class"].unique())
     employment_age_upper = list(employment_age_classes[1:]) + [9999]
 
-    minimum_employment_age = context.config("bavaria.minimum_employment_age")
+    minimum_employment_age = context.config("bavaria.minimum_age.employment")
 
     license_age_classes = np.sort(df_licenses_country["age_class"].unique())
     license_age_upper = list(license_age_classes[1:]) + [9999]
