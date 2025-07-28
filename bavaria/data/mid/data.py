@@ -17,6 +17,9 @@ def execute(context):
         { "zone": "munich", "target": 0.57 },
         #{ "zone": "mrs", "target": 0.62 },
         { "zone": "external", "target": 0.82 }, # Bavaria value
+
+        # age limit
+        {"age": (-np.inf, 5), "target": 0.0 },
     ]
 
     data["bicycle_availability_constraints"] = [
@@ -77,6 +80,9 @@ def execute(context):
         { "zone": "umland", "age": (50, 64), "target": 0.20 },
         { "zone": "umland", "age": (65, 74), "target": 0.11 },
         { "zone": "umland", "age": (75, np.inf), "target": 0.11 },
+
+        # age limit
+        {"age": (-np.inf, 5), "target": 0.0 },
     ]
 
     return data

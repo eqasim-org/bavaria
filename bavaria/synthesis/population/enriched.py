@@ -53,7 +53,17 @@ def execute(context):
     targets = []
 
     for constraint in constraints:
-        f = df_persons["inside_{}".format(constraint["zone"])]
+        f = np.ones((len(df_persons),), dtype = bool)
+
+        if "zone" in constraint:
+            f &= df_persons["inside_{}".format(constraint["zone"])]
+        
+        if "sex" in constraint:
+            f &= df_persons["sex"] == constraint["sex"]
+
+        if "age" in constraint:
+            f &= df_persons["age"].between(*constraint["age"])
+
         targets.append(constraint["target"] * np.count_nonzero(f))
         filters.append(f)
 
