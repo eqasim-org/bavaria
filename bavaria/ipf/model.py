@@ -14,6 +14,11 @@ def configure(context):
 def execute(context):
     df_population, df_employment, df_licenses_country, df_licenses_kreis = context.stage("bavaria.ipf.prepare")
 
+    #print(df_population[df_population["age_class"] == 18]["weight"].sum())
+    #print(df_employment[df_employment["age_class"] == 20]["weight"].sum())
+    print(df_licenses_country[df_licenses_country["age_class"] == 21]["weight"].sum())
+    exit()
+
     # Construct a combined age class
     population_age_classes = np.sort(df_population["age_class"].unique())
     population_age_upper = list(population_age_classes[1:]) + [9999]
@@ -55,6 +60,14 @@ def execute(context):
 
     df_model = pd.DataFrame(index = index).reset_index()
     df_model["weight"] = 1.0
+
+    # Provide a prior based on the size of the age classes
+    combined_age_classes_sizes = {
+        lower: upper - lower for
+        lower, upper in { combined_age_classes[:-1], combined_age_classes[1:] }
+    }
+    combined_age_classes_sizes[combined_age_classes[-1]] = 1.0
+    df_model["weight"] *= df_model["combined_age_class"].apply(lambda c: combined_age_classes_sizes[c])
 
     # Attach departement indices
     df_spatial = df_population[["commune_index", "departement_index"]].drop_duplicates()
