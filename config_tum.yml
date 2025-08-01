@@ -68,3 +68,4 @@ aliases:
   synthesis.population.enriched: bavaria.synthesis.population.enriched
   matsim.simulation.prepare: bavaria.matsim.simulation.prepare
   matsim.scenario.households: bavaria.matsim.scenario.households
+  matsim.scenario.population: bavaria.matsim.scenario.population
