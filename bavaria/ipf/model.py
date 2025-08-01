@@ -9,6 +9,7 @@ with inhabitants from Gemeinde level using Iterative Proportional Fitting
 
 def configure(context):
     context.stage("bavaria.ipf.prepare")
+    context.config("bavaria.minimum_age.employment", 16)
  
 def execute(context):
     df_population, df_employment, df_licenses_country, df_licenses_kreis = context.stage("bavaria.ipf.prepare")
@@ -20,13 +21,16 @@ def execute(context):
     employment_age_classes = np.sort(df_employment["age_class"].unique())
     employment_age_upper = list(employment_age_classes[1:]) + [9999]
 
+    minimum_employment_age = context.config("bavaria.minimum_age.employment")
+
     license_age_classes = np.sort(df_licenses_country["age_class"].unique())
     license_age_upper = list(license_age_classes[1:]) + [9999]
     
     combined_age_classes = np.array(np.sort(list(
         set(population_age_classes) | 
         set(employment_age_classes) |
-        set(license_age_classes))))
+        set(license_age_classes) | 
+        set([minimum_employment_age]))))
     
     population_age_mapping = {}
     employment_age_mapping = {}
@@ -51,6 +55,14 @@ def execute(context):
 
     df_model = pd.DataFrame(index = index).reset_index()
     df_model["weight"] = 1.0
+
+    # Provide a prior based on the size of the age classes
+    combined_age_classes_sizes = {
+        lower: upper - lower for
+        lower, upper in zip(combined_age_classes[:-1], combined_age_classes[1:])
+    }
+    combined_age_classes_sizes[combined_age_classes[-1]] = 1.0
+    df_model["weight"] *= df_model["combined_age_class"].apply(lambda c: combined_age_classes_sizes[c])
 
     # Attach departement indices
     df_spatial = df_population[["commune_index", "departement_index"]].drop_duplicates()
@@ -97,6 +109,12 @@ def execute(context):
     
         target_weight = df_employment.loc[f_reference, "weight"].sum()
         targets.append(target_weight)
+
+    # Minimum employment age
+    f_model = df_model["combined_age_class"] < minimum_employment_age
+    f_model &= df_model["employed"]
+    selectors.append(f_model)
+    targets.append(0.0)
 
     # License country constraints
     combinations = list(itertools.product(unique_sexes, license_age_classes))

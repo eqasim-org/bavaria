@@ -13,6 +13,10 @@ def configure(context):
     context.stage("bavaria.data.mid.zones")
     context.config("random_seed")
 
+    context.config("bavaria.minimum_age.car_availability", 0)
+    context.config("bavaria.minimum_age.bicycle_availability", 0)
+    context.config("bavaria.minimum_age.pt_subscription", 0)
+
 """
 This stage overrides car availability, bike availability and transit subscription based on MiD data
 """
@@ -49,11 +53,26 @@ def execute(context):
     df_persons["car_availability"] = 1.0
     constraints = mid["car_availability_constraints"]
 
+    constraints.append({ 
+        "age": (-np.inf, context.config("bavaria.minimum_age.car_availability") - 1), 
+        "target": 0.0 
+    })
+
     filters = []
     targets = []
 
     for constraint in constraints:
-        f = df_persons["inside_{}".format(constraint["zone"])]
+        f = np.ones((len(df_persons),), dtype = bool)
+
+        if "zone" in constraint:
+            f &= df_persons["inside_{}".format(constraint["zone"])]
+        
+        if "sex" in constraint:
+            f &= df_persons["sex"] == constraint["sex"]
+
+        if "age" in constraint:
+            f &= df_persons["age"].between(*constraint["age"])
+
         targets.append(constraint["target"] * np.count_nonzero(f))
         filters.append(f)
 
@@ -72,6 +91,11 @@ def execute(context):
     # BIKE AVAILABILITY
     df_persons["bicycle_availability"] = 1.0
     constraints = mid["bicycle_availability_constraints"]
+
+    constraints.append({ 
+        "age": (-np.inf, context.config("bavaria.minimum_age.bicycle_availability") - 1), 
+        "target": 0.0 
+    })
 
     filters = []
     targets = []
@@ -108,6 +132,11 @@ def execute(context):
     # PT SUBSCRIPTION
     df_persons["has_pt_subscription"] = 1.0
     constraints = mid["pt_subscription_constraints"]
+
+    constraints.append({ 
+        "age": (-np.inf, context.config("bavaria.minimum_age.pt_subscription") - 1), 
+        "target": 0.0 
+    })
 
     filters = []
     targets = []
