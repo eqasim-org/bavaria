@@ -1,0 +1,69 @@
+## Synthetic population pipeline for Munich (regions 091, 092, 097) using synpp (10% sample)
+
+# The config works with the following folder structure (relative to the project root):
+#   pipeline-bavaria/
+#     ├── data/                # Input data (see: https://github.com/eqasim-org/bavaria/blob/main/docs/population.md)
+#     ├── bavaria/             # This repository (run the pipeline from here)
+#     ├── cache_munich_0.1/    # Temporary pipeline data
+#     └── munich_output_0.1/   # Pipeline output
+
+# To run the pipeline, use:
+#   nohup python3 -m synpp config_munich_0.1.yml > output_0.1.log 2>&1 &
+
+working_directory: ../cache_munich_0.1
+
+# This section defines which parts of the pipeline should be run
+run:
+  - synthesis.output
+  - matsim.output
+
+# Here the configuration of the pipeline starts
+config:
+  # Some general configuration. Set to 64 if you're on a cluster, else 8.
+  processes: 64
+
+  # Define whether to use ENTD or EGT as the household travel survey (HTS)
+  hts: entd
+
+  # Define sampling rate and random seed for the output population
+  sampling_rate: 0.1
+  random_seed: 1234
+
+  # Paths to the input data and where the output should be stored. The data path need to be absolute! 
+  data_path: /...setyourabsolutepath.../data
+  output_path: ../munich_output_0.1
+  output_prefix: munich_
+
+  # Adapt these to your absolute paths. For executables, always use absolute paths!!!
+  osmosis_binary: /...setyourabsolutepath.../osmosis
+  osmconvert_binary: /...setyourabsolutepath.../osmconvert
+
+  # Only interesting if you run the simulation. Set to 120G if you're on a cluster, else 12G.
+  java_memory: 120G
+
+  # Defaults for Bavaria
+  home_location_sampling: weighted
+  mode_choice: false
+  matching_attributes: ["sex", "age_class", "has_license"]
+
+  gtfs_path: gtfs
+  osm_path: osm
+
+  # Activate if only certain "Bezirk" should be generated
+  bavaria.political_prefix: ["091", "092", "097"] # Oberbayern, Niederbayern, Schwaben
+
+# Overrides for the bavaria pipeline compared to the Île-de-France pipeline
+aliases:
+  data.census.filtered: bavaria.ipf.attributed
+  synthesis.population.income.selected: bavaria.income
+  synthesis.population.spatial.home.zones: bavaria.homes
+  synthesis.locations.home.locations: bavaria.locations.home
+  synthesis.locations.education: bavaria.locations.education
+  synthesis.locations.secondary: bavaria.locations.secondary
+  synthesis.locations.work: bavaria.locations.work
+  data.od.weighted: bavaria.gravity.model
+  data.spatial.iris: bavaria.data.spatial.iris
+  data.spatial.codes: bavaria.entd_codes
+  synthesis.population.spatial.primary.locations: bavaria.locations.synthesis.replacement
+  synthesis.population.enriched: bavaria.synthesis.population.enriched
+  matsim.simulation.prepare: bavaria.matsim.simulation.prepare
