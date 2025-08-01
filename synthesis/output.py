@@ -131,7 +131,7 @@ def execute(context):
         "household_id",
         "car_availability", "bicycle_availability",
         "number_of_cars", "number_of_bicycles",
-        "income",
+        "income", "high_income", # added for Bavaria
         "census_household_id"
     ]]
     if "csv" in output_formats:

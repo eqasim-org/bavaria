@@ -67,5 +67,3 @@ aliases:
   synthesis.population.spatial.primary.locations: bavaria.locations.synthesis.replacement
   synthesis.population.enriched: bavaria.synthesis.population.enriched
   matsim.simulation.prepare: bavaria.matsim.simulation.prepare
-  matsim.scenario.households: bavaria.matsim.scenario.households
-  matsim.scenario.population: bavaria.matsim.scenario.population
