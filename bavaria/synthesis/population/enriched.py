@@ -11,6 +11,10 @@ def configure(context):
 
     context.stage("bavaria.data.mid.data")
     context.stage("bavaria.data.mid.zones")
+
+    context.stage("bavaria.data.census.household_size")
+    context.stage("bavaria.data.census.household_income")
+
     context.config("random_seed")
 
     context.config("bavaria.minimum_age.car_availability", 0)
@@ -188,5 +192,31 @@ def execute(context):
     u = random.random_sample(len(df_persons))
     selection = u < df_persons["has_pt_subscription"]
     df_persons["has_pt_subscription"] = selection
-    
+
+    # Household size (overwrite)
+    df_household_size = context.stage("bavaria.data.census.household_size")
+
+    for (lower_age, upper_age, sex), df in df_household_size.groupby(["lower_age", "upper_age", "sex"]):
+        f = df_persons["age"].between(lower_age, upper_age, inclusive = "left")
+        f &= df_persons["sex"] == sex ## TODO
+
+        df = df.copy()
+        df["weight"] /= df["weight"].sum()
+        df = df.sample(n = np.count_nonzero(f), weights = "weight", replace = True)
+        df_persons.loc[f, "household_size"] = df["household_size"].values
+
+    df_persons["household_size"] = df_persons["household_size"].astype("category")
+
+    # Household income (overwrite)
+    df_income = context.stage("bavaria.data.census.household_income")
+
+    for household_size, df in df_income.groupby("household_size"):
+        f = df_persons["household_size"] == household_size
+
+        df = df.copy()
+        df["weight"] /= df["weight"].sum()
+        df = df.sample(n = np.count_nonzero(f), weights = "weight", replace = True)
+        df_persons.loc[f, "household_income"] = df["income_class"].values
+
+    df_persons["high_income"] = df_persons["household_income"] == "5000+"
     return df_persons
