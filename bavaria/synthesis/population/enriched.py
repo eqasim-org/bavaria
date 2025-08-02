@@ -21,6 +21,8 @@ def configure(context):
     context.config("bavaria.minimum_age.bicycle_availability", 0)
     context.config("bavaria.minimum_age.pt_subscription", 0)
 
+    context.config("bavaria.minimum_age.one_person_household", 16)
+
 """
 This stage overrides car availability, bike availability and transit subscription based on MiD data
 """
@@ -195,6 +197,17 @@ def execute(context):
 
     # Household size (overwrite)
     df_household_size = context.stage("bavaria.data.census.household_size")
+
+    # Make sure that persons <16 are not in 1-person households
+    minimum_age = context.config("bavaria.minimum_age.one_person_household")
+    df_household_size["lower_age"] = df_household_size["lower_age"].replace({ 0: minimum_age })
+
+    df_young = df_household_size[df_household_size["lower_age"] == minimum_age].copy()
+    df_young["lower_age"] = 0
+    df_young["upper_age"] = minimum_age
+    df_young.loc[df_young["household_size"] == "1", "weight"] = 0
+
+    df_household_size = pd.concat(df_household_size, df_young)
 
     for (lower_age, upper_age, sex), df in df_household_size.groupby(["lower_age", "upper_age", "sex"]):
         f = df_persons["age"].between(lower_age, upper_age, inclusive = "left")
