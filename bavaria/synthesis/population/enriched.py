@@ -207,7 +207,7 @@ def execute(context):
     df_young["upper_age"] = minimum_age
     df_young.loc[df_young["household_size"] == "1", "weight"] = 0
 
-    df_household_size = pd.concat(df_household_size, df_young)
+    df_household_size = pd.concat([df_household_size, df_young])
 
     for (lower_age, upper_age, sex), df in df_household_size.groupby(["lower_age", "upper_age", "sex"]):
         f = df_persons["age"].between(lower_age, upper_age, inclusive = "left")
