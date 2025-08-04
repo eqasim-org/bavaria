@@ -49,7 +49,23 @@ describe this process.
 - Download the data for 2022 (*202200*) in *XLS* format
 - Put the resulting *xla* file into `/data/bavaria`
 
-### 5) German driving license ownership data (municipality; Germany sex, age, type; Bundesland, sex, type)
+### 5) Bavarian household size data (sex, age, household size)
+
+- [Household size data](https://www.statistikdaten.bayern.de/genesis/online?operation=statistic&levelindex=0&levelid=1754050186084&code=12211#abreadcrumb)
+- Search for **12211-105** and click on the link
+- Click on *Werteabruf* 
+- In the following view, click *XLSX* on top to download the file
+- Put the resulting *xlsx* file into `/data/bavaria`
+
+### 6) Bavarian household income data (household size, household income)
+
+- [Household size data](https://www.statistikdaten.bayern.de/genesis/online?operation=statistic&levelindex=0&levelid=1754050186084&code=12211#abreadcrumb)
+- Search for **12211-101** and click on the link
+- Click on *Werteabruf* 
+- In the following view, click *XLSX* on top to download the file
+- Put the resulting *xlsx* file into `/data/bavaria`
+
+### 7) German driving license ownership data (municipality; Germany sex, age, type; Bundesland, sex, type)
 
 - [License ownership data](https://www.kba.de/DE/Statistik/Kraftfahrer/Fahrerlaubnisse/Fahrerlaubnisbestand/fahrerlaubnisbestand_node.html)
 - Select *2024* from the dropdown list and click *Auswahl anwenden*
@@ -57,7 +73,7 @@ describe this process.
 - Put the resulting file into `/data/germany`
 
 
-### 6) Bavarian building registry (Upper bavarian, Lower Bavaria, Swabia)
+### 8) Bavarian building registry (Upper bavarian, Lower Bavaria, Swabia)
 
 - [Building registry](https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=hausumringe)
 - Click on **Karte aktivieren** to activate the map
@@ -66,7 +82,7 @@ describe this process.
 - Put the resulting *zip* file into `/data/bavaria/buildings`
 - Repeat the process for all other zones, in total you should download *seven* files
 
-### 7) French National household travel survey (ENTD 2008)
+### 9) French National household travel survey (ENTD 2008)
 
 The national household travel survey is available from the Ministry of Ecology:
 
@@ -83,7 +99,7 @@ a few are actually relevant for the pipeline. Those are:
   - Données mobilité déplacements locaux (K_deploc.csv)
 - Put the downloaded *csv* files in to the folder `data/entd_2008`.
 
-### 8) German GTFS
+### 10) German GTFS
 
 This data set is *only needed if you run a MATSim simulation* or enable mode choice in the population synthesis.
 
@@ -91,7 +107,7 @@ This data set is *only needed if you run a MATSim simulation* or enable mode cho
 - Click on **Download**
 - Put the resulting *zip* file into `/data/gtfs`
 
-### 9) OpenStreetMap (Bavaria)
+### 11) OpenStreetMap (Bavaria)
 
 This data set is *only needed if you run a MATSim simulation* or enable mode choice in the population synthesis.
 
@@ -99,7 +115,7 @@ This data set is *only needed if you run a MATSim simulation* or enable mode cho
 - Download the data set for **Bavaria** in *osm.pbf* format ("Commonly used formats")
 - Put the resulting *osm.pbf* file into `/data/osm`
 
-### 10) MVG Zoning system
+### 12) MVG Zoning system
 
 This data set is *only needed if you run a MATSim simulation* or enable mode choice in the population synthesis.
 
