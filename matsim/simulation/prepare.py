@@ -99,30 +99,6 @@ def execute(context):
         "--prefix", context.config("output_prefix")
     ])
     assert os.path.exists("%s/%sconfig.xml" % (context.path(), context.config("output_prefix")))
-
-    # Add urban attributes to population and network
-    # (but only if Paris is included in the scenario!)
-    df_codes = context.stage("data.spatial.codes")
-
-    if "75" in df_codes["departement_id"].unique().astype(str):
-        df_shape = context.stage("data.spatial.departments")[["departement_id", "geometry"]].rename(
-            columns = dict(departement_id = "id")
-        )
-        df_shape["id"] = df_shape["id"].astype(str)
-
-        if "75" in df_shape["id"].unique():
-            df_shape.to_file("%s/departments.shp" % context.path())
-
-            eqasim.run(context, "org.eqasim.core.scenario.spatial.RunImputeSpatialAttribute", [
-                "--input-population-path", "prepared_population.xml.gz",
-                "--output-population-path", "prepared_population.xml.gz",
-                "--input-schedule-path", "{}transit_schedule.xml.gz".format(context.config("output_prefix")),
-                "--output-schedule-path", "{}transit_schedule.xml.gz".format(context.config("output_prefix")),
-                "--shape-path", "departments.shp",
-                "--shape-attribute", "id",
-                "--shape-value", "75",
-                "--attribute", "isParis"
-            ])
     
     # Optionally, perform mode choice
     if context.config("mode_choice"):
