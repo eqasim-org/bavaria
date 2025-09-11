@@ -232,4 +232,8 @@ def execute(context):
         df_persons.loc[f, "household_income"] = df["income_class"].values
 
     df_persons["high_income"] = df_persons["household_income"] == "5000+"
+
+    # Munich residents
+    df_persons["is_munich_resident"] = df_persons["inside_munich"]
+
     return df_persons
