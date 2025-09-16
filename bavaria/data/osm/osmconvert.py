@@ -1,5 +1,6 @@
 import subprocess as sp
-import shutil, os
+import shutil
+import os
 
 def configure(context):
     context.config("osmconvert_binary", "osmconvert")
@@ -29,7 +30,7 @@ def validate(context):
     if shutil.which(context.config("osmconvert_binary")) in ["", None]:
         raise RuntimeError("Cannot find osmconvert binary at: %s" % context.config("osmconvert_binary"))
 
-    if not b"0.8." in sp.check_output([
+    if b"0.8." not in sp.check_output([
         shutil.which(context.config("osmconvert_binary")),
         "-v"
     ], stderr = sp.STDOUT):
