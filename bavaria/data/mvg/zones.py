@@ -1,4 +1,6 @@
-import os, json, re
+import os
+import json
+import re
 import geopandas as gpd
 import pandas as pd
 import shapely.geometry as sgeo
@@ -7,6 +9,9 @@ import shapely.geometry as sgeo
 Loads station data for MVG
 https://www.mvg.de/.rest/zdm/stations
 """
+
+# Constants
+MVG_BUFFER_DISTANCE = 400  # Buffer distance in meters for station zones
 
 def configure(context):
     context.config("data_path")
@@ -50,7 +55,7 @@ def execute(context):
     df_zones = gpd.GeoDataFrame(pd.DataFrame.from_records(df_zones), crs = "EPSG:4326")
     df_zones = df_zones.to_crs("EPSG:25832")
 
-    df_zones["geometry"] = df_zones["geometry"].buffer(400)
+    df_zones["geometry"] = df_zones["geometry"].buffer(MVG_BUFFER_DISTANCE)
     return df_zones[["zone", "geometry"]]
 
 def validate(context):

@@ -792,8 +792,13 @@ def create(output_path):
 
     import subprocess
 
+    osmosis_path = shutil.which("osmosis")
+    if osmosis_path is None:
+        raise RuntimeError("Osmosis is required to run this test but was not found in PATH. "
+                           "Please install osmosis from https://wiki.openstreetmap.org/wiki/Osmosis")
+
     subprocess.check_call([
-        shutil.which("osmosis"), "--read-xml", "%s/osm_idf/ile-de-france-220101.osm.gz" % output_path,
+        osmosis_path, "--read-xml", "%s/osm_idf/ile-de-france-220101.osm.gz" % output_path,
         "--write-pbf", "%s/osm_idf/ile-de-france-220101.osm.pbf" % output_path
     ])
 
