@@ -6,7 +6,7 @@ import os
 
 root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))  # one level up -> pipeline-bavaria
 csv_path = os.path.join(root, "age_distribution_2045.csv")
-df_population_2040 = pd.read_csv(csv_path)
+df_munich_2040 = pd.read_csv(csv_path)
 
 """
 This stage loads the raw census data for Bavaria.
@@ -18,7 +18,7 @@ def configure(context):
     context.stage("bavaria.data.spatial.codes")
 
     context.config("data_path")
-    context.config("bavaria.population_path", "bavaria/a1310c_202200.xla")
+    context.config("bavaria.population_path", "bavaria/a1310c_202400.xla")
 
 def construct_municipality_id(municipality_code, association_code):
     if len(municipality_code) == 3:
@@ -128,12 +128,12 @@ def execute(context):
     df_census_2040['_orig_weight'] = df_census_2040['weight']
     
     # For convenience, ensure population age bounds are integers
-    df_population_2040['age_start'] = df_population_2040['age_start'].astype(int)
-    df_population_2040['age_end']   = df_population_2040['age_end'].astype(int)
+    df_munich_2040['age_start'] = df_munich_2040['age_start'].astype(int)
+    df_munich_2040['age_end']   = df_munich_2040['age_end'].astype(int)
 
     # Call prechecks
     target_communes = ["091620000000"]  # adapt as needed (list of strings)
-    pre_msgs, df_population_2040_checked, df_census_2040 = run_prechecks(df_population_2040, df_census_2040, target_communes)
+    pre_msgs, df_population_2040_checked, df_census_2040 = run_prechecks(df_munich_2040, df_census_2040, target_communes)
     for m in pre_msgs:
         print(m)
         
@@ -240,16 +240,17 @@ def execute(context):
 def check_difference_to_original(df_census, df_census_2040):
     # Find indices where "weight" differs between df_census and df_census_2040
     idx_diff_census_vs_2040 = df_census[df_census['weight'] != df_census_2040['weight']].index
-    print("Indices where df_census['weight'] != df_census_2040['weight']:", idx_diff_census_vs_2040.tolist())
 
     # Find indices in df_census_2040 where "weight" differs from "_orig_weight"
     if '_orig_weight' in df_census_2040.columns:
         idx_diff_2040_vs_orig = df_census_2040[df_census_2040['weight'] != df_census_2040['_orig_weight']].index
-        print("Indices where df_census_2040['weight'] != df_census_2040['_orig_weight']:", idx_diff_2040_vs_orig.tolist())
 
         # Compare - do the indices match?
         indices_match = set(idx_diff_census_vs_2040) == set(idx_diff_2040_vs_orig)
-        print("Do the indices match?:", indices_match)
+        if not indices_match:
+            print("Indices do not match")
+            print("Indices where df_census['weight'] != df_census_2040['weight']:", idx_diff_census_vs_2040.tolist())
+            print("Indices where df_census_2040['weight'] != df_census_2040['_orig_weight']:", idx_diff_2040_vs_orig.tolist())
         if indices_match:
             return True
         else:
