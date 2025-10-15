@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 import os
-from typing import Literal
-from collections import defaultdict
+# from typing import Literal
+# from collections import defaultdict
 
 root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))  # one level up -> pipeline-bavaria
 csv_path = os.path.join(root, "age_distribution_2045.csv")
@@ -230,22 +230,33 @@ def execute(context):
     others = df_census_2040.loc[~df_census_2040['commune_id'].isin(target_communes)]
     outside_changed = (others['weight'] != others[orig_col]).any()
     print("Any outside-target rows changed?", bool(outside_changed))
+    
+    matched = check_difference_to_original(df_census, df_census_2040)
+    if not matched:
+        raise ValueError("Weights do not match")
+    
+    return df_census_2040[["commune_id", "sex", "age_class", "weight"]]
 
-    # Optional: show dtype summary
-    print("Data types (df_population_2040):")
-    print(df_population_2040_checked[['age_start','age_end','male_2045','female_2045']].dtypes)
-    print("Data types (df_census_2040):")
-    print(df_census_2040.dtypes)
-    
-    raise ValueError("Stop here")
-    
-    df_census_output = df_census[["commune_id", "sex", "age_class", "weight"]]
-    df_census_output.to_csv("census_data.csv", index=False)
-    print("Census data saved to census_data.csv")
-    
-    return df_census_output
+def check_difference_to_original(df_census, df_census_2040):
+    # Find indices where "weight" differs between df_census and df_census_2040
+    idx_diff_census_vs_2040 = df_census[df_census['weight'] != df_census_2040['weight']].index
+    print("Indices where df_census['weight'] != df_census_2040['weight']:", idx_diff_census_vs_2040.tolist())
 
-    # return df_census[["commune_id", "sex", "age_class", "weight"]]
+    # Find indices in df_census_2040 where "weight" differs from "_orig_weight"
+    if '_orig_weight' in df_census_2040.columns:
+        idx_diff_2040_vs_orig = df_census_2040[df_census_2040['weight'] != df_census_2040['_orig_weight']].index
+        print("Indices where df_census_2040['weight'] != df_census_2040['_orig_weight']:", idx_diff_2040_vs_orig.tolist())
+
+        # Compare - do the indices match?
+        indices_match = set(idx_diff_census_vs_2040) == set(idx_diff_2040_vs_orig)
+        print("Do the indices match?:", indices_match)
+        if indices_match:
+            return True
+        else:
+            return False
+    else:
+        print("'_orig_weight' column not found in df_census_2040.")
+        return False
 
 # --- Safety diagnostics before mutating ---
 def run_prechecks(df_pop, df_census, target_communes):
