@@ -7,6 +7,7 @@ import os
 root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))  # one level up -> pipeline-bavaria
 csv_path = os.path.join(root, "age_distribution_2045.csv")
 df_munich_2040 = pd.read_csv(csv_path)
+for_2024 = False # set to True to use the 2024 population data, set to False to use the 2040 population data.
 
 """
 This stage loads the raw census data for Bavaria.
@@ -121,8 +122,9 @@ def execute(context):
     df_codes = context.stage("bavaria.data.spatial.codes")
     df_census = df_census[df_census["commune_id"].isin(df_codes["commune_id"])]
     
-    # Adapt here for population 2040. München has the code "62", and is in Oberbayern (091). Therefore, the correpsonding commune_id is "91620000000".
-
+    if for_2024:
+        return df_census[["commune_id", "sex", "age_class", "weight"]]
+    
     # Keep a copy of original weights for verification (so we can show before/after)
     df_census_2040 = df_census.copy()
     df_census_2040['_orig_weight'] = df_census_2040['weight']
