@@ -242,6 +242,7 @@ def execute(context):
     df_census_output = df_census[["commune_id", "sex", "age_class", "weight"]]
     df_census_output.to_csv("census_data.csv", index=False)
     print("Census data saved to census_data.csv")
+    
     return df_census_output
 
     # return df_census[["commune_id", "sex", "age_class", "weight"]]
